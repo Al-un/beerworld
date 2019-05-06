@@ -1,6 +1,6 @@
 # Beer world projects
 
-*Beer world* is a small web application listing beers developed under different frameworks.
+_Beer world_ is a small web application listing beers developed under different frameworks.
 Each project are developed with a tutorial. May this tutorial help somebody, I would be glad
 but the primary purpose is for myself to fix my short memory. Beer consumption is not involved
 regarding my poor brain. The mindset of the _beer world_ is to provide a real life application
@@ -16,6 +16,13 @@ Project purposes are:
 
 Because it aims at mimicing real life, each project has its dedicated repository. Main reason
 is probably it makes CI / CD easier.
+
+Projects are split in three types:
+
+- Full stack: uses a single stack / technology to power the web application from database connection
+  to web views
+- API: uses a stack / technology to provide a REST API. Need to be coupled with a front-end
+- Front-end: uses a stack / technology as web views but need an API to handle data
 
 ## Features
 

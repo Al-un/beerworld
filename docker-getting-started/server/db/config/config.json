@@ -1,16 +1,5 @@
 {
   "development": {
-    "username": "padawan",
-    "password": "padawan",
-    "database": "bw__docker_getting_started",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
-  },
-  "docker": {
-    "username": "mydockeruser",
-    "password": "mydockerpassword",
-    "database": "bw__docker_getting_started",
-    "host": "web-db",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL"
   }
 }

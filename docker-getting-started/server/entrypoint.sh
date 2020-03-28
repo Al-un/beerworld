@@ -11,8 +11,8 @@ set -e
 # available.
 # Also, script execution context is expected to be at the WORKDIR 
 # defined in the Dockerfile
-npx sequelize-cli db:create --env docker
-npx sequelize-cli db:migrate --env docker
-npx sequelize-cli db:seed:all --env docker
+npx sequelize-cli db:create
+npx sequelize-cli db:migrate 
+npx sequelize-cli db:seed:all
 
 exec "$@"

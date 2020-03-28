@@ -2,6 +2,7 @@
 
 **Objective**: build a simple REST API, with an unique `GET` endpoint, which serves a list of beers, first hard-coded and then from a database
 
+- [Run the example (Node.js only)](#run-the-example-nodejs-only)
 - [A simple API with Koa](#a-simple-api-with-koa)
   - [First steps](#first-steps)
   - [CORS](#cors)
@@ -12,6 +13,44 @@
   - [Migration](#migration)
   - [Updated services](#updated-services)
 - [Docker preparation](#docker-preparation)
+  - [Environment variable for Sequelize](#environment-variable-for-sequelize)
+  - [Environment splitting](#environment-splitting)
+
+## Run the example (Node.js only)
+
+Developed with `node 13.8.0`:
+
+- Install dependencies
+
+  ```sh
+  npm install
+  ```
+
+- Run the standalone version:
+
+  ```sh
+  node index.js
+  ```
+
+- Run against a database:
+
+  - Create and populate the database on the first run:
+
+    ```sh
+    export DATABASE_URL="postgres://padawan:some-jedi-level-password-here@localhost:5432/bw__docker_getting_started"
+    npm run db:init
+    # db:init script added for convenience and is the same as:
+    #
+    # npx sequelize-cli db:create
+    # npx sequelize-cli db:migrate
+    # npx sequelize-cli db:seed:all
+    ```
+
+  - Start:
+    ```sh
+    # DATABASE_URL is assumed to have been set-up during the database migration
+    node index.js
+    ```
 
 ## A simple API with Koa
 
@@ -19,7 +58,7 @@ To do honor to my laziness, I picked a framework: [Koa](https://koajs.com/). In 
 
 _Why Koa?_
 
-I have been playing with [Express](https://expressjs.com/) so far. As mentioned in the [Koa introduction](https://koajs.com/#introduction), Koa is developed by the team behind Express. If the team behind the most used framework decided to go for something new, there must be a valid reason. Also, I am pretty sure those guys know what they are doing so I turned on my curious sheep mode and followed them.
+I have been playing mainly with [Express](https://expressjs.com/) so far. As mentioned in the [Koa introduction](https://koajs.com/#introduction), Koa is developed by the team behind Express. If the team behind the most used framework decided to go for something new, there must be a valid reason. Also, I am pretty sure those guys know what they are doing so I turned on my curious sheep mode and followed them.
 
 ### First steps
 
@@ -44,7 +83,7 @@ Our Beer service, as the API is not using a database yet, simply returns a list 
 // services/index.js
 
 const getBeers = async () => {
-  return [{ name: "Kriek" }, { name: "Pecheresse" }];
+  return [{ name: "Kriek" }, { name: "Pêcheresse" }];
 };
 
 module.exports = {
@@ -110,9 +149,9 @@ Everything is meant for local development so I indulge myself the wildcards
 
 ## Database with Sequelize
 
-I use PostgreSQL now by habit. Please check [PostgreSQL getting started](../../pgsql-getting-started/README.md) if necessary.
+I use PostgreSQL now by habit. Please check [PostgreSQL getting started](../../pgsql-getting-started/README.md) for any setup related information.
 
-In my mind, [Sequelize](https://sequelize.org/) is one, if not the most, of the mostly used ORM in Node.js universe. So I'll go for it
+[Sequelize](https://sequelize.org/) is one, if not the most, of the mostly used ORM in Node.js ecosystem. So I'll go with it.
 
 ### Setup
 
@@ -127,7 +166,7 @@ npm install -save sequelize-cli
 
 ### Configuration
 
-The Sequelize CLI is a nice tool for bootstrapping many things. I missed the [`npx sequelize-cli init`](https://sequelize.org/v5/manual/migrations.html#bootstrapping) so I created the folder and files manually:
+The Sequelize CLI is a nice tool for bootstrapping. I forgot to [`npx sequelize-cli init`](https://sequelize.org/v5/manual/migrations.html#bootstrapping) so I created the folder and files manually:
 
 ```
 mkdir db
@@ -162,7 +201,7 @@ Then, let's have Sequelize connecting to our database:
   // When not specified, "development" is the default environment
   "development": {
     "username": "padawan",
-    "password": "padawan",
+    "password": "some-jedi-level-password-here",
     "database": "bw__docker_getting_started",
     "host": "127.0.0.1",
     "dialect": "postgres"
@@ -208,6 +247,7 @@ module.exports = {
     );
   },
 
+  // Rollback is deleting everything!
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete("Beers", null, {});
   }
@@ -245,35 +285,46 @@ module.exports = {
 };
 ```
 
-`require("../db")` is lazy loaded not for performance: I need this form for my final where both database data and hard-coded data co-exist
+`require("../db")` is lazy loaded not for performance: I need this as I will handle both database data and hard-coded data in the same code in [`services/index.js`](services/index.js). `db/index.js` is
+
+```js
+// ----- IMPORTS
+const Sequelize = require("sequelize");
+const beerModel = require("./models/beer");
+
+// ----- CONFIG
+const dbUrl = process.env.DATABASE_URL;
+
+// ----- INIT
+if (!dbUrl) {
+  throw new Error(`DATABASE_URL environment variable is missing`);
+}
+const sequelize = new Sequelize(dbUrl);
+
+// ----- Sequelize: models definition
+const Beer = beerModel(sequelize, Sequelize);
+
+module.exports = {
+  Beer
+};
+```
 
 ## Docker preparation
 
-Right now, the API uses the local database but once in a docker container, it might use a different database. To address this point, I created a `docker` environment in the Sequelize configuration. Such configuration will be used for learning [Docker compose](../../docker-compose/README.md)
+### Environment variable for Sequelize
+
+While `db/index.js` is properly using `DATABASE_URL`, Sequelize CLI configuration is currently using hard-coded credentials in the `db/config/config.json`. As state in the [sequelize/cli Issue#77](https://github.com/sequelize/cli/issues/77#issuecomment-68299495), it is possible to use environment variable in the `config.json` ([documentation link](https://github.com/sequelize/cli/tree/master/docs#configuration-connection-environment-variable)).
+
+### Environment splitting
+
+Now that our `db/config/config.json` is reduced to :
 
 ```json
-// db/config/config.json
-
 {
   "development": {
-    "username": "padawan",
-    "password": "padawan",
-    "database": "bw__docker_getting_started",
-    "host": "127.0.0.1",
-    "dialect": "postgres"
-  },
-  // Docker configuration:
-  // - both "username" and "password" must match the credentials defined in the
-  //   docker-compose.yml
-  // - "host" must match the name of the service
-  // - "database" name can be anything as migrations are expected to be run on
-  //   application startup
-  "docker": {
-    "username": "mydockeruser",
-    "password": "mydockerpassword",
-    "database": "bw__docker_getting_started",
-    "host": "web-db",
-    "dialect": "postgres"
+    "use_env_variable": "DATABASE_URL"
   }
 }
 ```
+
+We are ready to dockerize our application. As this application is very simple, there is no point adding a dedicated environment such as _production_.

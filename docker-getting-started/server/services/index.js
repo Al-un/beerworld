@@ -17,7 +17,7 @@ const getBeers = async () => {
   }
   // Get arbitrary value
   else {
-    return [{ name: "Kriek" }, { name: "Pecheresse" }];
+    return [{ name: "Kriek" }, { name: "Pêcheresse" }];
   }
 };
 

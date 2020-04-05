@@ -1,4 +1,4 @@
-const API_ROOT_URL = process.env.API_ROOT_URL || `http://localhost:3000`;
+const API_ROOT_URL = process.env.VUE_APP_API_ROOT_URL || `http://localhost:3000`;
 
 /**
  * Get the beers list from API

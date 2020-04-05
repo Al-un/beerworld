@@ -7,12 +7,18 @@
 # Exit the script if one command fails
 set -e
 
+# https://stackoverflow.com/a/307735/4906586
+HAS_DATABASE_URL="${DATABASE_URL:-DATABASE_URL not defined}"
 # At this stage, a Node.js environment is assumed so "npx" command is
 # available.
 # Also, script execution context is expected to be at the WORKDIR 
 # defined in the Dockerfile
-npx sequelize-cli db:create
-npx sequelize-cli db:migrate 
-npx sequelize-cli db:seed:all
+if [ "$HAS_DATABASE_URL" != "DATABASE_URL not defined" ]; then
+    npx sequelize-cli db:create
+    npx sequelize-cli db:migrate 
+    npx sequelize-cli db:seed:all
+else
+    echo "Skipping database initialisation, DATABASE_URL not found"
+fi
 
 exec "$@"

@@ -1,3 +1,5 @@
+<sub>[Back to _Docker Getting started_](../README.md)</sub>
+
 # Docker getting started: Server <!-- omit in toc -->
 
 **Objective**: build a simple REST API, with an unique `GET` endpoint, which serves a list of beers, first hard-coded and then from a database
@@ -15,10 +17,11 @@
 - [Docker preparation](#docker-preparation)
   - [Environment variable for Sequelize](#environment-variable-for-sequelize)
   - [Environment splitting](#environment-splitting)
+  - [Dockerfiles](#dockerfiles)
 
 ## Run the example (Node.js only)
 
-Developed with `node 13.8.0`:
+Developed with `node 13.7.0`:
 
 - Install dependencies
 
@@ -87,7 +90,7 @@ const getBeers = async () => {
 };
 
 module.exports = {
-  getBeers
+  getBeers,
 };
 ```
 
@@ -105,7 +108,7 @@ const HOST = process.env.HOST || "0.0.0.0";
 const PORT = process.env.PORT || 3000;
 const app = new Koa();
 
-app.use(async ctx => {
+app.use(async (ctx) => {
   const payload = await services.getBeers();
   ctx.body = JSON.stringify(payload);
 });
@@ -188,7 +191,7 @@ module.exports = {
   config: path.resolve("db", "config", "config.json"),
   "models-path": path.resolve("db", "models"),
   "seeders-path": path.resolve("db", "seeders"),
-  "migrations-path": path.resolve("db", "migrations")
+  "migrations-path": path.resolve("db", "migrations"),
 };
 ```
 
@@ -241,7 +244,7 @@ module.exports = {
         // createdAt and updatedAt are bootstrapped fields which cannot be NULL
         { name: "Stella Artois", createdAt: new Date(), updatedAt: new Date() },
         { name: "Affligem", createdAt: new Date(), updatedAt: new Date() },
-        { name: "Grimbergen", createdAt: new Date(), updatedAt: new Date() }
+        { name: "Grimbergen", createdAt: new Date(), updatedAt: new Date() },
       ],
       {}
     );
@@ -250,7 +253,7 @@ module.exports = {
   // Rollback is deleting everything!
   down: (queryInterface, Sequelize) => {
     return queryInterface.bulkDelete("Beers", null, {});
-  }
+  },
 };
 ```
 
@@ -305,11 +308,13 @@ const sequelize = new Sequelize(dbUrl);
 const Beer = beerModel(sequelize, Sequelize);
 
 module.exports = {
-  Beer
+  Beer,
 };
 ```
 
 ## Docker preparation
+
+Reference: [Node.js official Dockerization guide](https://nodejs.org/en/docs/guides/nodejs-docker-webapp/)
 
 ### Environment variable for Sequelize
 
@@ -328,3 +333,11 @@ Now that our `db/config/config.json` is reduced to :
 ```
 
 We are ready to dockerize our application. As this application is very simple, there is no point adding a dedicated environment such as _production_.
+
+### Dockerfiles
+
+| Dockerfile name        | Comment                                                      |
+| ---------------------- | ------------------------------------------------------------ |
+| `server-v1.Dockerfile` | Naive first implementation                                   |
+| `server-v2.Dockerfile` | Using build cache                                            |
+| `server.Dockerfile`    | Final version, add `ENTRYPOINT` and documentation (`EXPOSE`) |

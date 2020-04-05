@@ -83,7 +83,7 @@ fbf31233346b4ac462b89509c34b0d9a2d74a87e35377a9c4f98e78c7f71b011
 
 </details>
 
-You can check that both containers are running with 
+You can check that both containers are running with
 
 ```sh
 sudo docker ps
@@ -179,8 +179,8 @@ sudo docker ps -a
 And the output should look like
 
 ```
-CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS                      PORTS               NAMES
-7dcfe8097cd7        hello-world         "/hello"            54 seconds ago      Exited (0) 52 seconds ago                       optimistic_kepler
+CONTAINER ID    IMAGE         COMMAND       CREATED           STATUS                      PORTS       NAMES
+7dcfe8097cd7    hello-world   "/hello"      54 seconds ago    Exited (0) 52 seconds ago               optimistic_kepler
 ```
 
 I prefer to clean up my containers list so let's
@@ -258,7 +258,7 @@ Using the `server/` application, the most basic Dockerfile, `server/server-v1.Do
 - Install the dependencies, in this JavaScript example with NPM
 - Define the starting command as `node index.js`
 
-```docker
+```dockerfile
 # server/server-v1.Dockerfile
 
 # I developed under node-13.7.0 at the time I wrote this experiment
@@ -352,8 +352,8 @@ sudo docker images
 which outputs:
 
 ```
-REPOSITORY                  TAG                                IMAGE ID            CREATED             SIZE
-alunsng/beerworld           docker-getting-started_server-v1   c3571c08219f        8 seconds ago       129MB
+REPOSITORY            TAG                                IMAGE ID       CREATED         SIZE
+alunsng/beerworld     docker-getting-started_server-v1   c3571c08219f   8 seconds ago   129MB
 ```
 
 > [`docker build` reference](https://docs.docker.com/engine/reference/commandline/build/)
@@ -381,6 +381,7 @@ The build contexts main purpose is clarity by avoiding `../../.. ...` paths. `CO
 - The _builder context_ can also be a git repository!
 
 > Additional reading:
+>
 > [`docker build` reference](https://docs.docker.com/engine/reference/commandline/build/)
 
 ---
@@ -411,8 +412,8 @@ sudo docker ps -a
 which outputs:
 
 ```
-CONTAINER ID        IMAGE                                                COMMAND                  CREATED             STATUS                        PORTS                    NAMES
-db7a9c755369        alunsng/beerworld:docker-getting-started_server-v1   "docker-entrypoint.s…"   11 seconds ago      Up 10 seconds                 0.0.0.0:3000->3000/tcp   vibrant_mestorf
+CONTAINER ID  IMAGE                                                COMMAND                  CREATED           STATUS          PORTS                    NAMES
+db7a9c755369  alunsng/beerworld:docker-getting-started_server-v1   "docker-entrypoint.s…"   11 seconds ago    Up 10 seconds   0.0.0.0:3000->3000/tcp   vibrant_mestorf
 ```
 
 Your `http://localhost:3000` should now display a dull:
@@ -421,6 +422,7 @@ Your `http://localhost:3000` should now display a dull:
 
 > Docker documentation reference
 >
+> - [Docker documentation: `run` reference](https://docs.docker.com/engine/reference/run/)
 > - [`docker run`](https://docs.docker.com/engine/reference/commandline/run/)
 
 ### Stop, (re)start and delete containers
@@ -642,9 +644,9 @@ Successfully tagged alunsng/beerworld:docker-getting-started_server-v2
 That's some cool optimisation already. When checking the generated images, images size can be checked as well:
 
 ```
-REPOSITORY                  TAG                                IMAGE ID            CREATED             SIZE
-alunsng/beerworld           docker-getting-started_server-v2   72bbadad8ba9        2 minutes ago       150MB
-alunsng/beerworld           docker-getting-started_server-v1   3dfa3800c742        2 minutes ago       129MB
+REPOSITORY          TAG                                IMAGE ID       CREATED         SIZE
+alunsng/beerworld   docker-getting-started_server-v2   72bbadad8ba9   2 minutes ago   150MB
+alunsng/beerworld   docker-getting-started_server-v1   3dfa3800c742   2 minutes ago   129MB
 ```
 
 Are Docker images allowed to do some diet? Docker has a good prescription for them: _Multi-stage builds_!
@@ -655,7 +657,7 @@ Time for the `client/` application to shine here. _Multi-stage_ optimization is 
 
 Following the [Vue.js cookbook](https://vuejs.org/v2/cookbook/dockerize-vuejs-app.html), let's start with the naive Dockerfile:
 
-```docker
+```dockerfile
 FROM node:13.7.0-alpine AS build-stage
 
 # install simple http server for serving static content
@@ -778,7 +780,7 @@ Successfully tagged alunsng/beerworld:docker-getting-started_client-v1
 
 And without transition, let's create the _Multi-stage_ version:
 
-```docker
+```dockerfile
 # ---------- Building stage
 FROM node:13.7.0-alpine AS build-stage
 
@@ -901,9 +903,9 @@ Successfully tagged alunsng/beerworld:docker-getting-started_client
 A quick `sudo docker images` shows a 92% gain in image size with multi-stage Dockerfile:
 
 ```
-REPOSITORY                  TAG                                IMAGE ID            CREATED             SIZE
-alunsng/beerworld           docker-getting-started_client-v1   8ca7933829bd        2 minutes ago       303MB
-alunsng/beerworld           docker-getting-started_client      1bf5a52a1400        13 minutes ago      22.4MB
+REPOSITORY          TAG                                IMAGE ID       CREATED           SIZE
+alunsng/beerworld   docker-getting-started_client-v1   8ca7933829bd   2 minutes ago     303MB
+alunsng/beerworld   docker-getting-started_client      1bf5a52a1400   13 minutes ago    22.4MB
 ```
 
 When combining build cache and multi-stage builds, I start to have an idea of how efficient Docker images can be. But that's just the beginning.
@@ -919,8 +921,6 @@ When combining build cache and multi-stage builds, I start to have an idea of ho
 
 ## Various references
 
-- [Docker documentation: `run` reference](https://docs.docker.com/engine/reference/run/)
-- [Docker documentation: `build` reference](https://docs.docker.com/engine/reference/commandline/build/)
 - https://adilsoncarvalho.com/use-labels-on-your-docker-images-3abe4477e9f5
 - https://vsupalov.com/docker-build-pass-environment-variables/
 - https://vsupalov.com/docker-arg-env-variable-guide/

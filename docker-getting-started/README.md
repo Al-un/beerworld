@@ -27,8 +27,6 @@
 - [Next steps](#next-steps)
 - [Various references](#various-references)
 
-https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/
-
 # Docker: getting started <!-- omit in toc -->
 
 Let's take our first step in the world of containerization with Docker!
@@ -925,3 +923,4 @@ When combining build cache and multi-stage builds, I start to have an idea of ho
 - https://vsupalov.com/docker-build-pass-environment-variables/
 - https://vsupalov.com/docker-arg-env-variable-guide/
 - https://medium.com/create-code/docker-environment-variables-and-nginx-93d7173f19ec
+- https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/

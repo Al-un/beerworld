@@ -1,0 +1,72 @@
+version: "3"
+
+services:
+  # https://github.com/MichalZalecki/docker-compose-node-postgres/blob/master/docker-compose.yml
+  beer-db:
+    container_name: bw-compose-db
+    image: postgres:11.2-alpine
+    environment:
+      POSTGRES_USER: mydockeruser
+      POSTGRES_PASSWORD: mydockerpassword
+      POSTGRES_DB: bw__docker-compose
+      PGDATA: /var/lib/postgresql/data
+    networks:
+      bw-docker-compose-internal:
+        aliases:
+          - beer-database
+    volumes:
+      - bw-docker-compose-app-db:/var/lib/postgresql/data
+
+  beer-api:
+    container_name: bw-compose-api
+    build:
+      context: ../docker-getting-started/server
+      dockerfile: server.Dockerfile
+    expose:
+      - "3000"
+    environment:
+      DATABASE_URL: postgres://mydockeruser:mydockerpassword@beer-database/bw__docker-compose
+    networks:
+      - bw-docker-compose-internal
+    depends_on:
+      - beer-db
+
+  beer-gateway:
+    container_name: bw-compose-gateway
+    build:
+      context: ../docker-network-storage/server
+      dockerfile: server.Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      APP_LOG_FOLDER: /app-log/
+      APP_BEER_API: http://beer-api:3000/
+    networks:
+      - bw-docker-compose-internal
+      - bw-docker-compose-public
+    volumes:
+      - bw-docker-compose-app-log:/app-log
+    depends_on:
+      - beer-api
+
+  beer-web:
+    container_name: bw-compose-web
+    build:
+      context: ../docker-getting-started/client
+      dockerfile: client.Dockerfile
+    ports:
+      # Mapping container 80 port to localhost 8080
+      - "8080:80"
+    networks:
+      bw-docker-compose-public:
+    depends_on:
+      - beer-api
+      - beer-gateway
+
+networks:
+  bw-docker-compose-internal:
+  bw-docker-compose-public:
+
+volumes:
+  bw-docker-compose-app-log:
+  bw-docker-compose-app-db:

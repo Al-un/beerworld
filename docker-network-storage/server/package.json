@@ -1,0 +1,28 @@
+{
+  "name": "@al-un/bw-docker-network-storage-server",
+  "version": "1.0.0",
+  "description": "Server application for testing Docker network and storage",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Al-un/beerworld.git"
+  },
+  "keywords": [
+    "Docker"
+  ],
+  "author": "Al-un",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Al-un/beerworld/issues"
+  },
+  "homepage": "https://github.com/Al-un/beerworld#readme",
+  "dependencies": {
+    "@koa/cors": "^3.0.0",
+    "@koa/router": "^8.0.8",
+    "axios": "^0.19.2",
+    "koa": "^2.11.0"
+  }
+}

@@ -9,8 +9,9 @@ const PORT = process.env.PORT || 3000;
 const app = new Koa();
 app.use(cors({ origin: "*", allowHeaders: "*", allowMethods: "*" }));
 
-app.use(async ctx => {
+app.use(async (ctx) => {
   const payload = await services.getBeers();
+  ctx.set("Content-Type", "application/json");
   ctx.body = JSON.stringify(payload);
 });
 

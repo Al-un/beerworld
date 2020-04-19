@@ -14,7 +14,9 @@ HAS_DATABASE_URL="${DATABASE_URL:-DATABASE_URL not defined}"
 # Also, script execution context is expected to be at the WORKDIR 
 # defined in the Dockerfile
 if [ "$HAS_DATABASE_URL" != "DATABASE_URL not defined" ]; then
-    npx sequelize-cli db:create
+    # When using Docker Network, the database image already spawn a DB
+    # npx sequelize-cli db:create
+
     npx sequelize-cli db:migrate 
     npx sequelize-cli db:seed:all
 else

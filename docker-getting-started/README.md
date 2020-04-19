@@ -97,7 +97,11 @@ From the [Docker installation page](https://docs.docker.com/install/), please in
 
 #### Installing on Ubuntu
 
-The [Docker engine installation guide](https://docs.docker.com/install/linux/docker-ce/ubuntu/) is pretty straightforward. For lazy persons such as myself, here the commands from the guide:
+The [Docker engine installation guide](https://docs.docker.com/install/linux/docker-ce/ubuntu/) is pretty straightforward.
+
+<details>
+
+  <summary>For lazy persons such as myself, here the commands from the guide:</summary>
 
 ```sh
 # Uninstall old version if applicable
@@ -134,6 +138,8 @@ sudo docker --version
 # Or by running the hello-world
 sudo docker run hello-world
 ```
+
+</details>
 
 #### Docker hello-world example
 
@@ -800,7 +806,7 @@ COPY --from=build-stage /usr/src/app/dist /usr/share/nginx/html
 CMD ["nginx", "-g", "daemon off;"]
 ```
 
-I cleared some comments to leave the most important ones only. The section commented as _Building stage_ strongly looks like the previous version: dependencies are installed, source code is copied and application is built. \__The difference is that all this image is discarded at the end!_. So what's left? In reality, we went through all the steps for only one folder content: `app/dist/` which can be served statically. That's the multi-stage point: we only keep the part we need in the final result and discard all the intermediate data.
+I cleared some comments to leave the most important ones only. The section commented as _Building stage_ strongly looks like the previous version: dependencies are installed, source code is copied and application is built. _The difference is that all this image is discarded at the end!_. So what's left? In reality, we went through all the steps for only one folder content: `app/dist/` which can be served statically. That's the multi-stage point: we only keep the part we need in the final result and discard all the intermediate data.
 
 > To stick with the onion image, I imagined the _building stage_ as the first onion. When building the _building stage_, the _production stage_ onion is waiting. Once the _building stage_ onion is completed, then the _production stage_ onion can start growing.
 >

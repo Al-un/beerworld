@@ -3,6 +3,7 @@
 Learn building static website with the world's fastest static site generator: [https://gohugo.io/](https://gohugo.io/)
 
 - [Install](#install)
+- [Quick start](#quick-start)
 
 ## Install
 
@@ -27,3 +28,26 @@ sudo cp hugo_0.68.3/hugo /usr/local/bin/hugo
 ```
 
 To upgrade Hugo, simply replace the `/usr/local/bin/hugo` with the newest binary.
+
+## Quick start
+
+Following Hugo official [Quick Start](https://gohugo.io/getting-started/quick-start/):
+
+```sh
+# Create new site
+hugo new site quickstart
+
+# Add theme
+cd quickstart
+git submodule add https://github.com/budparr/gohugo-theme-ananke.git themes/ananke
+echo 'theme = "ananke"' >> config.toml
+
+# Create content
+hugo new posts/my-first-post.md
+
+# Run server
+hugo server -D
+
+# Build pages
+hugo -D
+```

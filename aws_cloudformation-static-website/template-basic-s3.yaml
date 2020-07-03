@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+# ---------- Parameters -------------------------------------------------------
+Parameters:
+  S3BucketName:
+    Type: String
+    Default: bw-basic-s3
+
+# ---------- Resources lists --------------------------------------------------
+Resources:
+  BwS3Hosting:
+    Type: AWS::S3::Bucket
+    Properties:
+      # AccessControl: PublicRead
+      BucketName: !Ref S3BucketName
+      WebsiteConfiguration:
+        ErrorDocument: 404.html
+        IndexDocument: index.html
+  BwS3HostingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref BwS3Hosting
+      PolicyDocument:
+        Id: MyPolicy
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Join
+              - ""
+              - - "arn:aws:s3:::"
+                - !Ref BwS3Hosting
+                - /*

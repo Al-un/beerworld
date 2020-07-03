@@ -1,0 +1,56 @@
+/* Some reset */
+html {
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  min-height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Off we go */
+body {
+  background-color: #0a1922;
+  color: white;
+}
+
+nav {
+  height: 48px;
+  background-color: #33ba91;
+}
+
+nav a {
+  display: inline-block;
+  font-size: 16px;
+  min-width: 123px;
+  padding: 14px 0px;
+  text-align: center;
+  color: white;
+}
+
+nav a:hover {
+  background-color: #29af87;
+}
+
+main {
+  margin: auto;
+  min-height: calc(100vh - 48px);
+  padding: 8px;
+  width: 100%;
+  max-width: 960px;
+  background-color: #08293d;
+}
+
+main img {
+  display: block;
+  margin: auto;
+}

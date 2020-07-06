@@ -408,7 +408,7 @@ A custom URL is nicer with HTTPS right? This is where we need CloudFront.
 
 #### Certificate stack
 
-> From June 2020, CloudFormation can automatically create the DNS entries to validate a certificate request \o/
+> From June 2020, CloudFormation can automatically create the DNS entries to validate a certificate request. However, if the stack is deleted, only the certificate is deleted. The DNS entries used to validate the domain remain and must be manually deleted if required.
 
 To be accessible to CloudFront, AWS Certificates **must** be created in North Virginia (_us-east-1_). An option is to create a dedicated stack. As only the certificate is created in _us-east-1_, the stack is light:
 

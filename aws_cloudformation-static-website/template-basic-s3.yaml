@@ -2,24 +2,24 @@ AWSTemplateFormatVersion: 2010-09-09
 
 # ---------- Parameters -------------------------------------------------------
 Parameters:
-  S3BucketName:
+  BucketName:
     Type: String
-    Default: bw-basic-s3
+    Default: bw-basic-hosting
 
 # ---------- Resources lists --------------------------------------------------
 Resources:
-  BwS3Hosting:
+  S3Hosting:
     Type: AWS::S3::Bucket
     Properties:
-      # AccessControl: PublicRead
-      BucketName: !Ref S3BucketName
+      BucketName: !Ref BucketName
       WebsiteConfiguration:
         ErrorDocument: 404.html
         IndexDocument: index.html
-  BwS3HostingBucketPolicy:
+
+  S3HostingBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
-      Bucket: !Ref BwS3Hosting
+      Bucket: !Ref S3Hosting
       PolicyDocument:
         Id: MyPolicy
         Version: 2012-10-17
@@ -31,5 +31,5 @@ Resources:
             Resource: !Join
               - ""
               - - "arn:aws:s3:::"
-                - !Ref BwS3Hosting
+                - !Ref S3Hosting
                 - /*

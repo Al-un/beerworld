@@ -9,8 +9,9 @@
   - [Step by step template definition](#step-by-step-template-definition)
   - [Deployment](#deployment)
   - [Stack deletion](#stack-deletion)
-- [Custom domain with AWS Route 53](#custom-domain-with-aws-route-53)
-- [Custom domain with an external registrar](#custom-domain-with-an-external-registrar)
+- [Custom URL/domain](#custom-urldomain)
+  - [With AWS Route53](#with-aws-route53)
+  - [With CloudFlare](#with-cloudflare)
 - [HTTPS with AWS](#https-with-aws)
 - [HTTPS with an external registrar](#https-with-an-external-registrar)
 - [CloudFront cache invalidation](#cloudfront-cache-invalidation)
@@ -23,6 +24,8 @@
 Hosting a static website involves a various set of AWS resources depending on our requirements. While all the actions defined here can be done via the web console or, with some faith and hardship, through the CLI, we are going to take the CloudFormation route.
 
 CloudFormation is basically the _Infrastructure as Code_ ([Wiki link](https://en.wikipedia.org/wiki/Infrastructure_as_code)) face of AWS.
+
+> Not all of us uses AWS DNS servers. Some examples will, whenever I can, split between a full AWS environment, essentially by using Route 53, and an external DNS server, in my case, CloudFlare.
 
 ## CloudFormation, the theory
 
@@ -292,7 +295,13 @@ aws s3 rm --recursive s3://bw-basic-s3
 aws cloudformation delete-stack --stack-name bw-hosting-basic-s3
 ```
 
-## Custom domain with AWS Route 53
+## Custom URL/domain
+
+All systems online! but online behind a not-very-user-friendly-URL.
+
+### With AWS Route53
+
+This section specificity is that the bucket name **must** match the target domain name: `example.com` must be hosted in a bucket with the same name. It also applies to subdomains: `subdomain.example.com` must be hosted in a bucket with exactly the same name.
 
 References:
 
@@ -315,7 +324,36 @@ Notes:
 - [AWS::Route53::RecordSet](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html)
 - [Amazon S3 Template Snippets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-s3.html#scenario-s3-bucket-website)
 
-## Custom domain with an external registrar
+### With CloudFlare
+
+Similarly to the previous example, the bucket name **must** match the target domain name.
+
+CloudFlare has to do Route 53's job: handle a CNAME entry (such as _example.com_ or _app.example.com_) pointing to the S3 bucket website endpoint (such as _example.com.s3-website.<AWS region>.amazonaws.com_ or _app.example.com.s3-website.<AWS region>.amazonaws.com_).
+
+> When editing DNS entries, don't forget to strip out ending slashes and the protocol (no `http://`).
+
+This can easily be done in the web interface by creating a DNS entry:
+
+- type: _CNAME_
+- name: your subdomain name or `@` for the root domain (such as `example.com`)
+- target: the S3 bucket website endpoint
+- TTL: automatic or any desired value
+
+Such DNS entry creation can also be performed with the Cloudflare API. A token with DNS edition permission on the appropriate domain is required. To create the DNS record ([Cloudflare docs](https://api.cloudflare.com/#dns-records-for-a-zone-create-dns-record))
+
+```sh
+curl "https://api.cloudflare.com/client/v4/zones/<zone id>/dns_records" -X POST \
+-H "Authorization: Bearer <token>" \
+-H "Content-Type: application/json" \
+--data @- <<'EOF'
+{
+  "type": "CNAME",
+  "name": "bw-domain-cloudflare",
+  "content": "bw-domain-cloudflare.al-un.fr.s3-website.eu-west-3.amazonaws.com",
+  "ttl": 1
+}
+EOF
+```
 
 ## HTTPS with AWS
 

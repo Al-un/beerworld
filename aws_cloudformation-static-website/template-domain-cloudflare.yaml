@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+# ---------- Parameters -------------------------------------------------------
+Parameters:
+  DomainName:
+    Type: String
+    Default: bw-domain-cloudflare.al-un.fr
+
+# ---------- Resources lists --------------------------------------------------
+Resources:
+  S3Hosting:
+    Type: AWS::S3::Bucket
+    Properties:
+      AccessControl: PublicRead
+      BucketName: !Ref DomainName
+      WebsiteConfiguration:
+        ErrorDocument: 404.html
+        IndexDocument: index.html
+
+  S3HostingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Hosting
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Sid: PublicReadForGetBucketObjects
+            Effect: Allow
+            Principal: "*"
+            Action: "s3:GetObject"
+            Resource: !Sub "arn:aws:s3:::${S3Hosting}/*"

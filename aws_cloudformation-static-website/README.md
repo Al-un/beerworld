@@ -12,14 +12,12 @@
 - [Custom URL/domain](#custom-urldomain)
   - [With AWS Route53](#with-aws-route53)
   - [With CloudFlare](#with-cloudflare)
-- [HTTPS with AWS](#https-with-aws)
-- [HTTPS with an external registrar](#https-with-an-external-registrar)
+- [HTTPS redirection](#https-redirection)
+  - [With AWS Route 53](#with-aws-route-53)
+  - [With Cloudflare](#with-cloudflare-1)
 - [CloudFront cache invalidation](#cloudfront-cache-invalidation)
 - [Misc](#misc)
   - [Deletion policy](#deletion-policy)
-- [Troubleshooting](#troubleshooting)
-  - [YAML](#yaml)
-  - [CloudFormation](#cloudformation)
 
 Hosting a static website involves a various set of AWS resources depending on our requirements. While all the actions defined here can be done via the web console or, with some faith and hardship, through the CLI, we are going to take the CloudFormation route.
 
@@ -80,22 +78,25 @@ Some functions will be used to ease the template definitions. Those functions wi
 
 As I spend quite a lot of times to find back "what are the properties of this resources", here is a list of all resources CloudFormation documentation:
 
-- [`AWS::S3::Bucket`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html)
-- [`AWS::S3::BucketPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html)
-  - [Policies and Permissions in Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html)
+- [`AWS::CertificateManager::Certificate`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-certificatemanager-certificate.html)
+  - [ACM now automatically DNS-validates certificate with CloudFormation](https://aws.amazon.com/about-aws/whats-new/2020/06/aws-certificate-manager-extends-automation-certificate-issuance-via-cloudformation/)
+  - [ACM best practices](https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html#best-practices-validating)
 - [`AWS::CloudFront::CloudFrontOriginAccessIdentity`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-cloudfrontoriginaccessidentity.html)
 - [`AWS::CloudFront::Distribution`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-cloudfront-distribution.html)
   - [AWS Pricing: AWS CloudFront](https://aws.amazon.com/cloudfront/pricing/)
-- [`AWS::Route53::RecordSetGroup`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordsetgroup.html)
-- [`AWS::Route53::RecordSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html)
-  - [`AWS::Route53::RecordSet` `AliasTarget`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget-1.html)
-    - `Z2FDTNDATAQYW2` is the _HostedZoneId_ for CloudFront resources ([link](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html))
 - [`AWS::IAM::Role`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html)
 - [`AWS::Lambda::Function`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-function.html)
   - https://serverlesscode.com/post/cloudformation-deploy-lambda-resources/
 - [`AWS::Lambda::Permission`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html)
   - [Solve Circular dependency in AWS S3 <> Lambda permission](https://aws.amazon.com/premiumsupport/knowledge-center/unable-validate-circular-dependency-cloudformation/)
   - https://www.lars-berning.de/avoiding-circular-dependency-problems-in-aws-cloudformation/
+- [`AWS::Route53::RecordSetGroup`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-route53-recordsetgroup.html)
+- [`AWS::Route53::RecordSet`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html)
+  - [`AWS::Route53::RecordSet` `AliasTarget`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-aliastarget-1.html)
+    - `Z2FDTNDATAQYW2` is the _HostedZoneId_ for CloudFront resources ([link](https://docs.aws.amazon.com/Route53/latest/APIReference/API_AliasTarget.html))
+- [`AWS::S3::Bucket`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket.html)
+- [`AWS::S3::BucketPolicy`](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html)
+  - [Policies and Permissions in Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/dev/access-policy-language-overview.html)
 
 ### CLI
 
@@ -393,9 +394,15 @@ curl "https://api.cloudflare.com/client/v4/zones/<zone id>/dns_records" -X POST 
 EOF
 ```
 
-## HTTPS with AWS
+**References**:
 
-## HTTPS with an external registrar
+- https://wsvincent.com/static-site-hosting-with-s3-and-cloudflare/
+
+## HTTPS redirection
+
+### With AWS Route 53
+
+### With Cloudflare
 
 ## CloudFront cache invalidation
 
@@ -404,14 +411,3 @@ EOF
 ### Deletion policy
 
 https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
-
-## Troubleshooting
-
-### YAML
-
-- Watch out indentation
-- Copy paste can be error prone in VS Code
-
-### CloudFormation
-
-- _You have attempted to create more buckets than allowed_

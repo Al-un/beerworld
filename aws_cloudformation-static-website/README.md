@@ -14,6 +14,8 @@
   - [With CloudFlare](#with-cloudflare)
 - [HTTPS redirection](#https-redirection)
   - [With AWS Route 53](#with-aws-route-53)
+    - [Certificate stack](#certificate-stack)
+    - [Main stack](#main-stack)
   - [With Cloudflare](#with-cloudflare-1)
 - [CloudFront cache invalidation](#cloudfront-cache-invalidation)
 - [Misc](#misc)
@@ -400,7 +402,53 @@ EOF
 
 ## HTTPS redirection
 
+A custom URL is nicer with HTTPS right? This is where we need CloudFront.
+
 ### With AWS Route 53
+
+#### Certificate stack
+
+> From June 2020, CloudFormation can automatically create the DNS entries to validate a certificate request \o/
+
+To be accessible to CloudFront, AWS Certificates **must** be created in North Virginia (_us-east-1_). An option is to create a dedicated stack. As only the certificate is created in _us-east-1_, the stack is light:
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: app.example.com
+      DomainValidationOptions:
+        - DomainName: app.example.com
+          HostedZoneId: <example.com. ZoneID>
+      ValidationMethod: DNS
+```
+
+The [`template-https-aws-acm.yaml`](template-https-aws-acm.yaml) is an example of a single certificate validating two sub domains of the same root domains.
+
+<sub>This template example can be improved by having some parameters</sub>
+
+```sh
+# Create the stack in us-east-1. From now on, it is recommended to pass
+# the --region argument to ensure that we are hitting the right spot
+aws cloudformation deploy --stack-name bw-https-aws-acm --template-file template-https-acm.yaml --region us-east-1
+
+# Describe the certificate to check the Certificate ARN
+aws cloudformation describe-stack-resource --stack-name bw-https-aws-acm --logical-resource-id Certificate --region us-east-1
+```
+
+Alternatively, we can use the `Output` section in the template. Although it sounds overkill as the certificate ARN is easy to find, the output would look like:
+
+```yaml
+Outputs:
+  CertificateArn:
+    Value: !Ref Certificate
+    Description: "Certificate ARN"
+```
+
+#### Main stack
 
 ### With Cloudflare
 

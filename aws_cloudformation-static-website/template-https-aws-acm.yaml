@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+# ---------- Resources lists --------------------------------------------------
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: app.example.com
+      DomainValidationOptions:
+        - DomainName: app.example.com
+          HostedZoneId: <example.com. ZoneID>
+        - DomainName: app-dev.example.com
+          HostedZoneId: <example.com. ZoneID>
+      SubjectAlternativeNames:
+        - app-dev.example.com
+      ValidationMethod: DNS

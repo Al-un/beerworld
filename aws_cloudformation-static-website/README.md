@@ -303,26 +303,64 @@ All systems online! but online behind a not-very-user-friendly-URL.
 
 This section specificity is that the bucket name **must** match the target domain name: `example.com` must be hosted in a bucket with the same name. It also applies to subdomains: `subdomain.example.com` must be hosted in a bucket with exactly the same name.
 
-References:
+This template can be built from the previous template:
 
-- [S3 Template Snippets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-s3.html)
-- [S3 website endpoint and hosted zone ID](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints)
+- `BucketName` parameter is renamed `DomainName` to be more explicit
+- Unlike AWS template snippets, I had to keep the S3 bucket policy
+- Two more resources are added: the S3 bucket for redirection and Route 53 entries
 
-```sh
-aws cloudformation deploy --stack-name bw-hosting-domain-aws --template-file template-domain-aws.yaml --profile alun
-aws s3 sync website s3://bw-domain-aws.al-un.fr --profile alun
+The S3 redirection bucket, typically redirecting _www.example.com_ to _example.com_, is simply defined as follow:
 
-aws s3 rm --recursive s3://bw-domain-aws.al-un.fr --profile alun
-aws cloudformation delete-stack --stack-name bw-hosting-domain-aws --profile alun
+```yaml
+S3Redirection:
+Type: AWS::S3::Bucket
+Properties:
+  AccessControl: BucketOwnerFullControl
+  BucketName: !Sub www.${DomainName}
+  WebsiteConfiguration:
+    RedirectAllRequestsTo:
+      HostName: !Ref S3Hosting
 ```
 
-Notes:
+> Note: I am not sure if the `AccessControl` can be dropped or not as I just copied from AWS snippet
 
-- Bucket name must match domain name
-- Bucket policy still required
+The Route 53 DNS entries handles both domain _example.com_ and _www.example.com_ by pointing them to the appropriate resources. The following code is simply copied from AWS snippet.
 
-- [AWS::Route53::RecordSet](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-route53-recordset.html)
+```yaml
+DNSEntries:
+  Type: AWS::Route53::RecordSetGroup
+  Properties:
+    HostedZoneName: !Ref RootDomainName
+    RecordSets:
+      - AliasTarget:
+          HostedZoneId: !FindInMap [S3Regions, !Ref "AWS::Region", ZoneId]
+          DNSName: !FindInMap [S3Regions, !Ref "AWS::Region", Endpoint]
+        Name: !Ref DomainName
+        Type: A
+      - Name: !Sub www.${DomainName}
+        ResourceRecords:
+          - !GetAtt S3Redirection.DomainName
+        Type: CNAME
+        TTL: 900
+```
+
+The final template is [`template-domain-aws.yaml`](template-domain-aws.yaml).
+
+Deployment and stack deletion commands are the same:
+
+```sh
+aws cloudformation deploy --stack-name bw-hosting-domain-aws --template-file template-domain-aws.yaml
+aws s3 sync website s3://bw-domain-aws.al-un.fr
+
+aws s3 rm --recursive s3://bw-domain-aws.al-un.fr
+aws cloudformation delete-stack --stack-name bw-hosting-domain-aws
+```
+
+References:
+
 - [Amazon S3 Template Snippets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-s3.html#scenario-s3-bucket-website)
+- [S3 website endpoint and hosted zone ID](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints)
+-
 
 ### With CloudFlare
 

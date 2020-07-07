@@ -9,7 +9,7 @@ Parameters:
     Description: Certificate must be created before CloudFormation stack so the value is fixed
   BucketName:
     Type: String
-    Default: bw-https-hosting
+    Default: bw-hosting-https-aws
   DomainName:
     Type: String
     Default: app.example.com

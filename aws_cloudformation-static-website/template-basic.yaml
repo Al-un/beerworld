@@ -4,7 +4,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   BucketName:
     Type: String
-    Default: bw-basic-hosting
+    Default: bw-hosting-basic
 
 # ---------- Resources lists --------------------------------------------------
 Resources:

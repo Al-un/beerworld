@@ -4,10 +4,10 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   DomainName:
     Type: String
-    Default: bw-domain-aws.al-un.fr
+    Default: bw-hosting-domain-aws.example.com
   RootDomainName:
     Type: String
-    Default: al-un.fr.
+    Default: example.com.
 
 # ---------- Mappings ---------------------------------------------------------
 Mappings:

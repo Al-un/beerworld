@@ -251,7 +251,7 @@ S3HostingBucketPolicy:
 
 Although I have not tried, I think `!Sub arn:aws:s3:::${S3Hosting}/*` is also valid.
 
-The end result is the [`template-basic-s3.yaml`](template-basic-s3.yaml).
+The end result is the [`template-basic.yaml`](template-basic.yaml).
 
 > Note: although the different tutorials and guide add `AccessControl: PublicRead` in the S3Hosting bucket definition, I did not need it so I removed it.
 
@@ -260,22 +260,22 @@ The end result is the [`template-basic-s3.yaml`](template-basic-s3.yaml).
 It is now time to deploy! Deploying is as simple as
 
 ```sh
-# Feel free to change "bw-hosting-basic-s3" to whatever value
-aws cloudformation deploy --stack-name bw-hosting-basic-s3 --template-file template-basic-s3.yaml
+# Feel free to change "bw-hosting-basic" to whatever value
+aws cloudformation deploy --stack-name bw-hosting-basic --template-file template-basic.yaml
 ```
 
 To deploy the same stack with a different bucket name, the bucket name parameter has to be overriden:
 
 ```sh
-# I changed the stack name. If the stack name was bw-hosting-basic-s3, it would have updated the
+# I changed the stack name. If the stack name was bw-hosting-basic, it would have updated the
 # previous stack
-aws cloudformation deploy --stack-name bw-hosting-basic-s3-other-name --template-file template-basic-s3.yaml --parameter-overrides BucketName=some-other-name
+aws cloudformation deploy --stack-name bw-hosting-basic-custom-name --template-file template-basic.yaml --parameter-overrides BucketName=some-other-name
 ```
 
 To check what name the bucket is currently having:
 
 ```sh
-aws cloudformation describe-stack-resource --stack-name bw-hosting-basic-s3 --logical-resource-id S3Hosting
+aws cloudformation describe-stack-resource --stack-name bw-hosting-basic --logical-resource-id S3Hosting
 ```
 
 Time to upload some content!
@@ -294,8 +294,8 @@ firefox http://bw-basic-hosting.s3-website.eu-west-3.amazonaws.com/
 S3 buckets cannot be deleted if not empty. The stack deletion then requires two actions:
 
 ```sh
-aws s3 rm --recursive s3://bw-basic-s3
-aws cloudformation delete-stack --stack-name bw-hosting-basic-s3
+aws s3 rm --recursive s3://bw-hosting-basic
+aws cloudformation delete-stack --stack-name bw-hosting-basic
 ```
 
 ## Custom URL/domain

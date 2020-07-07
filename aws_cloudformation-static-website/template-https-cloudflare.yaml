@@ -52,7 +52,6 @@ Resources:
         Origins:
           - DomainName: !GetAtt S3Hosting.RegionalDomainName
             Id: !Sub "S3-origin-${S3Hosting}"
-            OriginPath: /some-folder
             S3OriginConfig:
               OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CDNOriginIdentity}"
         PriceClass: PriceClass_100 # PriceClass_100 / PriceClass_200 / PriceClass_All

@@ -1,0 +1,225 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Some description for this stack
+
+# ---------- Parameters -------------------------------------------------------
+Parameters:
+  CertificateArn:
+    Type: String
+    # This certificate is deleted and must be updated when it is created again
+    Default: arn:aws:acm:us-east-1:558043415147:certificate/d98f41c4-7958-41a5-8283-2e32c58551e3
+    Description: Certificate must be created before CloudFormation stack so the value is fixed
+  BucketName:
+    Type: String
+    Default: bw-invalidate-cache
+  DomainName:
+    Type: String
+    Default: bw-invalidate-cache.al-un.fr
+  CacheInvalidationLambdaName:
+    Type: String
+    Default: cloudfront-cache-invalidation
+
+# ---------- Resources lists --------------------------------------------------
+Resources:
+  CDNOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "Cloudfront Origin identity for ${DomainName}"
+
+  CacheInvalidationLambdaIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Description: IAM role for the Lambda to invalidate CloudFront cache
+      Policies:
+        - PolicyName: CloudFrontCacheInvalidationPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - cloudfront:ListDistributions
+                Effect: Allow
+                Resource: "*"
+              - Action:
+                  - cloudfront:CreateInvalidation
+                Effect: Allow
+                Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/*"
+        - PolicyName: CloudWatchPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - "logs:CreateLogGroup"
+                Effect: Allow
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              - Action:
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Effect: Allow
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CacheInvalidationLambdaName}/*"
+      RoleName: !Sub "${CacheInvalidationLambdaName}-role"
+
+  CacheInvalidationLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      Code:
+        ZipFile: |
+          const aws = require("aws-sdk");
+          
+          const buildOriginId = (bucketName) => `S3-origin-${bucketName}`;
+
+          const buildOriginPath = (filePath) => {
+            const expectedFileName = "index.html";
+            return filePath !== expectedFileName ? "/" + filePath.substr(0, filePath.length - expectedFileName.length - 1) : "";
+          };
+          
+          const createInvalidation = (originId, originPath) => {
+            const cloudfront = new aws.CloudFront({ apiVersion: "2019-03-26" });
+          
+            return new Promise((resolve, reject) => {
+              cloudfront.listDistributions({}, function (err, data) {
+                if (err) {
+                  reject(err);
+                  return;
+                }
+          
+                const distribution = data.DistributionList.Items.filter((distrib) =>
+                  distrib.Origins.Items.some((origin) => {
+                    return origin.Id === originId && origin.OriginPath === originPath;
+                  })
+                ).find(() => true);
+          
+                if (!distribution) {
+                  reject({ message: "No Cloudfront distribution found", originId, originPath });
+                  return;
+                }
+          
+                const params = {
+                  DistributionId: distribution.Id,
+                  InvalidationBatch: {
+                    CallerReference: new Date().toISOString(),
+                    Paths: { Quantity: 1, Items: ["/*"] },
+                  },
+                };
+          
+                // Create invalidation
+                cloudfront.createInvalidation(params, function (err, data) {
+                  if (err)  { reject(err);    } 
+                  else      { resolve(data);  }
+                });
+              });
+            });
+          };
+          
+          exports.handler = async (event) => {
+            try {
+              const bucketName = event.Records[0].s3.bucket.name;
+              const filePath = event.Records[0].s3.object.key;
+        
+              const cloudFormationInvalidation = await createInvalidation(
+                buildOriginId(bucketName),
+                buildOriginPath(filePath)
+              );
+          
+              return {
+                statusCode: 200,
+                body: { cloudFormationInvalidation },
+              };
+            } catch (err) {
+              console.error("Caught error: ", err);
+              return {
+                statusCode: 500,
+                body: err,
+              };
+            }
+          };
+      FunctionName: !Ref CacheInvalidationLambdaName
+      Handler: index.handler
+      Role: !GetAtt CacheInvalidationLambdaIamRole.Arn
+      Runtime: nodejs12.x
+
+  S3PermissionToCacheInvalidationLambda:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !GetAtt CacheInvalidationLambda.Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !Sub "arn:aws:s3:::${BucketName}"
+
+  S3Hosting:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: index.html
+            Function: !GetAtt CacheInvalidationLambda.Arn
+
+  CDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Ref DomainName
+        DefaultCacheBehavior:
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: True
+          TargetOriginId: !Sub "S3-origin-${S3Hosting}"
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: True
+        HttpVersion: http2
+        IPV6Enabled: True
+        Origins:
+          - DomainName: !GetAtt S3Hosting.RegionalDomainName
+            Id: !Sub "S3-origin-${S3Hosting}"
+            OriginPath: /some-folder
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CDNOriginIdentity}"
+        PriceClass: PriceClass_100 # PriceClass_100 / PriceClass_200 / PriceClass_All
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          MinimumProtocolVersion: TLSv1.2_2018
+          SslSupportMethod: sni-only
+
+  S3HostingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Hosting
+      PolicyDocument:
+        Statement:
+          - Action:
+              - "s3:GetObject"
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CDNOriginIdentity}"
+            Resource: !Sub "arn:aws:s3:::${S3Hosting}/*"
+        Version: "2012-10-17"
+
+Outputs:
+  CloudFrontID:
+    Value: !Ref CDN
+    Description: CloudFront ID
+  CloudFrontURL:
+    Value: !GetAtt CDN.DomainName
+    Description: CloudFront URL for updating DNS record

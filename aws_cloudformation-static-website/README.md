@@ -20,6 +20,11 @@
     - [Certificate stack](#certificate-stack-1)
     - [Main stack](#main-stack-1)
 - [CloudFront cache invalidation](#cloudfront-cache-invalidation)
+  - [Certificate](#certificate)
+  - [Main stack](#main-stack-2)
+    - [S3 event notification](#s3-event-notification)
+    - [Cache invalidation lambda](#cache-invalidation-lambda)
+    - [Deployment](#deployment-1)
 - [Misc](#misc)
   - [Deletion policy](#deletion-policy)
 
@@ -490,6 +495,162 @@ The Cloudflare HTTPS main stack is very similar to the AWS version. There are tw
 When the stack is up, the last step is to create the CNAME record in Cloudflare matching the domain name and pointing to the CloudFront (CDN) domain name.
 
 ## CloudFront cache invalidation
+
+This section has not much difference between Route 53 and Cloudflare so my example will rely on the Cloudflare option only. For the Route 53 option, please refer to the HTTPS example.
+
+### Certificate
+
+The AWS Certificate is the same as before and has to be deployed first to get the ARN.
+
+- Deploy the ACM stack in _us-east-1_
+  ```sh
+  aws cloudformation deploy --stack-name bw-invalidate-cache-acm --template-file template-invalidate-cache-acm.yaml --region us-east-1
+  ```
+- Create the CNAME entries in Cloudflare to validate the certificate
+
+### Main stack
+
+Our previous configuration (CDN, S3 bucket) mainly remains the same. The core idea is to invalidate Cloudfront cache whenever the hosting bucket is updated:
+
+- To avoid spamming notifications, only updates on `index.html` trigger a notification
+- A lambda function processes the notification by creating an invalidation in the appropriate Cloudfront distribution
+
+> Note, the order of resources declaration in the template file does not matter but I try to be as closed as possible to the actual order of resources creation
+
+<sub>IAM fun starts here</sub>
+
+#### S3 event notification
+
+Adding the notification to the S3 bucket will change the resource definition into:
+
+```yaml
+S3Hosting:
+  Type: AWS::S3::Bucket
+  Properties:
+    BucketName: !Ref BucketName
+    NotificationConfiguration:
+      LambdaConfigurations:
+        - Event: s3:ObjectCreated:*
+          Filter:
+            S3Key:
+              Rules:
+                - Name: suffix
+                  Value: index.html
+          Function: <some lambda ARN>
+```
+
+However, this sole declaration lacks permission: the S3 bucket is now allowed to invoke the lambda provided by its ARN:
+
+```yaml
+S3PermissionToCacheInvalidationLambda:
+  Type: AWS::Lambda::Permission
+  Properties:
+    FunctionName: !GetAtt CacheInvalidationLambda.Arn
+    Action: lambda:InvokeFunction
+    Principal: s3.amazonaws.com
+    SourceAccount: !Ref AWS::AccountId
+    SourceArn: !Sub "arn:aws:s3:::${BucketName}"
+```
+
+> Note that for `SourceArn: !Sub "arn:aws:s3:::${BucketName}"`, I am not referring with `!Ref S3Hosting`. Doing so would end up with a circular reference:
+>
+> 1. Build the S3 bucket will require the permission
+> 2. Building the permission will require the S3 bucket
+>
+> Fatal error!
+
+The resource "chain" is then _Lambda > S3PermissionToCacheInvalidationLambda > S3Hosting_.
+
+#### Cache invalidation lambda
+
+A lambda function must be declared with an IAM role to define its access scope. To avoid cyclical reference (same as previous permission declaration), the lambda IAM role cannot target a specific Cloudfront distribution and must have access to all Cloudfront distributions.
+
+The lambda has to be authorised to:
+
+- List Cloudfront distribution
+- Create Cloudfront cache invalidation
+- Create log group
+- Logs
+
+```yaml
+Parameters:
+  # ...
+  CacheInvalidationLambdaName:
+    Type: String
+    Default: <some lambda function name>
+
+Resources:
+  CacheInvalidationLambdaIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Action:
+              - sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                - lambda.amazonaws.com
+      Description: IAM role for the Lambda to invalidate CloudFront cache
+      Policies:
+        - PolicyName: CloudFrontCacheInvalidationPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - cloudfront:ListDistributions
+                Effect: Allow
+                Resource: "*"
+              - Action:
+                  - cloudfront:CreateInvalidation
+                Effect: Allow
+                Resource: !Sub "arn:aws:cloudfront::${AWS::AccountId}:distribution/*"
+        - PolicyName: CloudWatchPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Action:
+                  - "logs:CreateLogGroup"
+                Effect: Allow
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+              - Action:
+                  - "logs:CreateLogStream"
+                  - "logs:PutLogEvents"
+                Effect: Allow
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CacheInvalidationLambdaName}/*"
+      RoleName: !Sub "${CacheInvalidationLambdaName}-role"
+```
+
+Once the IAM role is ready, declaring the lambda function is a straight:
+
+```yaml
+CacheInvalidationLambda:
+  Type: AWS::Lambda::Function
+  Properties:
+    Code:
+      ZipFile: |
+        ...Enter the lambda code here...
+    FunctionName: <lambda function name>
+    Handler: index.handler
+    Role: !GetAtt CacheInvalidationLambdaIamRole.Arn
+    Runtime: nodejs12.x
+```
+
+I skipped the code for clarity. The real code can be found in
+
+- [`template-invalidate-cache.yaml`](template-invalidate-cache.yaml)
+- [`lambda-invalidate-cache.js`](lambda-invalidate-cache.js) for syntax highlighting and some comments
+
+#### Deployment
+
+This stack requires IAM capabilities provided by the `--capabilities CAPABILITY_NAMED_IAM` argument
+
+```sh
+aws cloudformation deploy --stack-name bw-invalidate-cache --template-file template-invalidate-cache.yaml --capabilities CAPABILITY_NAMED_IAM --region eu-west-3
+```
+
+> Don't forget to create the CNAME entry in your DNS entries pointing to the Cloudfront distribution domain name
 
 ## Misc
 

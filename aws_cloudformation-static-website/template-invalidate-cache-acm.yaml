@@ -1,0 +1,10 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: Certificate for HTTPS hosting with CloudFlare
+
+# ---------- Resources lists --------------------------------------------------
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: bw-invalidate-cache.al-un.fr
+      ValidationMethod: DNS

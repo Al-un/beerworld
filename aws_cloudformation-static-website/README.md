@@ -17,6 +17,8 @@
     - [Certificate stack](#certificate-stack)
     - [Main stack](#main-stack)
   - [With Cloudflare](#with-cloudflare-1)
+    - [Certificate stack](#certificate-stack-1)
+    - [Main stack](#main-stack-1)
 - [CloudFront cache invalidation](#cloudfront-cache-invalidation)
 - [Misc](#misc)
   - [Deletion policy](#deletion-policy)
@@ -367,7 +369,14 @@ References:
 
 ### With CloudFlare
 
-Similarly to the previous example, the bucket name **must** match the target domain name.
+Similarly to the previous example, the bucket name **must** match the target domain name. As Route 53 is not used, the `RootDomainName` parameter is now unnecessary.
+
+```yaml
+Parameters:
+  DomainName:
+    Type: String
+    Default: bw-hosting-domain-cloudflare.al-un.fr
+```
 
 CloudFlare has to do Route 53's job: handle a CNAME entry (such as _example.com_ or _app.example.com_) pointing to the S3 bucket website endpoint (such as _example.com.s3-website.<AWS region>.amazonaws.com_ or _app.example.com.s3-website.<AWS region>.amazonaws.com_).
 
@@ -451,6 +460,34 @@ Outputs:
 #### Main stack
 
 ### With Cloudflare
+
+#### Certificate stack
+
+The certificate is still managed by AWS but the validation has to be done in Cloudflare. The certificate stack is lighter than the AWS counterpart:
+
+```yaml
+AWSTemplateFormatVersion: 2010-09-09
+
+Resources:
+  Certificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: bw-https.al-un.fr
+      ValidationMethod: DNS
+```
+
+If multiple domains must be covered by this certificate, the `SubjectAlternativeNames` also works here.
+
+To validate the certificate, you must create the CNAME records in Cloudflare as defined in AWS Certificate manager
+
+#### Main stack
+
+The Cloudflare HTTPS main stack is very similar to the AWS version. There are two differences:
+
+- There is no Route 53 resources as DNS entries are handled by Cloudflare
+- An output property display the CDN domain name that will be used in the CNAME record in Cloudflare
+
+When the stack is up, the last step is to create the CNAME record in Cloudflare matching the domain name and pointing to the CloudFront (CDN) domain name.
 
 ## CloudFront cache invalidation
 

@@ -1,10 +1,6 @@
 # Nuxtjs full setup <!-- omit in toc -->
 
-Mainly self notes for setting up a Nuxtjs application with:
-
-- Vuetify
-- vue-i18n
-- Storybook
+Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and Storybook.
 
 - [Nuxtjs setup](#nuxtjs-setup)
   - [Nuxtjs](#nuxtjs)
@@ -22,7 +18,7 @@ Start with the magic setup command (see [Nuxtjs docs: installation](https://nuxt
 npx create-nuxt-app
 ```
 
-[![Full configuration](../beerworld/screenshots/vue_nuxtjs-full-setup-01.png)]
+![Full configuration](../beerworld/screenshots/vue_nuxtjs-full-setup-01.png)
 
 > Note: at the time of running `create-nuxt-app` v3.1.0, TypeScript is already configured so there is no need to proceed to any TypeScript setup ([Nuxt TypeScript doc link](https://typescript.nuxtjs.org/guide/setup.html)). [`create-nuxt-app` releases list](https://github.com/nuxt/create-nuxt-app/releases/tag/v2.15.0) mentions the TypeScript support from v2.15.0
 

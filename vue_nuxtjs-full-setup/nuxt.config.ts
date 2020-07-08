@@ -1,5 +1,7 @@
 import colors from 'vuetify/es5/util/colors'
 
+import i18nMsgs from './i18n/'
+
 export default {
   /*
    ** Nuxt rendering mode
@@ -59,6 +61,7 @@ export default {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    'nuxt-i18n',
   ],
   /*
    ** Axios module configuration
@@ -91,4 +94,15 @@ export default {
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {},
+  i18n: {
+    locales: ['en', 'fr'],
+    defaultLocale: 'fr',
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: {
+        en: i18nMsgs.EN,
+        fr: i18nMsgs.FR,
+      },
+    },
+  },
 }

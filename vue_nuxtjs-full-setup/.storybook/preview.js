@@ -47,6 +47,8 @@ import 'vuetify/dist/vuetify.min.css'
 // https://vuetifyjs.com/en/customization/icons/#usage
 Vue.use(Vuetify)
 const vuetify = new Vuetify({
+  // Using spread operator here in case this part will be put in common
+  // with nuxt.config.js configuration
   ...{
     customVariables: ['~/assets/variables.scss'],
     theme: {

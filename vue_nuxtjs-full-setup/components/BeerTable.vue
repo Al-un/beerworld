@@ -1,5 +1,18 @@
 <template>
-  <v-data-table :headers="headers" :items="beers" item-key="id"></v-data-table>
+  <div>
+    <div>
+      <span>Testing some icons:</span>
+      <v-icon>mdi-home</v-icon>
+    </div>
+
+    <v-data-table :headers="headers" :items="beers" item-key="id"></v-data-table>
+
+    <v-chip close color="teal" text-color="white" close-icon="mdi-delete">
+      <v-avatar left>
+        <v-icon>mdi-checkbox-marked-circle</v-icon>
+      </v-avatar>Confirmed
+    </v-chip>
+  </div>
 </template>
 
 <script lang="ts">

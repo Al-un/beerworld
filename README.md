@@ -6,7 +6,7 @@ A mix of experiments, guides, self-notes primarily focusing on front-end develop
 
 - Front-end
   - Vue.js
-    - Nuxt.js full configuration: _TODO_
+    - [Nuxt.js full setup](vue_nuxtjs-full-setup/): Nuxt.js setup notes with Vuetify, Nuxt-i18n and Storybook-powered
 - Static site generator
   - Hugo
     - [Getting started](hugo_getting_started/)
@@ -18,8 +18,8 @@ A mix of experiments, guides, self-notes primarily focusing on front-end develop
     - [Getting started](docker_getting-started/)
     - [Network & storage](docker_network-storage/)
     - [Docker compose](docker_compose/)
-    - Reverse Proxy: _TODO_
-  - Kubernetes: _TODO_
+    - Reverse Proxy
+  - Kubernetes
 - Databases
   - PostgreSQL
     - [Getting started](pgsql_getting-started/)

@@ -8,6 +8,8 @@ Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and
 - [Storybook setup](#storybook-setup)
   - [Storybook core and addons](#storybook-core-and-addons)
 
+> Note: In VS Code, Vetur does not like "monorepo-like" folder structure and will flag TypeScript as `xxx is not a module`. I fixed the issue by opening the folder in a new VS Code window
+
 ## Nuxtjs setup
 
 ### Nuxtjs
@@ -170,6 +172,8 @@ export default {
 
   configure(require.context('../', true, /\.stories\.ts$/), module)
   ```
+
+> Note: when creating a testing _xxx.stories.ts_ file, I encountered an issue when importing a Vue file in the TypeScript file. Creating _shims-vue.d.ts_ file fixes that issue
 
 **References**:
 

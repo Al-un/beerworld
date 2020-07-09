@@ -34,9 +34,94 @@ Following [Nuxt-i18n setup guide](https://nuxt-community.github.io/nuxt-i18n/set
   ```sh
   npm install nuxt-i18n
   ```
-- Add `nuxt-i18n` type in _tsconfig.json_
-- Create I18n entries in the _i18n/_ folder
+- Add `nuxt-i18n` type in _tsconfig.json_:
+
+  ```json
+  {
+    "compilerOptions": {
+      "types": ["@types/node", "@nuxt/types", "vuetify/types", "nuxt-i18n"]
+    }
+  }
+  ```
+
+- Create I18n entries in the _i18n/_ folder:
+
+  ```
+  {nuxt project}
+  i18n/
+    en.ts
+    fr.ts
+    index.ts <-- for re-export only
+  ```
+
 - Add `nuxt-i18n` plugin in _nuxt.config.ts_ and configure `i18n` global variable
-- Update _pages/index.vue_ to use the newly created I18n entries
+
+  ```js
+  export default {
+    modules: [
+      // ...
+      'nuxt-i18n',
+    ],
+    // ...
+    i18n: {
+      // configuration here (see below)
+    },
+  }
+  ```
+
+- Update _pages/index.vue_ to use the newly created I18n entries:
+
+  ```html
+  <template>
+    <div>{{ $t('hello') }}</div>
+  </template>
+  ```
+
+Regarding the `i18n` configuration, the basic configuration is simply the standard `vue-i18n` configuration:
+
+```js
+import i18nMsgs from './i18n/'
+
+export default {
+  // ...
+  i18n: {
+    defaultLocale: 'fr',
+    locales: ['en', 'fr'],
+    vueI18n: {
+      fallbackLocale: 'en',
+      messages: {
+        en: i18nMsgs.EN,
+        fr: i18nMsgs.FR,
+      },
+    },
+  },
+}
+```
+
+However, some features are specific to the nuxt plugin, such as lazy loading. The configuration must be declared differently:
+
+```js
+export default {
+  // ...
+  i18n: {
+    defaultLocale: 'fr',
+    langDir: 'i18n/',
+    locales: [
+      { code: 'en', iso: 'en-GB', file: 'en.ts' },
+      { code: 'fr', iso: 'fr-FR', file: 'fr.ts' },
+    ],
+    lazy: true,
+  },
+}
+```
+
+> Note: if `lazy: true`, then `langDir` must be defined and `locales` has to be an array. However, it also works the other way around: if `langDir` is defined and `locales` is an array then `lazy` must be true.
+
+**References**:
+
+- [`vue-i18n` repo](https://github.com/kazupon/vue-i18n)
+- [`vue-i18n` docs](https://kazupon.github.io/vue-i18n/)
+- [`nuxt-i18n` repo](https://github.com/nuxt-community/nuxt-i18n)
+- [`nuxt-i18n` docs](https://nuxt-community.github.io/nuxt-i18n/)
 
 ## Storybook setup

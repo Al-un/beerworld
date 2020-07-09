@@ -1,6 +1,6 @@
 import colors from 'vuetify/es5/util/colors'
 
-import i18nMsgs from './i18n/'
+// import i18nMsgs from './i18n/'
 
 export default {
   /*
@@ -95,14 +95,25 @@ export default {
    */
   build: {},
   i18n: {
-    locales: ['en', 'fr'],
     defaultLocale: 'fr',
-    vueI18n: {
-      fallbackLocale: 'en',
-      messages: {
-        en: i18nMsgs.EN,
-        fr: i18nMsgs.FR,
-      },
-    },
+    // --- If lazy=true is required, langDir and locales-as-array would be
+    // --- already ready
+    // https://github.com/nuxt-community/nuxt-i18n/blob/145f3b2a080a91028fd5ef59f9c8bd88755d3b4b/docs/lazy-load-translations.md
+    langDir: 'i18n/',
+    locales: [
+      { code: 'en', iso: 'en-GB', file: 'en.ts' },
+      { code: 'fr', iso: 'fr-FR', file: 'fr.ts' },
+    ],
+    // For some reason, if lazy is false, then the messages are not properly loaded
+    lazy: true,
+    // --- If using default vue-i18n configuration
+    // locales: ['en', 'fr'],
+    // vueI18n: {
+    //   fallbackLocale: 'en',
+    //   messages: {
+    //     en: i18nMsgs.EN,
+    //     fr: i18nMsgs.FR,
+    //   },
+    // },
   },
 }

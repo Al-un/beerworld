@@ -1,10 +1,16 @@
 import { LocaleMessageObject } from 'vue-i18n/types'
 
-const frMsgs: LocaleMessageObject = {
+const msgs: LocaleMessageObject = {
   hello: 'Salut!',
   nested: {
     value: 'Ceci est un message imbriqué',
   },
+  beer: {
+    id: 'ID',
+    name: 'Nom',
+    country: 'Pays',
+    type: 'Type',
+  },
 }
 
-export default frMsgs
+export default msgs

@@ -111,8 +111,8 @@ export default {
     // vueI18n: {
     //   fallbackLocale: 'en',
     //   messages: {
-    //     en: i18nMsgs.EN,
-    //     fr: i18nMsgs.FR,
+    //     en: i18nMsgs.en,
+    //     fr: i18nMsgs.fr,
     //   },
     // },
   },

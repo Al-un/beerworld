@@ -28,5 +28,10 @@ export default {
     Logo,
     VuetifyLogo,
   },
+  head() {
+    return {
+      title: 'Home',
+    }
+  },
 }
 </script>

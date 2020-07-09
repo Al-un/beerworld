@@ -4,9 +4,9 @@ Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and
 
 - [Nuxtjs setup](#nuxtjs-setup)
   - [Nuxtjs](#nuxtjs)
-  - [Plugins](#plugins)
-    - [Nuxt-i18n](#nuxt-i18n)
+  - [Nuxt-i18n](#nuxt-i18n)
 - [Storybook setup](#storybook-setup)
+  - [Storybook core and addons](#storybook-core-and-addons)
 
 ## Nuxtjs setup
 
@@ -24,9 +24,7 @@ npx create-nuxt-app
 
 > Note 2: starting from `create-nuxt-app` v3.0.0, minimum Node.js version is 10.20.0 (see [v3.0.0. release notes](https://github.com/nuxt/create-nuxt-app/releases/tag/v3.0.0))
 
-### Plugins
-
-#### Nuxt-i18n
+### Nuxt-i18n
 
 Following [Nuxt-i18n setup guide](https://nuxt-community.github.io/nuxt-i18n/setup.html):
 
@@ -125,3 +123,57 @@ export default {
 - [`nuxt-i18n` docs](https://nuxt-community.github.io/nuxt-i18n/)
 
 ## Storybook setup
+
+### Storybook core and addons
+
+- Install Storybook
+  ```sh
+  # Install Storybook
+  npm install @storybook/vue --save-dev
+  # Only this dependency should be missing
+  npm install babel-preset-vue --save-dev
+  # Install Storybook addons
+  npm install @storybook/addon-knobs @storybook/addon-viewport @storybook/addon-storysource --save-dev
+  ```
+- Add scripts in _package.json_:
+
+  ```json
+  {
+    "scripts": {
+      "storybook": "start-storybook",
+      "storybook:build": "build-storybook"
+    }
+  }
+  ```
+
+- Create a _.storybook/_ folder
+- Create the _.storybook/main.js_ configuration file:
+
+  ```js
+  // main.js
+  module.exports = {
+    addons: [
+      '@storybook/addon-knobs',
+      '@storybook/addon-viewport',
+      '@storybook/addon-storysource',
+    ],
+  }
+  ```
+
+  As well as the _.storybook/preview.js_ which will be useful when configuring plugins:
+
+  ```js
+  // preview.js
+  import { configure } from '@storybook/vue'
+
+  import Vue from 'vue'
+
+  configure(require.context('../', true, /\.stories\.ts$/), module)
+  ```
+
+**References**:
+
+- [Storybook for Vue guide](https://storybook.js.org/docs/guides/guide-vue/)
+- [Storybook addon: Knobs](https://github.com/storybookjs/storybook/tree/master/addons/knobs)
+- [Storybook addon: Viewport](https://github.com/storybookjs/storybook/tree/master/addons/viewport)
+- [Storybook addon: Storysource](https://github.com/storybookjs/storybook/tree/master/addons/storysource)

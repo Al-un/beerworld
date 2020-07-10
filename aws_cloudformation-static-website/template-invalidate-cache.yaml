@@ -64,7 +64,7 @@ Resources:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                 Effect: Allow
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CacheInvalidationLambdaName}/*"
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CacheInvalidationLambdaName}:*"
       RoleName: !Sub "${CacheInvalidationLambdaName}-role"
 
   CacheInvalidationLambda:

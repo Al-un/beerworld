@@ -1,5 +1,7 @@
 # Deploy a static website with AWS CloudFormation <!-- omit in toc -->
 
+> [The guide is also on Medium: https://medium.com/@Al_un/aws-website-hosting-with-cloudformation-guide-36cac151d1af](https://medium.com/@Al_un/aws-website-hosting-with-cloudformation-guide-36cac151d1af)
+
 - [CloudFormation, the theory](#cloudformation-the-theory)
   - [Template overview](#template-overview)
   - [Functions](#functions)
@@ -36,7 +38,7 @@ CloudFormation is basically the _Infrastructure as Code_ ([Wiki link](https://en
 
 ## CloudFormation, the theory
 
-In short, CloudFormation relies on a template file, written in JSON or YAML. Such template declares all the AWS resources we will need, how they are configured and, subjected to some limitations, how they are related to each other.
+CloudFormation relies on a template file, written in JSON or YAML. Such template declares all the AWS resources we will need, how they are configured and, subjected to some limitations, how they are related to each other.
 
 CloudFormation can be managed through the CLI or the web console.
 
@@ -158,7 +160,7 @@ Resources:
 
 Filling the properties boils down to googling the properties list and pick up the relevant ones. The [Resources documentation](#resources-documentation) section is a list of such documentation links.
 
-If we want to name our bucket `bw-basic-hosting`, our template can be defined as
+If we want to name our bucket `bw-hosting-basic`, our template can be defined as
 
 ```yaml
 AWSTemplateFormatVersion: 2010-09-09
@@ -168,7 +170,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       # That's our bucket name
-      BucketName: bw-basic-hosting
+      BucketName: bw-hosting-basic
       # We declare this bucket a website hosting, similar to the
       # website configuration in the properties tab in the web console
       WebsiteConfiguration:
@@ -179,7 +181,7 @@ Resources:
     Type: AWS::S3::BucketPolicy
     Properties:
       # This policy is declared for the bucket above
-      Bucket: bw-basic-hosting
+      Bucket: bw-hosting-basic
       PolicyDocument:
         Id: MyPolicy
         Version: 2012-10-17
@@ -192,10 +194,10 @@ Resources:
             Action: s3:GetObject
             # This policy is limited to the bucket defined in this stack, hey,
             # it is not open-bar!
-            Resource: arn:aws:s3:::bw-basic-hosting/*
+            Resource: arn:aws:s3:::bw-hosting-basic/*
 ```
 
-Nice! But it is not very DRY: `bw-basic-hosting` is written three times. Let's the bucket name into a `BucketName` parameter with `bw-basic-hosting` as a default value. A parameter value can be overridden during the CloudFormation stack deployment.
+Nice! But it is not very DRY: `bw-hosting-basic` is written three times. Let's put the bucket name into a `BucketName` parameter with `bw-hosting-basic` as a default value. A parameter value can be overridden during the CloudFormation stack deployment.
 
 ```yaml
 AWSTemplateFormatVersion: 2010-09-09
@@ -203,7 +205,7 @@ AWSTemplateFormatVersion: 2010-09-09
 Parameters:
   BucketName:
     Type: String
-    Default: bw-basic-hosting
+    Default: bw-hosting-basic
 
 Resources:
   # ...
@@ -259,11 +261,11 @@ S3HostingBucketPolicy:
               - /*
 ```
 
-Although I have not tried, I think `!Sub arn:aws:s3:::${S3Hosting}/*` is also valid.
+I prefer the `!Sub` syntax: `!Sub arn:aws:s3:::${S3Hosting}/*`.
 
 The end result is the [`template-basic.yaml`](template-basic.yaml).
 
-> Note: although the different tutorials and guide add `AccessControl: PublicRead` in the S3Hosting bucket definition, I did not need it so I removed it.
+> Note: although the different tutorials and guides add `AccessControl: PublicRead` in the S3Hosting bucket definition, I did not need it so I removed it.
 
 ### Deployment
 
@@ -278,7 +280,7 @@ This command will block the terminal until the stack creation is completed:
 
 ![CLI deployment in progress](screenshots/aws_cloudformation_hosting-basic_00.png)
 
-> To deploy the same stack with a different bucket name, the bucket name parameter has to be overriden:
+> To deploy the same stack with a different bucket name, the bucket name parameter has to be overridden:
 >
 > ```sh
 > # I changed the stack name. If the stack name was bw-hosting-basic, it would have updated the
@@ -784,9 +786,9 @@ A lambda function must be declared with an IAM role to define its access scope. 
 
 The lambda has to be authorised to:
 
-- List Cloudfront distribution
+- List all Cloudfront distribution without any restriction
 - Create Cloudfront cache invalidation
-- Create log group
+- Create log group (Required only if the `LogGroup` is not created by CloudFormation)
 - Logs
 
 ```yaml
@@ -828,14 +830,15 @@ Resources:
             Version: 2012-10-17
             Statement:
               - Action:
-                  - "logs:CreateLogGroup"
-                Effect: Allow
-                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
-              - Action:
                   - "logs:CreateLogStream"
                   - "logs:PutLogEvents"
                 Effect: Allow
                 Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${CacheInvalidationLambdaName}/*"
+              # Required only if LogGroup is not created by the stack
+              - Action:
+                  - "logs:CreateLogGroup"
+                Effect: Allow
+                Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
       RoleName: !Sub "${CacheInvalidationLambdaName}-role"
 ```
 
@@ -852,6 +855,7 @@ CacheInvalidationLambda:
     Handler: index.handler
     Role: !GetAtt CacheInvalidationLambdaIamRole.Arn
     Runtime: nodejs12.x
+    Timeout: 30
 ```
 
 Lambda code is skipped for clarity. The real code can be found in
@@ -916,3 +920,15 @@ CloudFormation offers capabilities than are not covered (yet?) by the guide / re
 - [Deletion policy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html): when a CloudFormation stack is deleted, some resources might be needed to be kept.
 - CloudFront origin path: all the examples use the whole bucket to host a website but multiple websites, if served by a CloudFront distribution, can be hosted on the same bucket. An use case example is to have a folder per environment: `development/`, `staging/` and `production/`
 - CloudFormation nested stack: A stack (child stack) can be defined as a resource of another stack (parent stack). This is useful when multiple stacks share common resources: the common resources are defined in the root stack and the various stacks are configured as children stacks, getting the common resources value (ARN, name, ID...) through parameters
+- `Mappings` property allows template re-usability. A good use case is to re-use a CloudFormation template for multiple environment and the Mappings would list all values such as:
+
+  ```yaml
+  Mappings:
+    EnvMaps:
+      develop:
+        Domain: dev.example.com
+      staging:
+        Domain: stg.example.com
+      production:
+        Domain: example.com
+  ```

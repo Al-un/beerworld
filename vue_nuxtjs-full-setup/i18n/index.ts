@@ -1,17 +1,9 @@
-import enMsgs from './en'
-import enVuetify from './en-vuetify'
-import frMsgs from './fr'
-import frVuetify from './fr-vuetify'
+import en from './en'
+import fr from './fr'
 
 const i18nMsgs = {
-  en: {
-    ...enMsgs,
-    $vuetify: enVuetify,
-  },
-  fr: {
-    ...frMsgs,
-    $vuetify: frVuetify,
-  },
+  en,
+  fr,
 }
 
 export default i18nMsgs

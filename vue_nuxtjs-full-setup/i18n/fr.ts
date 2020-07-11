@@ -1,4 +1,5 @@
 import { LocaleMessageObject } from 'vue-i18n/types'
+import vuetifyMsgs from "./fr-vuetify"
 
 const msgs: LocaleMessageObject = {
   hello: 'Salut!',
@@ -11,6 +12,7 @@ const msgs: LocaleMessageObject = {
     country: 'Pays',
     type: 'Type',
   },
+  $vuetify: vuetifyMsgs,
 }
 
 export default msgs

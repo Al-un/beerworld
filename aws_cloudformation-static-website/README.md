@@ -12,6 +12,7 @@
 - [Custom URL/domain](#custom-urldomain)
   - [With AWS Route53](#with-aws-route53)
   - [With CloudFlare](#with-cloudflare)
+  - [Deployment (Cloudflare example)](#deployment-cloudflare-example)
 - [HTTPS redirection](#https-redirection)
   - [With AWS Route 53](#with-aws-route-53)
     - [Certificate stack](#certificate-stack)
@@ -25,14 +26,13 @@
     - [S3 event notification](#s3-event-notification)
     - [Cache invalidation lambda](#cache-invalidation-lambda)
     - [Deployment](#deployment-1)
-- [Misc](#misc)
-  - [Deletion policy](#deletion-policy)
+- [Extra miles](#extra-miles)
 
 Hosting a static website involves a various set of AWS resources depending on our requirements. While all the actions defined here can be done via the web console or, with some faith and hardship, through the CLI, we are going to take the CloudFormation route.
 
 CloudFormation is basically the _Infrastructure as Code_ ([Wiki link](https://en.wikipedia.org/wiki/Infrastructure_as_code)) face of AWS.
 
-> Not all of us uses AWS DNS servers. Some examples will, whenever I can, split between a full AWS environment, essentially by using Route 53, and an external DNS server, in my case, CloudFlare.
+> When DNS entries are involved, I split, when relevant, the examples in two depending on where DNS entries are handled: Route 53 or Cloudflare.
 
 ## CloudFormation, the theory
 
@@ -57,6 +57,9 @@ Conditions: # set of conditions definition
 
 Resources: # set of resources
 ```
+
+![Cloudformation empty console](./screenshots/aws_cloudformation_hosting_00.png)
+<sub>CloudFormation empty console</sub>
 
 The various examples below help illustrating the purpose of each section. For a more formal approach, some useful links:
 
@@ -271,30 +274,61 @@ It is now time to deploy! Deploying is as simple as
 aws cloudformation deploy --stack-name bw-hosting-basic --template-file template-basic.yaml
 ```
 
-To deploy the same stack with a different bucket name, the bucket name parameter has to be overriden:
+This command will block the terminal until the stack creation is completed:
 
-```sh
-# I changed the stack name. If the stack name was bw-hosting-basic, it would have updated the
-# previous stack
-aws cloudformation deploy --stack-name bw-hosting-basic-custom-name --template-file template-basic.yaml --parameter-overrides BucketName=some-other-name
-```
+![CLI deployment in progress](screenshots/aws_cloudformation_hosting-basic_00.png)
 
-To check what name the bucket is currently having:
+> To deploy the same stack with a different bucket name, the bucket name parameter has to be overriden:
+>
+> ```sh
+> # I changed the stack name. If the stack name was bw-hosting-basic, it would have updated the
+> # previous stack
+> aws cloudformation deploy --stack-name bw-hosting-basic-custom-name --template-file template-basic.yaml --parameter-overrides BucketName=some-other-name
+> ```
 
-```sh
-aws cloudformation describe-stack-resource --stack-name bw-hosting-basic --logical-resource-id S3Hosting
-```
+Stack creation progress can be checked in the web console:
 
-Time to upload some content!
+![Stack deployment in progress](screenshots/aws_cloudformation_hosting-basic_01.png)
+
+Select the stack and check the _Events_ tab to follow the creation steps:
+
+| Creation in progress                                                                      | Creation completed                                                                        |
+| ----------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
+| ![Stack deployment creation details](screenshots/aws_cloudformation_hosting-basic_02.png) | ![Stack deployment creation details](screenshots/aws_cloudformation_hosting-basic_03.png) |
+
+When stack deployment is finished, you get back the control of the terminal:
+
+![CLI deployment in progress](screenshots/aws_cloudformation_hosting-basic_04.png)
+
+> To check what name the bucket is currently having:
+>
+> ```sh
+> aws cloudformation describe-stack-resource --stack-name bw-hosting-basic --logical-resource-id S3Hosting
+> ```
+
+Time to upload some content:
 
 ```sh
 # Use the CLI to send some content to a S3 bucket
 aws s3 sync website s3://bw-basic-hosting --profile alun
+```
 
+![Website upload](screenshots/aws_cloudformation_hosting-basic_05.png)
+
+S3 content can be checked in the web console:
+
+![Website content check](screenshots/aws_cloudformation_hosting-basic_06.png)
+
+```sh
 # Open the URL with firefox
 firefox http://bw-basic-hosting.s3-website.eu-west-3.amazonaws.com/
-
 ```
+
+The website has two pages: `/index.html` and `/about.html`. The former ensures that `/` properly serves the index page and the latter checks that non-SPA websites are properly served:
+
+| Index page                                                        | About page                                                                |
+| ----------------------------------------------------------------- | ------------------------------------------------------------------------- |
+| ![It works!](screenshots/aws_cloudformation_hosting-basic_07.png) | ![About page works!](screenshots/aws_cloudformation_hosting-basic_08.png) |
 
 ### Stack deletion
 
@@ -302,8 +336,19 @@ S3 buckets cannot be deleted if not empty. The stack deletion then requires two 
 
 ```sh
 aws s3 rm --recursive s3://bw-hosting-basic
+```
+
+![S3 bucket content deletion](screenshots/aws_cloudformation_hosting-basic_09.png)
+
+```sh
 aws cloudformation delete-stack --stack-name bw-hosting-basic
 ```
+
+![Stack deletion](screenshots/aws_cloudformation_hosting-basic_10.png)
+
+Unlike stack creation, stack deletion is not blocking: the command is fired and the terminal is not blocked. It also means that errors might not shown up so better check in the web console if the deletion went fine:
+
+![Stack deletion](screenshots/aws_cloudformation_hosting-basic_11.png)
 
 ## Custom URL/domain
 
@@ -323,13 +368,13 @@ The S3 redirection bucket, typically redirecting _www.example.com_ to _example.c
 
 ```yaml
 S3Redirection:
-Type: AWS::S3::Bucket
-Properties:
-  AccessControl: BucketOwnerFullControl
-  BucketName: !Sub www.${DomainName}
-  WebsiteConfiguration:
-    RedirectAllRequestsTo:
-      HostName: !Ref S3Hosting
+  Type: AWS::S3::Bucket
+  Properties:
+    AccessControl: BucketOwnerFullControl
+    BucketName: !Sub www.${DomainName}
+    WebsiteConfiguration:
+      RedirectAllRequestsTo:
+        HostName: !Ref S3Hosting
 ```
 
 > Note: I am not sure if the `AccessControl` can be dropped or not as I just copied from AWS snippet
@@ -370,7 +415,6 @@ References:
 
 - [Amazon S3 Template Snippets](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-s3.html#scenario-s3-bucket-website)
 - [S3 website endpoint and hosted zone ID](https://docs.aws.amazon.com/general/latest/gr/s3.html#s3_website_region_endpoints)
--
 
 ### With CloudFlare
 
@@ -403,8 +447,8 @@ curl "https://api.cloudflare.com/client/v4/zones/<zone id>/dns_records" -X POST 
 --data @- <<'EOF'
 {
   "type": "CNAME",
-  "name": "bw-domain-cloudflare",
-  "content": "bw-domain-cloudflare.al-un.fr.s3-website.eu-west-3.amazonaws.com",
+  "name": "bw-hosting-domain-cloudflare",
+  "content": "bw-hosting-domain-cloudflare.al-un.fr.s3-website.eu-west-3.amazonaws.com",
   "ttl": 1
 }
 EOF
@@ -413,6 +457,30 @@ EOF
 **References**:
 
 - https://wsvincent.com/static-site-hosting-with-s3-and-cloudflare/
+
+### Deployment (Cloudflare example)
+
+Stack creation and upload to S3 commands are the same:
+
+```sh
+aws cloudformation deploy --stack-name bw-hosting-domain --template-file template-domain-cloudflare.yaml
+# Bucket name is copied from the template
+aws s3 cp --recursive website s3://bw-hosting-domain-cloudflare.al-un.fr
+```
+
+![Stack creation and S3 content upload](screenshots/aws_cloudformation_hosting-domain-cloudflare_00.png)
+
+Create the CNAME record either via the CLI or the web console:
+
+![CNAME record creation in CloudFlare](screenshots/aws_cloudformation_hosting-domain-cloudflare_01.png)
+
+Both page are now served under `bw-hosting-domain-cloudflare.al-un.fr`:
+
+| Index page                                                                            | About page                                                                            |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| ![Index page works!](screenshots/aws_cloudformation_hosting-domain-cloudflare_02.png) | ![About page works!](screenshots/aws_cloudformation_hosting-domain-cloudflare_03.png) |
+
+Stack deletion steps are identical to the basic HTTP hosting stack deletion steps.
 
 ## HTTPS redirection
 
@@ -464,11 +532,106 @@ Outputs:
 
 #### Main stack
 
+The HTTPS redirection is managed by CloudFront. CloudFront can serve a S3 bucket by identifying itself with a CloudFront origin identity. Some changes are worth to note:
+
+- S3 bucket name is not tied to the domain anymore
+- S3 bucket does not need a website configuration anymore
+
+```yaml
+Parameters:
+  CertificateArn:
+    Type: String
+    Description: Certificate must be created before CloudFormation stack so the value is fixed
+  BucketName:
+    Type: String
+  DomainName:
+    Type: String
+
+Resources:
+  S3Hosting:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+
+  # Declare the identity of our CloudFront distribution
+  CDNOriginIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: !Sub "Cloudfront Origin identity for ${DomainName}"
+
+  CDN:
+    Type: "AWS::CloudFront::Distribution"
+    Properties:
+      DistributionConfig:
+        Aliases:
+          - !Ref DomainName
+        DefaultCacheBehavior:
+          # ... some configs are omitted for brievity
+          TargetOriginId: !Sub "S3-origin-${S3Hosting}"
+          # This is where we define the HTTPS redirection
+          ViewerProtocolPolicy: redirect-to-https
+        DefaultRootObject: index.html
+        Enabled: True
+        Origins:
+          - DomainName: !GetAtt S3Hosting.RegionalDomainName
+            Id: !Sub "S3-origin-${S3Hosting}"
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub "origin-access-identity/cloudfront/${CDNOriginIdentity}"
+        PriceClass: PriceClass_100 # PriceClass_100 / PriceClass_200 / PriceClass_All
+        # The SSL certificate used
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          MinimumProtocolVersion: TLSv1.2_2018
+          SslSupportMethod: sni-only
+```
+
+> Note about `DomainName: !GetAtt S3Hosting.RegionalDomainName`: see [this StackOverflow post](https://stackoverflow.com/a/58423033/4906586)
+
+The S3 bucket policy can now restrict access to the CloudFront distribution only:
+
+```yaml
+Resources:
+  S3HostingBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref S3Hosting
+      PolicyDocument:
+        Statement:
+          - Action:
+              - "s3:GetObject"
+            Effect: Allow
+            Principal:
+              AWS: !Sub "arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity ${CDNOriginIdentity}"
+            Resource: !Sub "arn:aws:s3:::${S3Hosting}/*"
+        Version: "2012-10-17"
+```
+
+The last step is to create a DNS entry with Route 53 to have a nice URL such `https://app.example.com` rather than some `xxxxxxxxxxxxx.cloudfront.net`:
+
+```yaml
+Resources:
+  DNS:
+    Type: AWS::Route53::RecordSetGroup
+    Properties:
+      HostedZoneName: !Ref RootDomainName
+      RecordSets:
+        - AliasTarget:
+            DNSName: !GetAtt CDN.DomainName
+            HostedZoneId: Z2FDTNDATAQYW2 # CloudFront hosted zone ID is fixed
+          Name: !Ref DomainName
+          Type: A
+```
+
+The deployment process and content upload to S3 is the same as the previous example.
+
 ### With Cloudflare
+
+> Note: I am using CloudFlare SSL certificate so the actual certificate is not delivered by Amazon but CloudFlare but this example should work with any DNS manager.
 
 #### Certificate stack
 
-The certificate is still managed by AWS but the validation has to be done in Cloudflare. The certificate stack is lighter than the AWS counterpart:
+The certificate is still managed by AWS but the DNS validation has to be done in Cloudflare. The certificate stack is lighter than the AWS counterpart:
 
 ```yaml
 AWSTemplateFormatVersion: 2010-09-09
@@ -481,9 +644,36 @@ Resources:
       ValidationMethod: DNS
 ```
 
-If multiple domains must be covered by this certificate, the `SubjectAlternativeNames` also works here.
+> If multiple domains must be covered by this certificate, the `SubjectAlternativeNames` also works here.
 
-To validate the certificate, you must create the CNAME records in Cloudflare as defined in AWS Certificate manager
+Deployment has also to be done in North Virginia:
+
+```sh
+aws cloudformation deploy --stack-name bw-hosting-https-acm --region us-east-1 --template-file template-https-cloudflare-acm.yaml
+```
+
+Don't forget this command is blocking until the stack creation is completed:
+![Long long ACM stack creation](./screenshots/aws_cloudformation_hosting-https-cloudflare_00.png)
+
+To find the ACM stack, make sure that region is switched to _North Virginia / us-east-1_
+
+![us-east-1 Cloudformation stacks](./screenshots/aws_cloudformation_hosting-https-cloudflare_01.png)
+
+Open the certificate manager to check that a certificate request is created. Make sure you are still in _us-east-1_:
+
+![Certificate request](./screenshots/aws_cloudformation_hosting-https-cloudflare_02.png)
+
+To validate the certificate, you must create the CNAME records in Cloudflare as defined in AWS Certificate manager:
+
+![Certificate DNS validation](./screenshots/aws_cloudformation_hosting-https-cloudflare_03.png)
+
+Get yourself a coffee and let AWS works on its own. After a while, the certificate will be issued:
+
+![Certificate success!](./screenshots/aws_cloudformation_hosting-https-cloudflare_04.png)
+
+The ACM stack creation is then completed:
+
+![Certificate success!](./screenshots/aws_cloudformation_hosting-https-cloudflare_05.png)
 
 #### Main stack
 
@@ -492,11 +682,38 @@ The Cloudflare HTTPS main stack is very similar to the AWS version. There are tw
 - There is no Route 53 resources as DNS entries are handled by Cloudflare
 - An output property display the CDN domain name that will be used in the CNAME record in Cloudflare
 
-When the stack is up, the last step is to create the CNAME record in Cloudflare matching the domain name and pointing to the CloudFront (CDN) domain name.
+```sh
+# Obviously, you have to adjust the CertificateArn parameter value
+aws cloudformation deploy --stack bw-hosting-https --region eu-west-3 --template-file template-https-cloudflare.yaml --parameter-override CertificateArn="arn:aws:acm:us-east-1:558043415147:certificate/0230f177-2606-4e36-8964-64ac484766bb"
+
+aws s3 cp --recursive website s3://bw-hosting-https-cloudflare
+```
+
+![The usual AWS CLI commands!](./screenshots/aws_cloudformation_hosting-https-cloudflare_06.png)
+
+The CloudFront distribution usually takes a while (few minutes) to be created:
+
+![Stack creation complete!](./screenshots/aws_cloudformation_hosting-https-cloudflare_07.png)
+
+When the stack is up, the last step is to create the CNAME record in Cloudflare matching the domain name and pointing to the CloudFront (CDN) domain name. As there is an `Outputs` property in the template, there is no need to browser CloudFront distributions:
+
+| CloudFront domain name                                                                      | DNS record creation                                                                    |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| ![CloudFront domain name](./screenshots/aws_cloudformation_hosting-https-cloudflare_08.png) | ![Adding DNS record](./screenshots/aws_cloudformation_hosting-https-cloudflare_09.png) |
+
+Inputting the `http://` URL now automatically redirects to the `https://` URL:
+
+| Index page                                                                             | About page                                                                             |
+| -------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| ![Index page works!](./screenshots/aws_cloudformation_hosting-https-cloudflare_10.png) | ![About page works!](./screenshots/aws_cloudformation_hosting-https-cloudflare_11.png) |
+
+Delete this stack before the ACM stack. Also, don't forget to remove the DNS entries in Cloudflare (DNS validation CNAME entry and CDN CNAME entry).
 
 ## CloudFront cache invalidation
 
 This section has not much difference between Route 53 and Cloudflare so my example will rely on the Cloudflare option only. For the Route 53 option, please refer to the HTTPS example.
+
+> This section does not deal with service workers! If you use service workers, make sure that cache is properly managed.
 
 ### Certificate
 
@@ -504,7 +721,7 @@ The AWS Certificate is the same as before and has to be deployed first to get th
 
 - Deploy the ACM stack in _us-east-1_
   ```sh
-  aws cloudformation deploy --stack-name bw-invalidate-cache-acm --template-file template-invalidate-cache-acm.yaml --region us-east-1
+  aws cloudformation deploy --stack-name bw-hosting-invalidate-cache-acm --template-file template-invalidate-cache-acm.yaml --region us-east-1
   ```
 - Create the CNAME entries in Cloudflare to validate the certificate
 
@@ -637,23 +854,65 @@ CacheInvalidationLambda:
     Runtime: nodejs12.x
 ```
 
-I skipped the code for clarity. The real code can be found in
+Lambda code is skipped for clarity. The real code can be found in
 
 - [`template-invalidate-cache.yaml`](template-invalidate-cache.yaml)
 - [`lambda-invalidate-cache.js`](lambda-invalidate-cache.js) for syntax highlighting and some comments
+
+Optionally, the log group can be declared as a resource of the stack:
+
+```yaml
+CacheInvalidationLambdaLogGroup:
+  Type: AWS::Logs::LogGroup
+  Properties:
+    LogGroupName: !Sub "/aws/lambda/${CacheInvalidationLambda}"
+    RetentionInDays: 30
+```
+
+If you don't declare the log group as a resource, you have to add the permission to create a log group to IAM role:
+
+```yaml
+CacheInvalidationLambdaIamRole:
+  Type: AWS::IAM::Role
+  Properties:
+    # ...
+    Policies:
+      # ....
+      - PolicyName: CloudWatchPolicy
+        PolicyDocument:
+          Version: 2012-10-17
+          Statement:
+            # ...
+            # This part:
+            - Action:
+                - "logs:CreateLogGroup"
+              Effect: Allow
+              Resource: !Sub "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:*"
+```
+
+Having the log group in the stack ensures that the log group is also deleted when the stack is deleted. If the log group is created automatically by the lambda, it is not deleted when the stack is deleted.
 
 #### Deployment
 
 This stack requires IAM capabilities provided by the `--capabilities CAPABILITY_NAMED_IAM` argument
 
 ```sh
-aws cloudformation deploy --stack-name bw-invalidate-cache --template-file template-invalidate-cache.yaml --capabilities CAPABILITY_NAMED_IAM --region eu-west-3
+aws cloudformation deploy --stack-name bw-hosting-invalidate-cache --template-file template-invalidate-cache.yaml --capabilities CAPABILITY_NAMED_IAM --region eu-west-3
+aws s3 cp --recursive website s3://bw-hosting-invalidate-cache
 ```
 
 > Don't forget to create the CNAME entry in your DNS entries pointing to the Cloudfront distribution domain name
 
-## Misc
+Upon any upload of any `index.html`, the cache is invalidated for all files:
 
-### Deletion policy
+| Check in CloudFront distribution                                                                   | Check in CloudWatch log group                                                   |
+| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| ![CloudFront cache invalidation](./screenshots/aws_cloudformation_hosting-invalidate-cache_00.png) | ![Lambda log](./screenshots/aws_cloudformation_hosting-invalidate-cache_01.png) |
 
-https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html
+## Extra miles
+
+CloudFormation offers capabilities than are not covered (yet?) by the guide / repo:
+
+- [Deletion policy](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-deletionpolicy.html): when a CloudFormation stack is deleted, some resources might be needed to be kept.
+- CloudFront origin path: all the examples use the whole bucket to host a website but multiple websites, if served by a CloudFront distribution, can be hosted on the same bucket. An use case example is to have a folder per environment: `development/`, `staging/` and `production/`
+- CloudFormation nested stack: A stack (child stack) can be defined as a resource of another stack (parent stack). This is useful when multiple stacks share common resources: the common resources are defined in the root stack and the various stacks are configured as children stacks, getting the common resources value (ARN, name, ID...) through parameters

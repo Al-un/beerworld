@@ -9,6 +9,7 @@
         <v-card-title class="headline">{{ $t('hello') }}</v-card-title>
         <v-card-text>
           <span>{{ $t('nested.value') }}</span>
+          <beer-table />
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -22,11 +23,13 @@
 <script>
 import Logo from '~/components/Logo.vue'
 import VuetifyLogo from '~/components/VuetifyLogo.vue'
+import BeerTable from '~/components/BeerTable.vue'
 
 export default {
   components: {
     Logo,
     VuetifyLogo,
+    BeerTable,
   },
   head() {
     return {

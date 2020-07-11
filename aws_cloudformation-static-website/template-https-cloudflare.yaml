@@ -10,7 +10,7 @@ Parameters:
     Description: Certificate must be created before CloudFormation stack so the value is fixed
   BucketName:
     Type: String
-    Default: bw-hosting-aws-cloudflare
+    Default: bw-hosting-https-cloudflare
   DomainName:
     Type: String
     Default: bw-https.al-un.fr

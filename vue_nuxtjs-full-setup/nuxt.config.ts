@@ -1,6 +1,7 @@
-// import colors from 'vuetify/es5/util/colors'
+import colors from 'vuetify/es5/util/colors'
+import { LOCALE_DEFAULT } from './i18n'
 
-// import i18nMsgs from './i18n/'
+import messages from './i18n/'
 
 export default {
   /*
@@ -52,7 +53,6 @@ export default {
     '@nuxt/typescript-build',
     // Doc: https://github.com/nuxt-community/stylelint-module
     '@nuxtjs/stylelint-module',
-    '@nuxtjs/vuetify',
   ],
   /*
    ** Nuxt.js modules
@@ -62,59 +62,46 @@ export default {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     'nuxt-i18n',
+    '@nuxtjs/vuetify',
   ],
   /*
    ** Axios module configuration
    ** See https://axios.nuxtjs.org/options
    */
   axios: {},
+  i18n: {
+    defaultLocale: LOCALE_DEFAULT,
+    // --- If lazy=true is required, langDir and locales-as-array would be
+    // --- already ready
+    // https://github.com/nuxt-community/nuxt-i18n/blob/145f3b2a080a91028fd5ef59f9c8bd88755d3b4b/docs/lazy-load-translations.md
+    langDir: 'i18n/',
+    locales: [
+      { code: 'en', iso: 'en-GB', file: 'en/index.ts' },
+      { code: 'fr', iso: 'fr-FR', file: 'fr/index.ts' },
+    ],
+    // For some reason, if lazy is false, then the messages are not properly loaded
+    lazy: true,
+    // // --- If using default vue-i18n configuration
+    // locales: ['en', 'fr'],
+    // vueI18n: {
+    //   fallbackLocale: 'en',
+    //   messages,
+    //   // messages: {
+    //   //   en: messages.en,
+    //   //   fr: messages.fr,
+    //   // },
+    // },
+  },
   /*
    ** vuetify module configuration
    ** https://github.com/nuxt-community/vuetify-module
    */
   vuetify: {
-    optionsPath: 'vuetify.options.js',
-    // customVariables: ['~/assets/variables.scss'],
-    // theme: {
-    //   dark: true,
-    //   themes: {
-    //     dark: {
-    //       primary: colors.blue.darken2,
-    //       accent: colors.grey.darken3,
-    //       secondary: colors.amber.darken3,
-    //       info: colors.teal.lighten1,
-    //       warning: colors.amber.base,
-    //       error: colors.deepOrange.accent4,
-    //       success: colors.green.accent3,
-    //     },
-    //   },
-    // },
+    optionsPath: 'vuetify.options.ts',
   },
   /*
    ** Build configuration
    ** See https://nuxtjs.org/api/configuration-build/
    */
   build: {},
-  i18n: {
-    defaultLocale: 'en',
-    // --- If lazy=true is required, langDir and locales-as-array would be
-    // --- already ready
-    // https://github.com/nuxt-community/nuxt-i18n/blob/145f3b2a080a91028fd5ef59f9c8bd88755d3b4b/docs/lazy-load-translations.md
-    langDir: 'i18n/',
-    locales: [
-      { code: 'en', iso: 'en-GB', file: 'en.ts' },
-      { code: 'fr', iso: 'fr-FR', file: 'fr.ts' },
-    ],
-    // For some reason, if lazy is false, then the messages are not properly loaded
-    lazy: true,
-    // --- If using default vue-i18n configuration
-    // locales: ['en', 'fr'],
-    // vueI18n: {
-    //   fallbackLocale: 'en',
-    //   messages: {
-    //     en: i18nMsgs.en,
-    //     fr: i18nMsgs.fr,
-    //   },
-    // },
-  },
 }

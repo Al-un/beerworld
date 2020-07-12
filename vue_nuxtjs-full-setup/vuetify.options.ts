@@ -12,9 +12,7 @@ import { LOCALE_DEFAULT } from '~/i18n'
  *
  * @param i18n vue-i18n instance
  */
-export const vuetifyCustomOptions: (i18n: VueI18n) => Partial<VuetifyPreset> = (
-  i18n
-) => ({
+export const vuetifyCustomOptions: (i18n: VueI18n) => Options = (i18n) => ({
   theme: {
     dark: true,
     disable: false,
@@ -41,15 +39,14 @@ export const vuetifyCustomOptions: (i18n: VueI18n) => Partial<VuetifyPreset> = (
       },
     },
   },
-  // >> For some reason, this part always resolve i18n to `undefined`
-  // lang: {
-  //   // The messages are now handled by vue-i18n so `locales` becomes unnecessary
-  //   locales: {},
-  //   // In theory, not required anymore as handled by vue-i18n but this makes
-  //   // TypeScript happy so let's it happy
-  //   current: LOCALE_DEFAULT,
-  //   t: (key, ...params) => (i18n ? (i18n.t(key, params) as string) : 'PROUT'),
-  // },
+  lang: {
+    // The messages are now handled by vue-i18n so `locales` becomes unnecessary
+    locales: {},
+    // In theory, not required anymore as handled by vue-i18n but this makes
+    // TypeScript happy so let's it happy
+    current: LOCALE_DEFAULT,
+    t: (key, ...params) => (i18n ? (i18n.t(key, params) as string) : 'ERROR'),
+  },
 })
 
 /**
@@ -57,11 +54,11 @@ export const vuetifyCustomOptions: (i18n: VueI18n) => Partial<VuetifyPreset> = (
  * @param ctx Nuxt context
  */
 const vuetifyOptions = (ctx: Context): Options => {
-  const config = vuetifyCustomOptions(ctx.app.i18n)
-
   return {
-    ...config,
     customVariables: ['~/assets/variables.scss'],
+    // For some reason, this part always resolve i18n to `undefined`...
+    ...vuetifyCustomOptions(ctx.app.i18n),
+    // ...so I override it here
     lang: {
       locales: {},
       current: LOCALE_DEFAULT,

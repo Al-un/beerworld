@@ -1,5 +1,6 @@
 import { LocaleMessageObject } from 'vue-i18n/types'
-import vuetifyMsgs from './en-vuetify'
+
+import vuetifyMsgs from './vuetify'
 
 const msgs: LocaleMessageObject = {
   hello: 'Hello!',

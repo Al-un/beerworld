@@ -1,7 +1,12 @@
+import { LocaleMessages } from 'vue-i18n'
+
 import en from './en'
 import fr from './fr'
 
-const i18nMsgs = {
+export const LOCALE_DEFAULT = 'fr'
+export const LOCALES = ['en', 'fr']
+
+const i18nMsgs: LocaleMessages = {
   en,
   fr,
 }

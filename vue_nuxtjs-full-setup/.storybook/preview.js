@@ -6,11 +6,11 @@ import Vue from 'vue'
 
 // --- Vue-i18n (not Nuxt-i18n)
 import VueI18n from 'vue-i18n'
-import messages from '~/i18n'
+import messages, { LOCALE_DEFAULT } from '../i18n'
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
-  locale: 'en',
+  locale: LOCALE_DEFAULT,
   locales: ['en', 'fr'],
   messages,
 })
@@ -40,35 +40,17 @@ const i18nDecorator = () => ({
 
 // --- Vuetify
 import Vuetify from 'vuetify'
-import colors from 'vuetify/es5/util/colors'
+// import colors from 'vuetify/es5/util/colors'
+import { vuetifyCustomOptions } from '../vuetify.options'
 import 'vuetify/dist/vuetify.min.css'
 
 // https://github.com/nidkil/vuetify-with-storybook/blob/master/src/plugins/vuetify.js
 // https://vuetifyjs.com/en/customization/icons/#usage
 Vue.use(Vuetify)
 const vuetify = new Vuetify({
-  // Using spread operator here in case this part will be put in common
-  // with nuxt.config.js configuration
-  ...{
-    customVariables: ['~/assets/variables.scss'],
-    theme: {
-      dark: true,
-      themes: {
-        dark: {
-          primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
-          secondary: colors.amber.darken3,
-          info: colors.teal.lighten1,
-          warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
-          success: colors.green.accent3,
-        },
-      },
-    },
-    lang: {
-      t: (key, ...params) => i18n.t(key, params),
-    },
-  },
+  ...vuetifyCustomOptions(i18n),
+  // Make the icon set explicit to ensure that the import in preview-head.html is
+  // the correct one
   icons: { iconfont: 'mdiSvg' },
 })
 

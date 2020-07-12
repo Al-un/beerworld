@@ -6,7 +6,11 @@ Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and
   - [09-Jul-2020](#09-jul-2020)
 - [Nuxtjs setup](#nuxtjs-setup)
   - [Nuxtjs](#nuxtjs)
+  - [Nuxt-vuetify](#nuxt-vuetify)
   - [Nuxt-i18n](#nuxt-i18n)
+    - [Setup](#setup)
+    - [Create and configure i18n entries](#create-and-configure-i18n-entries)
+  - [Conjugate Vuetify with Vue-i18n](#conjugate-vuetify-with-vue-i18n)
 - [Storybook setup](#storybook-setup)
   - [Storybook core and addons](#storybook-core-and-addons)
   - [Vue-i18n](#vue-i18n)
@@ -31,19 +35,125 @@ Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and
 
 ### Nuxtjs
 
+#### Magic setup <!-- omit in toc -->
+
 Start with the magic setup command (see [Nuxtjs docs: installation](https://nuxtjs.org/guide/installation)):
 
 ```sh
 npx create-nuxt-app
 ```
 
+> Starting from `create-nuxt-app` v3.0.0, minimum Node.js version is 10.20.0 (see [v3.0.0. release notes](https://github.com/nuxt/create-nuxt-app/releases/tag/v3.0.0))
+
 ![Full configuration](../beerworld/screenshots/vue_nuxtjs-full-setup-01.png)
 
-> Note: at the time of running `create-nuxt-app` v3.1.0, TypeScript is already configured so there is no need to proceed to any TypeScript setup ([Nuxt TypeScript doc link](https://typescript.nuxtjs.org/guide/setup.html)). [`create-nuxt-app` releases list](https://github.com/nuxt/create-nuxt-app/releases/tag/v2.15.0) mentions the TypeScript support from v2.15.0
+#### Post installation actions <!-- omit in toc -->
 
-> Note 2: starting from `create-nuxt-app` v3.0.0, minimum Node.js version is 10.20.0 (see [v3.0.0. release notes](https://github.com/nuxt/create-nuxt-app/releases/tag/v3.0.0))
+At the time of running `create-nuxt-app` v3.1.0, TypeScript configuration replacing the NuxtTypeScript setup ([Nuxt TypeScript doc link](https://typescript.nuxtjs.org/guide/setup.html)). [`create-nuxt-app` releases list](https://github.com/nuxt/create-nuxt-app/releases/tag/v2.15.0) mentions the TypeScript support is from v2.15.0.
+
+> The following statements are true as-of July 2020 (`create-nuxt-app` v3.1.0) and future releases might make it irrelevant.
+
+Running `npm run dev` triggers the following error:
+
+```
+(node:12060) ExperimentalWarning: Conditional exports is an experimental feature. This feature could change at any time
+```
+
+![Error](../beerworld/screenshots/vue_nuxtjs-full-setup-02.png)
+
+To leverage [TypeScript at runtime](https://typescript.nuxtjs.org/guide/runtime.html), I had to use `nuxt-ts` in my `dev` script. This will be necessary when Vuetify configuration will be customized.
+
+```diff
+{
+  "scripts": {
+-    "dev": "nuxt",
++    "dev": "nuxt-ts",
+  },
+}
+```
+
+When renaming _nuxt.config.js_ into _nuxt.config.ts_, the following error appears:
+
+```
+ ERROR  ERROR in /xxxxxx/xxxxxx/git/beerworld/vue_nuxtjs-full-setup/node_modules/@types/webpack-env/index.d.ts(349,15):                       nuxt:typescript 17:13:50
+349:15 Interface 'NodeJS.Module' incorrectly extends interface '__WebpackModuleApi.Module'.
+  Types of property 'parent' are incompatible.
+    Type 'Module | null' is not assignable to type 'NodeModule | null'.
+      Property 'path' is missing in type 'Module' but required in type 'NodeModule'.
+    347 |     interface Process extends __WebpackModuleApi.NodeProcess {}
+    348 |     interface RequireResolve extends __WebpackModuleApi.RequireResolve {}
+  > 349 |     interface Module extends __WebpackModuleApi.Module {}
+        |               ^
+    350 |     interface Require extends __WebpackModuleApi.RequireFunction {}
+    351 | }
+    352 | declare var process: NodeJS.Process;
+```
+
+![Error](../beerworld/screenshots/vue_nuxtjs-full-setup-03.png)
+
+If _nuxt.config.js_ is not renamed into the TypeScript version but another TypeScript file is involved (e.g. the Vuetify configuration defined later), the error will be raised again.
+
+### Nuxt-vuetify
+
+References:
+
+- [Nuxtjs Vuetify module repo](https://github.com/nuxt-community/vuetify-module)
+
+#### TypeScript setup <!-- omit in toc -->
+
+[_tsconfig.json_ needs to have Vuetify typing](https://github.com/nuxt-community/vuetify-module#typescript):
+
+```json
+{
+  "compilerOptions": {
+    "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify"]
+  }
+}
+```
+
+#### Post installation actions <!-- omit in toc -->
+
+`create-nuxt-app` v3.1.0 installed `@nuxtjs/vuetify v1.11.2`. `<v-layout>` being deprecated in favour of `<v-main>`, _layouts/default.vue_ needs a small update:
+
+```diff
+<template>
+  <v-app dark>
+    ...
+-    <v-layout>
++    <v-main>
+      <v-container>
+        <nuxt />
+      </v-container>
+-    </v-layout>
++    </v-main>
+    ...
+  </v-app>
+</template>
+```
+
+#### Playzone <!-- omit in toc -->
+
+I created a [_components/BeerTable.vue_](./components/BeerTable.vue) component to test:
+
+- Icons set
+- Handling vuetify translation with vue-i18n
+
+I then added the `BeerTable` component in the [_pages/index.vue_](./pages/index.vue) home page.
+
+Using the `<v-data-table>` caused one issue: the page is generated with a mobile viewport and is then adjusted to desktop viewport during the hydration. This creates a mismatch between the virtual DOM generated by the server (mobile viewport) and the one rendered on the client side (desktop viewport):
+
+![Error](../beerworld/screenshots/vue_nuxtjs-full-setup-04.png)
 
 ### Nuxt-i18n
+
+**References**:
+
+- [`vue-i18n` repo](https://github.com/kazupon/vue-i18n)
+- [`vue-i18n` docs](https://kazupon.github.io/vue-i18n/)
+- [`nuxt-i18n` repo](https://github.com/nuxt-community/nuxt-i18n)
+- [`nuxt-i18n` docs](https://nuxt-community.github.io/nuxt-i18n/)
+
+#### Setup
 
 Following [Nuxt-i18n setup guide](https://nuxt-community.github.io/nuxt-i18n/setup.html):
 
@@ -56,22 +166,25 @@ Following [Nuxt-i18n setup guide](https://nuxt-community.github.io/nuxt-i18n/set
   ```json
   {
     "compilerOptions": {
-      "types": ["@types/node", "@nuxt/types", "vuetify/types", "nuxt-i18n"]
+      "types": ["@types/node", "@nuxt/types", "@nuxtjs/vuetify", "nuxt-i18n"]
     }
   }
   ```
+
+#### Create and configure i18n entries
 
 - Create I18n entries in the [_i18n/_](i18n/) folder:
 
   ```
   {nuxt project}
   i18n/
-    en.ts
-    fr.ts
+    en/index.ts
+    fr/index.ts
     index.ts <-- for re-export only
   ```
 
-  Re-exported object keys are recommended te be the language ISO code: `en`, `fr` ...
+  - Re-exported object keys, in _i18n/index.ts_ are recommended te be the language ISO code: `en`, `fr` ...
+  - Depending on your requirements, having the _en/_ and _fr/_ subfolders might be an overkill. I prefer this structure for scalability.
 
 - Add `nuxt-i18n` plugin in _nuxt.config.ts_ and configure `i18n` global variable
 
@@ -109,7 +222,7 @@ export default {
     vueI18n: {
       fallbackLocale: 'en',
       messages,
-      // Or to be more explicit:
+      // if the keys do not match the locale code:
       // messages: {
       //   en: messages.en,
       //   fr: messages.fr,
@@ -128,8 +241,8 @@ export default {
     defaultLocale: 'fr',
     langDir: 'i18n/',
     locales: [
-      { code: 'en', iso: 'en-GB', file: 'en.ts' },
-      { code: 'fr', iso: 'fr-FR', file: 'fr.ts' },
+      { code: 'en', iso: 'en-GB', file: 'en/index.ts' },
+      { code: 'fr', iso: 'fr-FR', file: 'fr/index.ts' },
     ],
     lazy: true,
   },
@@ -138,12 +251,120 @@ export default {
 
 > Note: if `lazy: true`, then `langDir` must be defined and `locales` has to be an array. However, it also works the other way around: if `langDir` is defined and `locales` is an array then `lazy` must be true.
 
-**References**:
+### Conjugate Vuetify with Vue-i18n
 
-- [`vue-i18n` repo](https://github.com/kazupon/vue-i18n)
-- [`vue-i18n` docs](https://kazupon.github.io/vue-i18n/)
-- [`nuxt-i18n` repo](https://github.com/nuxt-community/nuxt-i18n)
-- [`nuxt-i18n` docs](https://nuxt-community.github.io/nuxt-i18n/)
+[The Vuetify configuration has to be externalized](https://github.com/nuxt-community/vuetify-module#optionspath) to access the Nuxt context. This also allows leveraging TypeScript typing in _vuetify.options.ts_:
+
+```ts
+import { Context } from '@nuxt/types'
+import { Options } from '@nuxtjs/vuetify'
+import VueI18n from 'vue-i18n'
+import colors from 'vuetify/es5/util/colors'
+import { VuetifyPreset } from 'vuetify/types/services/presets'
+
+/**
+ * @see https://github.com/nuxt-community/vuetify-module/pull/99
+ * @param ctx Nuxt context
+ */
+const vuetifyOptions = (ctx: Context): Options => {
+  return {
+    customVariables: ['~/assets/variables.scss'],
+    theme: {
+      dark: true,
+      disable: false,
+      default: false,
+      options: {},
+      themes: {
+        light: {
+          primary: colors.teal.lighten2,
+          accent: colors.blueGrey.darken3,
+          secondary: colors.pink.darken1,
+          info: colors.blue.lighten2,
+          warning: colors.amber.base,
+          error: colors.red.accent4,
+          success: colors.green.accent3,
+        },
+        dark: {
+          primary: colors.teal.darken1,
+          accent: colors.blueGrey.darken3,
+          secondary: colors.pink.darken1,
+          info: colors.blue.lighten1,
+          warning: colors.amber.base,
+          error: colors.red.accent4,
+          success: colors.green.accent3,
+        },
+      },
+    },
+    lang: {
+      // The messages are now handled by vue-i18n so `locales` becomes unnecessary
+      locales: {},
+      // this value is not relevant anymore but required for TypeScript
+      current: 'en',
+      t: (key, ...params) => ctx.app.i18n.t(key, params) as string,
+    },
+  }
+}
+
+export default vuetifyOptions
+```
+
+As [specified in Vuetify documentation](https://vuetifyjs.com/en/customization/internationalization/#vue-i-18-n), Vuetify specific messages must be declared under the `$vuetify` key:
+
+```ts
+// Example of en/index.ts:
+import { LocaleMessageObject } from 'vue-i18n/types'
+
+import vuetifyMsgs from './vuetify'
+
+const msgs: LocaleMessageObject = {
+  hello: 'Hello!',
+  nested: {
+    value: 'This is a nested value',
+  },
+  beer: {
+    id: 'ID',
+    name: 'Name',
+    country: 'Country',
+    type: 'Type',
+  },
+  $vuetify: vuetifyMsgs,
+}
+
+export default msgs
+```
+
+Vuetify messages must covers all messages, not a partial set of keys:
+
+```ts
+// Example of en/vuetify.ts
+import { LocaleMessageObject } from 'vue-i18n/types'
+
+// import defaultVuetify from 'vuetify/src/locale/en'
+// the `vuetify_default` is a copy of 'vuetify/src/locale/en' content
+import defaultVuetify from './vuetify_default'
+
+const msgs: LocaleMessageObject = {
+  ...defaultVuetify,
+  dataTable: {
+    ...defaultVuetify.dataTable,
+    itemsPerPageText: 'Beers per page',
+  },
+  dataFooter: {
+    ...defaultVuetify.dataFooter,
+    pageText: '{0}>{1} / {2}',
+  },
+}
+
+export default msgs
+```
+
+> Note: I copied the default Vuetify messages instead of importing from `vuetify/src/locale/{locale name}` as I encountered the error:
+>
+> ```
+> Cannot find module 'vuetify/src/locale/en' from 'xxxxxxxx/git/beerworld/vue_nuxtjs-full-setup'
+> ```
+
+Our `<v-data-table>` can now have custom translations :tada:!
 
 ## Storybook setup
 
@@ -215,8 +436,10 @@ Similarly to a standard Vue.js application, two steps are needed:
 
 ```js
 // .storybook/preview.js
+
 import VueI18n from 'vue-i18n'
-import messages from '~/i18n'
+// Use of relative path in this file
+import messages from '../i18n'
 
 Vue.use(VueI18n)
 const i18n = new VueI18n({
@@ -230,6 +453,7 @@ const i18n = new VueI18n({
 
 ```js
 // .storybook/preview.js
+
 import { addDecorator } from '@storybook/vue'
 import { select } from '@storybook/addon-knobs'
 
@@ -273,6 +497,7 @@ import 'vuetify/dist/vuetify.min.css'
 
 Vue.use(Vuetify)
 const vuetify = new Vuetify({
+  // Copy default configuration that was initially in nuxt.config.js
   customVariables: ['~/assets/variables.scss'],
   theme: {
     dark: true,
@@ -295,6 +520,7 @@ const vuetify = new Vuetify({
 
 ```js
 // .storybook/preview.js
+
 import { addDecorator } from '@storybook/vue'
 import { boolean } from '@storybook/addon-knobs'
 
@@ -333,6 +559,7 @@ Vuetify can be integrated with vue-i18n (see [documentation](https://vuetifyjs.c
    const vuetify = new Vuetify({
      // ... other Vuetify configuration
      lang: {
+       // the `i18n` variable here refers to the vue-i18n instance declaration
        t: (key, ...params) => i18n.t(key, params),
      },
    })

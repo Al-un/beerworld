@@ -5,15 +5,15 @@
  * DAO common structure
  */
 export interface DAO {
-  createBeer: (beer: Beer) => Beer;
+  createBeer: (beer: Beer) => Promise<Beer>;
 
-  deleteBeer: (beerId: string) => number;
+  deleteBeer: (beerId: string) => Promise<number>;
 
-  getBeer: (beerId: string) => Beer | undefined;
+  getBeer: (beerId: string) => Promise<Beer | undefined>;
 
-  listBeers: () => Beer[];
+  listBeers: () => Promise<Beer[]>;
 
-  updateBeer: (beer: Beer, beerId: string) => Beer | undefined;
+  updateBeer: (beer: Beer, beerId: string) => Promise<Beer | undefined>;
 }
 
 /* ========================================================================= */

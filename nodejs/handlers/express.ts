@@ -14,26 +14,26 @@ export class ExpressHandler implements Handler {
     this._dao = dao;
   }
 
-  createBeer = (
+  createBeer = async (
     req: express.Request<{}, Beer, Beer>,
     res: express.Response
   ) => {
     let newBeer = req.body;
-    newBeer = this._dao.createBeer(newBeer);
+    newBeer = await this._dao.createBeer(newBeer);
 
     res.json(newBeer);
   };
 
-  deleteBeer = (req: express.Request, res: express.Response) => {
+  deleteBeer = async (req: express.Request, res: express.Response) => {
     const beerId = req.params["beerId"];
-    const deleteCount = this._dao.deleteBeer(beerId);
+    const deleteCount = await this._dao.deleteBeer(beerId);
 
     res.json({ deleteCount });
   };
 
-  getBeer = (req: express.Request, res: express.Response) => {
+  getBeer = async (req: express.Request, res: express.Response) => {
     const beerId = req.params["beerId"];
-    const beer = this._dao.getBeer(beerId);
+    const beer = await this._dao.getBeer(beerId);
 
     if (beer) {
       res.json(beer);
@@ -42,16 +42,16 @@ export class ExpressHandler implements Handler {
     }
   };
 
-  listBeers = (req: express.Request, res: express.Response) => {
-    const beers = this._dao.listBeers();
+  listBeers = async (req: express.Request, res: express.Response) => {
+    const beers = await this._dao.listBeers();
 
     res.json(beers);
   };
 
-  updateBeer = (req: express.Request, res: express.Response) => {
+  updateBeer = async (req: express.Request, res: express.Response) => {
     const beerId = req.params["beerId"];
     let beer = req.body;
-    beer = this._dao.updateBeer(beer, beerId);
+    beer = await this._dao.updateBeer(beer, beerId);
 
     if (beer) {
       res.json(beer);

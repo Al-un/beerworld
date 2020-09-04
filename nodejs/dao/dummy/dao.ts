@@ -5,14 +5,14 @@ let dbBeers = mockBeers;
 let dbCountries = mockCountries;
 
 export class DummyDao implements DAO {
-  createBeer(beer: Beer) {
+  async createBeer(beer: Beer) {
     beer.id = generateMockBeerId(dbBeers);
     dbBeers = [...dbBeers, beer];
 
     return beer;
   }
 
-  deleteBeer(beerId: string) {
+  async deleteBeer(beerId: string) {
     const oldLength = dbBeers.length;
     dbBeers = dbBeers.filter((b) => b.id !== beerId);
     const newLength = dbBeers.length;
@@ -20,17 +20,17 @@ export class DummyDao implements DAO {
     return oldLength - newLength;
   }
 
-  getBeer(beerId: string) {
+  async getBeer(beerId: string) {
     const beer = dbBeers.find((b) => b.id === beerId);
 
     return beer;
   }
 
-  listBeers() {
+  async listBeers() {
     return dbBeers;
   }
 
-  updateBeer(beer: Beer, beerId: string) {
+  async updateBeer(beer: Beer, beerId: string) {
     let updatedBeer = undefined;
 
     dbBeers.forEach((oldBeer, idx, beersArray) => {

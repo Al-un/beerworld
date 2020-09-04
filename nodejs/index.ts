@@ -8,6 +8,7 @@
 
 import { DummyDao } from "./dao";
 import { ExpressApp } from "./apps";
+import { SequelizeDao } from "./dao/sequelize";
 
 // import express from "express";
 // // rest of the code remains same
@@ -19,5 +20,8 @@ import { ExpressApp } from "./apps";
 // });
 
 const dummyDao = new DummyDao();
-const expressApp = new ExpressApp(dummyDao);
+const sequelizeDao = new SequelizeDao();
+
+// const expressApp = new ExpressApp(dummyDao);
+const expressApp = new ExpressApp(sequelizeDao);
 expressApp.start();

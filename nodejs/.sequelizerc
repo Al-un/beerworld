@@ -1,0 +1,8 @@
+const path = require("path");
+// https://github.com/sequelize/cli/blob/master/docs/README.md
+module.exports = {
+  config: path.resolve("dao", "sequelize", "config", "database.json"),
+  "models-path": path.resolve("dao", "sequelize", "models"),
+  "seeders-path": path.resolve("dao", "sequelize", "seeders"),
+  "migrations-path": path.resolve("dao", "sequelize", "migrations"),
+};

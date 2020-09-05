@@ -3,7 +3,6 @@ import { BeerDAO, Beer } from "../models";
 export const SequelizeBeerDAO: (beerModel: any) => BeerDAO = (beerModel) => {
   const dao: BeerDAO = {
     create: async (beer: Beer) => {
-      console.log("ToCreate", beer);
       const createdBeer = (await beerModel.create(beer)) as Beer;
       return createdBeer;
     },

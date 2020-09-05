@@ -1,17 +1,17 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-import { ExpressHandler, Endpoint } from "../../handlers";
+import { ExpressHandler, Endpoint, AllHandlers } from "../../handlers";
 import { DAO } from "../../dao";
 import { AbstApplication } from "../models";
 
 export class ExpressApp extends AbstApplication<any> {
   _app: express.Application;
-  _handler: ExpressHandler;
+  _handler: AllHandlers;
 
   constructor(dao: DAO) {
     super(dao);
-    this._handler = new ExpressHandler(dao);
+    this._handler = ExpressHandler(dao);
 
     this._app = express();
     this._app.use(bodyParser.json());

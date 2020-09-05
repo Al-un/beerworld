@@ -23,7 +23,14 @@ export interface DAO {
  * Country is represented by a two-letters string
  * @see https://en.wikipedia.org/wiki/ISO_3166-2
  */
-export type Country = string;
+export type CountryCode = string;
+
+/**
+ * Countries is identified by an unique code
+ */
+export interface Country {
+  code: CountryCode;
+}
 
 /**
  * Beer has an unique string ID
@@ -31,5 +38,5 @@ export type Country = string;
 export interface Beer {
   id: string;
   name: string;
-  country: Country;
+  country: CountryCode;
 }

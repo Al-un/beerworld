@@ -1,8 +1,8 @@
-import { Beer, Country, DAO } from "../models";
-import { mockBeers, mockCountries, generateMockBeerId } from "./mock-data";
+import { Beer, DAO } from "../models";
+import { generateMockBeerId } from "./utils";
+import { beers } from "../data";
 
-let dbBeers = mockBeers;
-let dbCountries = mockCountries;
+let dbBeers = beers;
 
 export class DummyDao implements DAO {
   async createBeer(beer: Beer) {

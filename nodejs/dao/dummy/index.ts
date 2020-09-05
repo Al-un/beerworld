@@ -1,2 +1,2 @@
 export * from "./dao";
-export * from "./mock-data";
+export * from "./utils";

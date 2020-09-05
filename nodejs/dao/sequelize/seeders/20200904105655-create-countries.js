@@ -1,31 +1,19 @@
 "use strict";
 
+const data = require("../../data");
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-     */
-    await queryInterface.bulkInsert("Countries", [
-      { code: "be", createdAt: new Date(), updatedAt: new Date() },
-      { code: "ie", createdAt: new Date(), updatedAt: new Date() },
-      { code: "fr", createdAt: new Date(), updatedAt: new Date() },
-      { code: "jp", createdAt: new Date(), updatedAt: new Date() },
-      { code: "us", createdAt: new Date(), updatedAt: new Date() },
-    ]);
+    const countries = data.countries.map((c) => ({
+      code: c.code,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    }));
+
+    await queryInterface.bulkInsert("Countries", countries);
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    await queryInterface.bulkDelete("Countries", null, {});
   },
 };

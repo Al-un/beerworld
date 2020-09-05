@@ -1,4 +1,4 @@
-import { Endpoint, Handler } from "../handlers";
+import { Endpoint, AllHandlers } from "../handlers";
 import { DAO } from "../dao";
 import { ENDPOINTS } from "./routes";
 
@@ -13,7 +13,7 @@ export abstract class AbstApplication<H> implements Application {
     this._dao = dao;
   }
 
-  protected loadEndpoints(handler: Handler) {
+  protected loadEndpoints(handler: AllHandlers) {
     const endpoints = ENDPOINTS<H>(handler);
     endpoints.forEach((e) => this.bindEndpoint(e));
   }

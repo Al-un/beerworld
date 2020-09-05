@@ -1,4 +1,4 @@
-import { Handler, Endpoint } from "../handlers";
+import { AllHandlers, Endpoint } from "../handlers";
 
 export const ROUTES = {
   BEERS: {
@@ -10,30 +10,30 @@ export const ROUTES = {
   },
 };
 
-export const ENDPOINTS = <H>(handler: Handler): Endpoint<H>[] => [
+export const ENDPOINTS = <H>(handler: AllHandlers): Endpoint<H>[] => [
   {
     path: ROUTES.BEERS.LIST,
     method: "GET",
-    handler: handler.listBeers,
+    handler: handler.beer.list,
   },
   {
     path: ROUTES.BEERS.CREATE,
     method: "POST",
-    handler: handler.createBeer,
+    handler: handler.beer.create,
   },
   {
     path: ROUTES.BEERS.GET,
     method: "GET",
-    handler: handler.getBeer,
+    handler: handler.beer.get,
   },
   {
     path: ROUTES.BEERS.UPDATE,
     method: "PUT",
-    handler: handler.updateBeer,
+    handler: handler.beer.update,
   },
   {
     path: ROUTES.BEERS.DELETE,
     method: "DELETE",
-    handler: handler.deleteBeer,
+    handler: handler.beer.delete,
   },
 ];

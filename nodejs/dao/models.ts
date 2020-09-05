@@ -5,16 +5,24 @@
  * DAO common structure
  */
 export interface DAO {
-  createBeer: (beer: Beer) => Promise<Beer>;
-
-  deleteBeer: (beerId: string) => Promise<number>;
-
-  getBeer: (beerId: string) => Promise<Beer | undefined>;
-
-  listBeers: () => Promise<Beer[]>;
-
-  updateBeer: (beer: Beer, beerId: string) => Promise<Beer | undefined>;
+  beer: BeerDAO;
+  // country: CountryDAO
 }
+
+/**
+ * @type E: Entity type
+ * @type I: Enttiy ID type
+ */
+interface CrudDao<E, I> {
+  create: (entity: E) => Promise<E>;
+  delete: (entityId: I) => Promise<number>;
+  get: (entityId: I) => Promise<E | undefined>;
+  list: () => Promise<E[]>;
+  update: (entity: E, entityId: I) => Promise<E | undefined>;
+}
+
+export interface BeerDAO extends CrudDao<Beer, string> {}
+export interface CountryDAO extends CrudDao<Country, string> {}
 
 /* ========================================================================= */
 //    Data model

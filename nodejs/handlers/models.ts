@@ -1,3 +1,5 @@
+import { DAO } from "../dao";
+
 export type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export interface Endpoint<H> {
@@ -6,14 +8,16 @@ export interface Endpoint<H> {
   handler: H;
 }
 
-export interface Handler {
-  createBeer: any;
+export type HandlerBuilder<H> = (dao: DAO) => H;
 
-  deleteBeer: any;
+export interface AllHandlers {
+  beer: BeerHandler;
+}
 
-  getBeer: any;
-
-  listBeers: any;
-
-  updateBeer: any;
+export interface BeerHandler {
+  create: any;
+  delete: any;
+  get: any;
+  list: any;
+  update: any;
 }

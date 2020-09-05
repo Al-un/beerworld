@@ -6,9 +6,8 @@
 //   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 // });
 
-import { DummyDao } from "./dao";
+import { DummyDAO, SequelizeDAO } from "./dao";
 import { ExpressApp } from "./apps";
-import { SequelizeDao } from "./dao/sequelize";
 
 // import express from "express";
 // // rest of the code remains same
@@ -19,9 +18,6 @@ import { SequelizeDao } from "./dao/sequelize";
 //   console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
 // });
 
-const dummyDao = new DummyDao();
-const sequelizeDao = new SequelizeDao();
-
-// const expressApp = new ExpressApp(dummyDao);
-const expressApp = new ExpressApp(sequelizeDao);
+// const expressApp = new ExpressApp(DummyDAO);
+const expressApp = new ExpressApp(SequelizeDAO);
 expressApp.start();

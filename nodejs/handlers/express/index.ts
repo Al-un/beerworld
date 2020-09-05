@@ -1,7 +1,7 @@
 import express from "express";
 
-import { Handler } from "./models";
-import { Beer, DAO } from "../dao";
+import { Handler } from "../models";
+import { Beer, DAO } from "../../dao";
 
 interface ParamBeerId {
   beerId: string;

@@ -1,9 +1,9 @@
 import express from "express";
 import bodyParser from "body-parser";
 
-import { ExpressHandler, Endpoint } from "../handlers";
-import { DAO } from "../dao";
-import { AbstApplication } from "./models";
+import { ExpressHandler, Endpoint } from "../../handlers";
+import { DAO } from "../../dao";
+import { AbstApplication } from "../models";
 
 export class ExpressApp extends AbstApplication<any> {
   _app: express.Application;
@@ -14,7 +14,7 @@ export class ExpressApp extends AbstApplication<any> {
     this._handler = new ExpressHandler(dao);
 
     this._app = express();
-    this._app.use(bodyParser.json())
+    this._app.use(bodyParser.json());
   }
 
   bindEndpoint(endpoint: Endpoint<any>) {

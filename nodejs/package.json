@@ -10,6 +10,7 @@
     "db:sequelize:migrate": "sequelize-cli db:migrate",
     "db:sequelize:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:sequelize:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
+    "db:sequelize:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:seed:all",
     "db:sequelize:seed": "sequelize-cli db:seed:all",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

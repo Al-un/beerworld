@@ -4,7 +4,13 @@ const beerModel = require("./models/beer");
 const countryModel = require("./models/country");
 
 // ----- CONFIG
-const dbUrl = "postgres://padawan:padawan@localhost:5432/bw_nodejs";
+import databaseConfig from "./config/database";
+const { username, password, host, port, database } = databaseConfig.development;
+let dbUrl = `postgres://${username}:${password}@${host}:${port}/${database}`;
+
+const dbUrlTest = process.env[databaseConfig.test.use_env_variable];
+const dbUrlProd = process.env[databaseConfig.production.use_env_variable];
+dbUrl = dbUrlProd || dbUrlTest || dbUrl;
 
 // ----- INIT
 if (!dbUrl) {
@@ -13,7 +19,7 @@ if (!dbUrl) {
 const sequelize = new Sequelize(dbUrl);
 
 // ----- Sequelize: models definition
-import {DAO } from "../models";
+import { DAO } from "../models";
 import { SequelizeBeerDAO } from "./beers";
 
 export const SequelizeDAO: DAO = {

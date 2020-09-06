@@ -8,15 +8,25 @@ export const SequelizeBeerDAO: (beerModel: any) => BeerDAO = (beerModel) => {
     },
 
     delete: async (beerId: string) => {
+      const parsedId = parseInt(beerId);
+      if (isNaN(parsedId)) {
+        return 0;
+      }
+
       const deleteCount = await beerModel.destroy({
-        where: { id: parseInt(beerId) },
+        where: { id: parsedId },
       });
       return deleteCount as number;
     },
 
     get: async (beerId: string) => {
+      const parsedId = parseInt(beerId);
+      if (isNaN(parsedId)) {
+        return undefined;
+      }
+
       const beers = (await beerModel.findAll({
-        where: { id: parseInt(beerId) },
+        where: { id: parsedId },
       })) as Beer[];
 
       return beers.length ? beers[0] : undefined;
@@ -28,8 +38,13 @@ export const SequelizeBeerDAO: (beerModel: any) => BeerDAO = (beerModel) => {
     },
 
     update: async (beer: Beer, beerId: string) => {
+      const parsedId = parseInt(beerId);
+      if (isNaN(parsedId)) {
+        return undefined;
+      }
+
       const updatedBeerCount = (await beerModel.update(beer, {
-        where: { id: parseInt(beerId) },
+        where: { id: parsedId },
       })) as Beer;
 
       return dao.get(beerId);

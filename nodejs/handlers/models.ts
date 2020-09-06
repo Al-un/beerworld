@@ -1,5 +1,7 @@
 import { DAO } from "../dao";
-
+/* ========================================================================= */
+//    Utilities
+/* ========================================================================= */
 export type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export interface Endpoint<H> {
@@ -8,6 +10,9 @@ export interface Endpoint<H> {
   handler: H;
 }
 
+/* ========================================================================= */
+//    Handler layer
+/* ========================================================================= */
 export type HandlerBuilder<H> = (dao: DAO) => H;
 
 export interface AllHandlers {
@@ -20,4 +25,11 @@ export interface BeerHandler {
   get: any;
   list: any;
   update: any;
+}
+
+/* ========================================================================= */
+//    Non data-model response format
+/* ========================================================================= */
+export interface DeleteResponse {
+  deleteCount: number;
 }

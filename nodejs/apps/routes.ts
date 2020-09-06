@@ -1,12 +1,18 @@
 import { AllHandlers, Endpoint } from "../handlers";
 
+export const PARAM = {
+  BEERS: {
+    ID: ":beerId",
+  },
+};
+
 export const ROUTES = {
   BEERS: {
-    LIST: "/beers",
-    CREATE: "/beers",
-    GET: "/beers/detail/:beerId",
-    UPDATE: "/beers/detail/:beerId",
-    DELETE: "/beers/detail/:beerId",
+    LIST: `/beers`,
+    CREATE: `/beers`,
+    GET: `/beers/detail/${PARAM.BEERS.ID}`,
+    UPDATE: `/beers/detail/${PARAM.BEERS.ID}`,
+    DELETE: `/beers/detail/${PARAM.BEERS.ID}`,
   },
 };
 

@@ -16,7 +16,7 @@ dbUrl = dbUrlProd || dbUrlTest || dbUrl;
 if (!dbUrl) {
   throw new Error(`DATABASE_URL environment variable is missing`);
 }
-const sequelize = new Sequelize(dbUrl);
+export const sequelize = new Sequelize(dbUrl);
 
 // ----- Sequelize: models definition
 import { DAO } from "../models";

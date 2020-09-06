@@ -15,6 +15,12 @@ export class ExpressApp extends AbstApplication<any> {
 
     this._app = express();
     this._app.use(bodyParser.json());
+
+    this.loadEndpoints(this._handler);
+  }
+
+  get app(): express.Application {
+    return this._app;
   }
 
   bindEndpoint(endpoint: Endpoint<any>) {
@@ -38,8 +44,6 @@ export class ExpressApp extends AbstApplication<any> {
   }
 
   start() {
-    this.loadEndpoints(this._handler);
-
     const PORT = 8000;
 
     this._app.listen(PORT, () => {

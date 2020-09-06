@@ -1,6 +1,6 @@
 import express from "express";
 
-import { BeerHandler, HandlerBuilder } from "../models";
+import { BeerHandler, HandlerBuilder, DeleteResponse } from "../models";
 import { Beer } from "../../dao";
 
 interface ParamBeerId {
@@ -27,8 +27,9 @@ export const ExpressBeerHandler: HandlerBuilder<BeerHandler> = (dao) => ({
     try {
       const beerId = req.params["beerId"];
       const deleteCount = await dao.beer.delete(beerId);
+      const deleteResp: DeleteResponse = { deleteCount };
 
-      res.json({ deleteCount });
+      res.json(deleteResp);
     } catch (error) {
       res.status(500);
       res.json({ error });

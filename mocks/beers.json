@@ -1,0 +1,52 @@
+[
+  {
+    "name": "Orion Draft",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/asahi_orion-draft.jpg",
+    "brewer": { "id": 1234, "name": "Asahi" }
+  },
+  {
+    "name": "Ginga Kogen Hefe-Weizen",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/ginga-kogen_wheat-beer.jpg",
+    "brewer": { "id": 1234, "name": "Ginga Kogen" }
+  },
+  {
+    "name": "ジューシー New England IPA",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_juicy-ipa.jpg",
+    "brewer": { "id": 1234, "name": "J-craft Hopping" }
+  },
+  {
+    "name": "ガツんと IPA",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_klonk-ipa.jpg",
+    "brewer": { "id": 1234, "name": "J-craft Hopping" }
+  },
+  {
+    "name": "Grand Kirin IPA",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/kirin_grand-ipa.jpg",
+    "brewer": { "id": 1234, "name": "Kirin" }
+  },
+  {
+    "name": "ペルミアム　アンバー",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/sapporo_yebisu-red.jpg",
+    "brewer": { "id": 1234, "name": "Sapporo" }
+  },
+  {
+    "name": "Aooni - インドの青鬼",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_aooni.jpg",
+    "brewer": { "id": 1234, "name": "Yo-Ho" }
+  },
+  {
+    "name": "水曜日のネコ",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_suiyoubi-no-neko.jpg",
+    "brewer": { "id": 1234, "name": "Yo-Ho" }
+  },
+  {
+    "name": "Tokyo Black",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_tokyo-black.jpg",
+    "brewer": { "id": 1234, "name": "Yo-Ho" }
+  },
+  {
+    "name": "Yona Yona Ale",
+    "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_yona-yona-ale.jpg",
+    "brewer": { "id": 1234, "name": "Yo-Ho" }
+  }
+]

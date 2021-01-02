@@ -3,60 +3,60 @@
     "id": 1000001,
     "name": "Orion Draft",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/asahi_orion-draft.jpg",
-    "brewer": { "id": 1234, "name": "Asahi" }
+    "brewer": { "id": 200001, "name": "Asahi" }
   },
   {
     "id": 1000002,
     "name": "Ginga Kogen Hefe-Weizen",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/ginga-kogen_wheat-beer.jpg",
-    "brewer": { "id": 1234, "name": "Ginga Kogen" }
+    "brewer": { "id": 200002, "name": "Ginga Kogen" }
   },
   {
     "id": 1000003,
     "name": "ジューシー New England IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_juicy-ipa.jpg",
-    "brewer": { "id": 1234, "name": "J-craft Hopping" }
+    "brewer": { "id": 200003, "name": "J-craft Hopping" }
   },
   {
     "id": 1000004,
     "name": "ガツんと IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_klonk-ipa.jpg",
-    "brewer": { "id": 1234, "name": "J-craft Hopping" }
+    "brewer": { "id": 200003, "name": "J-craft Hopping" }
   },
   {
     "id": 1000005,
     "name": "Grand Kirin IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/kirin_grand-ipa.jpg",
-    "brewer": { "id": 1234, "name": "Kirin" }
+    "brewer": { "id": 200004, "name": "Kirin" }
   },
   {
     "id": 1000006,
     "name": "ペルミアム　アンバー",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/sapporo_yebisu-red.jpg",
-    "brewer": { "id": 1234, "name": "Sapporo" }
+    "brewer": { "id": 200005, "name": "Sapporo" }
   },
   {
     "id": 1000007,
     "name": "Aooni - インドの青鬼",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_aooni.jpg",
-    "brewer": { "id": 1234, "name": "Yo-Ho" }
+    "brewer": { "id": 200006, "name": "Yo-Ho" }
   },
   {
     "id": 1000008,
     "name": "水曜日のネコ",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_suiyoubi-no-neko.jpg",
-    "brewer": { "id": 1234, "name": "Yo-Ho" }
+    "brewer": { "id": 200006, "name": "Yo-Ho" }
   },
   {
     "id": 1000009,
     "name": "Tokyo Black",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_tokyo-black.jpg",
-    "brewer": { "id": 1234, "name": "Yo-Ho" }
+    "brewer": { "id": 200006, "name": "Yo-Ho" }
   },
   {
     "id": 1000010,
     "name": "Yona Yona Ale",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_yona-yona-ale.jpg",
-    "brewer": { "id": 1234, "name": "Yo-Ho" }
+    "brewer": { "id": 200006, "name": "Yo-Ho" }
   }
 ]

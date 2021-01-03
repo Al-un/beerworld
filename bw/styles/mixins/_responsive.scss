@@ -1,0 +1,32 @@
+// Sources:
+//     - https://css-tricks.com/approaches-media-queries-sass/
+//     - https://responsivedesign.is/articles/helpful-sass-mixins/
+//     - https://glennmccomb.com/articles/useful-sass-scss-media-query-mixins-for-bootstrap/
+$breakpoints: (
+  tablet: 768px,
+  desktop: 1024px,
+);
+
+@mixin respond-above($size) {
+  @if map-has-key($breakpoints, $size) {
+    $breakpoint-value: map-get($breakpoints, $size);
+
+    @media (min-width: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @error 'Invalid respond-above $size: #{$size}';
+  }
+}
+
+@mixin respond-below($size) {
+  @if map-has-key($breakpoints, $size) {
+    $breakpoint-value: map-get($breakpoints, $size);
+
+    @media (max-width: $breakpoint-value - 1px) {
+      @content;
+    }
+  } @else {
+    @error 'Invalid respond-below $size: #{$size}';
+  }
+}

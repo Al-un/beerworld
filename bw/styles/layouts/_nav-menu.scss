@@ -1,0 +1,40 @@
+@use "../_bw";
+
+#bw-nav-drawer {
+  grid-area: bw-app-drawer;
+
+  box-shadow: 2px 0 4px -1px bw.$shadow-black-base;
+  height: 100%; // required for the mobile part to skip the grid position
+  position: absolute;
+  transition: width bw.$anim-speed-base;
+  width: 0;
+  z-index: bw.$z-index-menu;
+
+  &.opened {
+    width: bw.$bw-nav-menu-width;
+  }
+
+  @include bw.respond-above(tablet) {
+    position: inherit;
+  }
+}
+
+#bw-nav-menu {
+  background-color: var(--bw-bg-white);
+  height: 100%;
+}
+
+#bw-nav-backdrop {
+  @extend %fullscreen-fixed;
+
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  z-index: bw.$z-index-menu;
+
+  // Backdrop used only in mobile viewport
+  @include bw.respond-below(tablet) {
+    &.opened {
+      display: block;
+    }
+  }
+}

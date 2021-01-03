@@ -1,0 +1,17 @@
+@use "../variables" as *;
+
+%text-body {
+  color: var(--bw-font-color-body);
+}
+
+%text-description {
+  color: var(--bw-font-color-sub-body);
+}
+
+%title-1 {
+  color: var(--bw-primary);
+}
+
+%title-2 {
+  color: var(--bw-font-color-body);
+}

@@ -1,0 +1,11 @@
+@use "../../_bw" as *;
+
+.bw-beer-display {
+  .title {
+    @extend %text-body;
+  }
+
+  .desc {
+    @extend %text-description;
+  }
+}

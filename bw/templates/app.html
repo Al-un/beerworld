@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beer World</title>
+
+    <script type="text/javascript">
+      // https://veerasundar.com/blog/2019/01/how-to-inject-environment-values-in-javascript-app-with-webpack/
+      window.BW_ENV = {
+        API_BASE_URL: "<%= htmlWebpackPlugin.options.bwEnv.apiBaseUrl %>",
+      };
+    </script>
+  </head>
+  <body>
+    <div id="bw-app-wrapper">
+      <div id="bw-nav-backdrop"></div>
+      <aside id="bw-nav-drawer">
+        <nav id="bw-nav-menu"></nav>
+      </aside>
+
+      <header id="bw-app-header">
+        <div id="bw-nav-menu-toggler">Toggle</div>
+      </header>
+
+      <main id="bw-app-content"></main>
+
+      <footer id="bw-app-footer"></footer>
+    </div>
+  </body>
+</html>

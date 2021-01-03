@@ -6,50 +6,45 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const fs = require("fs");
 // --- Config
+const FOLDER_PAGES = "pages";
+const FOLDER_TEMPLATES = "templates";
 const IS_DEV_MODE = process.env.NODE_ENV !== "production";
 
 // Load all pages in the pages folder (default: pages/). A JavaScript file is
 // recognized as a page if a HTML file with the exact same name exists
 //
 // Sub-folders are not supported
-const loadPages = (pagesFolder = "pages") => {
-  const pageCandidates = {};
+const loadPages = (pagesFolder = FOLDER_PAGES) => {
+  let entries = {};
+  let htmlPages = [];
 
   // Load all files in the pages folder and check if there is a HTML and JS
   const files = fs.readdirSync(path.join(__dirname, pagesFolder));
   files.forEach((f) => {
-    const fileCheck = f.match(/^(.*)\.(html|js)$/i);
+    const fileCheck = f.match(/^(.*)\.js$/i);
 
-    // If the file is a valid file, save filename with "html" or "js" key
     if (fileCheck) {
-      pageCandidates[fileCheck[1]] = {
-        ...pageCandidates[fileCheck[1]],
-        [fileCheck[2]]: true,
-      };
-    }
-  });
+      // Remove the .js extension
+      const pageName = fileCheck[1];
 
-  const entries = {};
-  let htmlPages = [];
-
-  Object.keys(pageCandidates).forEach((pageName) => {
-    // Page is valid only if both HTML and JS are present
-    if (pageCandidates[pageName].html && pageCandidates[pageName].js) {
       // Add JS entry
-      entries[pageName] = path.resolve(
-        __dirname,
-        pagesFolder,
-        `${pageName}.js`
-      );
+      entries = {
+        ...entries,
+        [pageName]: path.resolve(__dirname, pagesFolder, `${pageName}.js`),
+      };
 
       // Add HTML entry
       htmlPages = [
         ...htmlPages,
         new HtmlWebpackPlugin({
-          template: path.resolve(__dirname, pagesFolder, `${pageName}.html`),
+          template: path.resolve(__dirname, FOLDER_TEMPLATES, `app.html`),
           filename: `${pageName}.html`,
           hash: false,
           chunks: [pageName],
+          // https://veerasundar.com/blog/2019/01/how-to-inject-environment-values-in-javascript-app-with-webpack/
+          bwEnv: {
+            apiBaseUrl: process.env.API_BASE_URL,
+          },
         }),
       ];
     }

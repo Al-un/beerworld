@@ -1,62 +1,95 @@
 [
   {
+    "brewer": { "id": 200001, "name": "Asahi" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000001,
-    "name": "Orion Draft",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/asahi_orion-draft.jpg",
-    "brewer": { "id": 200001, "name": "Asahi" }
+    "name": "Orion Draft",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200002, "name": "Ginga Kogen" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000002,
-    "name": "Ginga Kogen Hefe-Weizen",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/ginga-kogen_wheat-beer.jpg",
-    "brewer": { "id": 200002, "name": "Ginga Kogen" }
+    "name": "Ginga Kogen Hefe-Weizen",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200003, "name": "J-craft Hopping" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000003,
-    "name": "ジューシー New England IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_juicy-ipa.jpg",
-    "brewer": { "id": 200003, "name": "J-craft Hopping" }
+    "name": "ジューシー New England IPA",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200003, "name": "J-craft Hopping" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000004,
-    "name": "ガツんと IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/j-craft-hopping_klonk-ipa.jpg",
-    "brewer": { "id": 200003, "name": "J-craft Hopping" }
+    "name": "ガツんと IPA",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200004, "name": "Kirin" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000005,
-    "name": "Grand Kirin IPA",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/kirin_grand-ipa.jpg",
-    "brewer": { "id": 200004, "name": "Kirin" }
+    "name": "Grand Kirin IPA",
+    "pictures": [
+      "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/kirin_grand-ipa-glass-1.jpg",
+      "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/kirin_grand-ipa-glass-2.jpg"
+    ]
   },
   {
+    "brewer": { "id": 200005, "name": "Sapporo" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000006,
-    "name": "ペルミアム　アンバー",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/sapporo_yebisu-red.jpg",
-    "brewer": { "id": 200005, "name": "Sapporo" }
+    "name": "ペルミアム　アンバー",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200006, "name": "Yo-Ho" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000007,
-    "name": "Aooni - インドの青鬼",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_aooni.jpg",
-    "brewer": { "id": 200006, "name": "Yo-Ho" }
+    "name": "Aooni - インドの青鬼",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200006, "name": "Yo-Ho" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000008,
-    "name": "水曜日のネコ",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_suiyoubi-no-neko.jpg",
-    "brewer": { "id": 200006, "name": "Yo-Ho" }
+    "name": "水曜日のネコ",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200006, "name": "Yo-Ho" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000009,
-    "name": "Tokyo Black",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_tokyo-black.jpg",
-    "brewer": { "id": 200006, "name": "Yo-Ho" }
+    "name": "Tokyo Black",
+    "pictures": []
   },
   {
+    "brewer": { "id": 200006, "name": "Yo-Ho" },
+    "cheersCount": 12345,
+    "drunkCount": 12345,
     "id": 1000010,
-    "name": "Yona Yona Ale",
     "mainPicture": "https://raw.githubusercontent.com/Al-un/beerworld/media/photos/yo-ho_yona-yona-ale.jpg",
-    "brewer": { "id": 200006, "name": "Yo-Ho" }
+    "name": "Yona Yona Ale",
+    "pictures": []
   }
 ]

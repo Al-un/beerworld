@@ -19,21 +19,22 @@
   }
 }
 
-#bw-nav-menu {
-  background-color: var(--bw-bg-white);
-  height: 100%;
-}
-
 #bw-nav-backdrop {
   @extend %fullscreen-fixed;
 
+  animation: fade bw.$anim-speed-base reverse;
   background: rgba(0, 0, 0, 0.6);
   display: none;
   z-index: bw.$z-index-menu;
+  // >>>> HACK to overcome backdrop z=index position
+  left: bw.$bw-nav-menu-width;
+  width: calc(100% - #{bw.$bw-nav-menu-width});
+  // <<<<
 
   // Backdrop used only in mobile viewport
   @include bw.respond-below(tablet) {
     &.opened {
+      animation: fade bw.$anim-speed-base;
       display: block;
     }
   }

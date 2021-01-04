@@ -1,6 +1,6 @@
 @use "../_bw" as *;
 
-#bw-app-wrapper {
+#bw-app {
   background-color: var(--bw-bg-main);
   display: grid;
   grid-template-areas:

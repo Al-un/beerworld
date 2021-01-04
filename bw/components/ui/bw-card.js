@@ -1,7 +1,7 @@
-import "../../styles/components/ui/_bw-button.scss";
+import "../../styles/components/ui/_bw-card.scss";
 import { addSlotFromCustomElement, attachCustomElementNode } from "../../utils";
 
-class BwButton extends HTMLElement {
+class BwCard extends HTMLElement {
   // --------------------------------------------------------------------------
   //  Lifecycle
   // --------------------------------------------------------------------------
@@ -21,27 +21,12 @@ class BwButton extends HTMLElement {
   //  Render
   // --------------------------------------------------------------------------
   render() {
-    const el = document.createElement("button");
-    el.classList.add("bw-button");
+    this.classList.add("bw-card");
 
-    // icon
-    if (this.hasAttribute("icon")) {
-      const elIcon = document.createElement("img");
-      elIcon.alt = "icon";
-      elIcon.classList.add("icon");
-      elIcon.src = this.getAttribute("icon");
-      el.appendChild(elIcon);
+    if (this.hasAttribute("padded")) {
+      this.classList.add("padded");
     }
-
-    // Text via slot
-    const elText = document.createElement("span");
-    elText.classList.add("text");
-    addSlotFromCustomElement(this, elText);
-    el.appendChild(elText);
-
-    // Attach to DOM
-    attachCustomElementNode(this, el);
   }
 }
 
-customElements.define("bw-button", BwButton);
+customElements.define("bw-card", BwCard);

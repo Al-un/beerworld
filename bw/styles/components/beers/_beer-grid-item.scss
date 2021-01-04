@@ -4,7 +4,7 @@
 .bw-beer-grid-item {
   @extend %box-shadow-1;
 
-  border-radius: 4px;
+  border-radius: $border-radius-base;
   color: var(--bw-font-color-body);
   line-height: 0; // to ensure it is perfectly squared;
   overflow: hidden;

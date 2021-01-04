@@ -1,0 +1,22 @@
+@use "../../_bw" as *;
+
+.bw-button {
+  @extend %flex-row-align-center;
+
+  background-color: transparent;
+  border-radius: $border-radius-base;
+  border: 1px solid var(--bw-primary);
+  min-height: 24px;
+  padding: 0 16px;
+
+  .icon {
+    height: 16px;
+  }
+
+  .text {
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+}

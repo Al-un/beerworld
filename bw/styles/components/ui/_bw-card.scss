@@ -1,0 +1,11 @@
+@use "../../_bw" as *;
+
+.bw-card {
+  background-color: var(--bw-bg-white);
+  border-radius: $border-radius-base;
+  display: block;
+
+  &.padded {
+    padding: 8px;
+  }
+}

@@ -21,7 +21,7 @@ const loadPages = (pagesFolder = FOLDER_PAGES) => {
   // Load all files in the pages folder and check if there is a HTML and JS
   const files = fs.readdirSync(path.join(__dirname, pagesFolder));
   files.forEach((f) => {
-    const fileCheck = f.match(/^(.*)\.js$/i);
+    const fileCheck = f.match(/^(?!_)(.*)\.js$/i);
 
     if (fileCheck) {
       // Remove the .js extension
@@ -34,10 +34,15 @@ const loadPages = (pagesFolder = FOLDER_PAGES) => {
       };
 
       // Add HTML entry
+      let htmlPath = path.resolve(__dirname, FOLDER_TEMPLATES, `${pageName}.html`);
+      if (!fs.existsSync(htmlPath)) {
+        htmlPath = path.resolve(__dirname, FOLDER_TEMPLATES, `app.html`);
+      }
+
       htmlPages = [
         ...htmlPages,
         new HtmlWebpackPlugin({
-          template: path.resolve(__dirname, FOLDER_TEMPLATES, `app.html`),
+          template: htmlPath,
           filename: `${pageName}.html`,
           hash: false,
           chunks: [pageName],
@@ -87,6 +92,10 @@ module.exports = {
         exclude: /node_modules/,
         use: ["babel-loader"],
       },
+      // {
+      //   test: /(?!pages)\.html$/i,
+      //   loader: "html-loader",
+      // },
     ],
   },
 

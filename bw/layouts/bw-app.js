@@ -6,6 +6,7 @@ import {
   attachCustomElementNode,
   USE_SHADOW_DOM,
   logoutUser,
+  decodeAccessToken,
 } from "../utils";
 
 class BwApp extends HTMLElement {
@@ -62,7 +63,21 @@ class BwApp extends HTMLElement {
       : this.querySelector("#bw-user-info-area");
     userInfoArea.innerHTML = "";
 
-    if (!this.hasAttribute(ATTR_BW_APP_ACCESS_TOKEN)) {
+    if (this.hasAttribute(ATTR_BW_APP_ACCESS_TOKEN)) {
+      const userInfo = decodeAccessToken(
+        this.getAttribute(ATTR_BW_APP_ACCESS_TOKEN)
+      );
+      const userName = document.createElement("div");
+      userName.textContent = `Hey ${userInfo.name}!`;
+      userInfoArea.appendChild(userName);
+
+      const logoutBtn = document.createElement("bw-button");
+      logoutBtn.addEventListener("click", () => this.logout());
+      logoutBtn.id = "bw-logout-btn";
+      logoutBtn.textContent = "Logout";
+
+      userInfoArea.appendChild(logoutBtn);
+    } else {
       const loginBtn = document.createElement("bw-button");
       loginBtn.addEventListener("click", () => {
         window.location.assign("login.html");
@@ -71,13 +86,6 @@ class BwApp extends HTMLElement {
       loginBtn.textContent = "Login";
 
       userInfoArea.appendChild(loginBtn);
-    } else {
-      const logoutBtn = document.createElement("bw-button");
-      logoutBtn.addEventListener("click", () => this.logout());
-      logoutBtn.id = "bw-logout-btn";
-      logoutBtn.textContent = "Logout";
-
-      userInfoArea.appendChild(logoutBtn);
     }
   }
 

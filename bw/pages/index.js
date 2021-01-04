@@ -1,8 +1,6 @@
-import "../layouts";
+import { APP_CONTENT, api } from "./_common";
 import "../styles/pages/index.scss";
 
-import api from "../api";
-import { APP_CONTENT } from "../utils";
 import { buildBeerDisplay } from "../components";
 
 let elBeerDisplay = undefined;
@@ -13,13 +11,14 @@ const beerDisplayInfo = {
 };
 
 const onInit = () => {
-  elBeerDisplay = buildBeerDisplay(beerDisplayInfo, beers);
-  APP_CONTENT.appendChild(elBeerDisplay);
+  const app = document.getElementById("app");
+  elBeerDisplay = buildBeerDisplay(beerDisplayInfo, []);
+  app.appendChild(elBeerDisplay);
 
   api.beers.fetchBeers().then((data) => {
-    APP_CONTENT.removeChild(elBeerDisplay);
+    app.removeChild(elBeerDisplay);
     elBeerDisplay = buildBeerDisplay(beerDisplayInfo, data);
-    APP_CONTENT.appendChild(elBeerDisplay);
+    app.appendChild(elBeerDisplay);
   });
 };
 

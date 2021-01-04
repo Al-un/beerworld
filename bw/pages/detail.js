@@ -1,8 +1,7 @@
-import "../layouts";
+import { APP_CONTENT } from "./_common";
 import "../styles/pages/detail.scss";
 
 import { buildBeerDetail } from "../components";
-import { APP_CONTENT } from "../utils";
 
 const onInit = () => {
   const beerDetail = buildBeerDetail();

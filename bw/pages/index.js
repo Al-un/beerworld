@@ -1,5 +1,5 @@
 import { APP_CONTENT, api } from "./_common";
-import "../styles/pages/index.scss";
+import "./index.scss";
 
 import { buildBeerDisplay } from "../components";
 

@@ -1,0 +1,45 @@
+@use "../variables" as *;
+
+%flex {
+  display: flex;
+}
+
+%flex-row {
+  @extend %flex;
+  flex-direction: row;
+}
+
+%flex-col {
+  @extend %flex;
+  flex-direction: column;
+}
+
+%flex-row-align-center {
+  @extend %flex-row;
+  align-items: center;
+}
+
+%flex-col-align-center {
+  @extend %flex-col;
+  align-items: center;
+}
+
+%flex-row-justify-center {
+  @extend %flex-row;
+  justify-content: center;
+}
+
+%flex-col-justify-center {
+  @extend %flex-col;
+  justify-content: center;
+}
+
+%flex-row-all-center {
+  @extend %flex-row-align-center;
+  @extend %flex-row-justify-center;
+}
+
+%flex-col-all-center {
+  @extend %flex-col-align-center;
+  @extend %flex-col-justify-center;
+}

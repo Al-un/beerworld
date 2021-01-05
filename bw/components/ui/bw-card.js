@@ -1,4 +1,3 @@
-import "../../styles/components/ui/_bw-card.scss";
 import { addSlotFromCustomElement, attachCustomElementNode } from "../../utils";
 
 class BwCard extends HTMLElement {

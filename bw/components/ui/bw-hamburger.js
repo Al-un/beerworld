@@ -1,4 +1,3 @@
-import "../../styles/components/ui/_bw-hamburger.scss";
 import { attachCustomElementNode } from "../../utils";
 
 class BwHamburger extends HTMLElement {

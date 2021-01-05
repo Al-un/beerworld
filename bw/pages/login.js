@@ -1,5 +1,5 @@
 import { api } from "./_common";
-import "../styles/pages/login.scss";
+import "./login.scss";
 
 import { LS_ACCESS_TOKEN } from "../constants";
 

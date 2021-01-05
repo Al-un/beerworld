@@ -13,4 +13,3 @@ import "../layouts";
 
 // Register common components
 import "../components/ui";
-import "../layouts";

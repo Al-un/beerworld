@@ -1,0 +1,18 @@
+@use "../styles/_bw" as *;
+
+@use "../styles/global/common";
+@use "../styles/global/reset_base";
+@use "../styles/global/reset_custom";
+
+@use "../styles/layouts";
+@use "../styles/components/ui";
+
+// Init CSS variables
+
+:root {
+  --bw-bg-main: #{$bg-main};
+  --bw-bg-white: #{$bg-white};
+  --bw-font-color-body: #{$font-color-body};
+  --bw-font-color-sub-body: #{$font-color-sub-body};
+  --bw-primary: #{$primary};
+}

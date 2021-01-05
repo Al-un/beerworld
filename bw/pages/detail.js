@@ -1,5 +1,5 @@
 import { APP_CONTENT } from "./_common";
-import "../styles/pages/detail.scss";
+import "./detail.scss";
 
 import { buildBeerDetail } from "../components";
 

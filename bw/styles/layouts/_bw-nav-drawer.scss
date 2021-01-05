@@ -17,6 +17,10 @@
   @include bw.respond-above(tablet) {
     position: inherit;
   }
+
+  .logo {
+    height: bw.$bw-app-header-height;
+  }
 }
 
 #bw-nav-backdrop {

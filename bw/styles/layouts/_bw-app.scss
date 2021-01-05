@@ -7,7 +7,7 @@
     "bw-app-drawer bw-app-header"
     "bw-app-drawer bw-app-content"
     "bw-app-drawer bw-app-footer";
-  grid-template-rows: 48px 1fr 120px;
+  grid-template-rows: $bw-app-header-height 1fr $bw-app-footer-height;
   grid-template-columns: max-content 1fr;
   min-height: 100%;
   width: 100%;
@@ -15,10 +15,12 @@
 }
 
 #bw-app-header {
+  @extend %flex-row-align-center;
   grid-area: bw-app-header;
 
   background-color: var(--bw-bg-white);
   box-shadow: 0 2px 4px -1px $shadow-black-base;
+  padding: 16px;
   position: sticky;
   top: 0;
 }

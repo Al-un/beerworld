@@ -1,0 +1,5 @@
+@use "../../_bw" as *;
+
+.bw-button-group {
+  @extend %flex-row-align-center;
+}

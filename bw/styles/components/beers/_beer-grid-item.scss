@@ -22,11 +22,18 @@
 
   .beer-name {
     background-color: rgba(255, 255, 255, 0.75);
-    bottom: 0;
+    top: 0;
     padding: 8px;
     position: absolute;
     line-height: 16px;
     text-align: center;
+    width: 100%;
+  }
+
+  .beer-actions {
+    background-color: rgba(255, 255, 255, 0.75);
+    bottom: 0;
+    position: absolute;
     width: 100%;
   }
 

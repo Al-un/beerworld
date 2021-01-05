@@ -1,5 +1,3 @@
-import "../styles/layouts/_bw-nav-drawer.scss";
-import "../styles/layouts/_bw-nav-menu.scss";
 import { attachCustomElementNode, USE_SHADOW_DOM } from "../utils";
 
 const ATTR_OPENED = "opened";
@@ -86,14 +84,21 @@ class BwNavMenu extends HTMLElement {
     backdrop.addEventListener("click", () => this.removeAttribute(ATTR_OPENED));
     elements = [...elements, backdrop];
 
-    // --- Drawer
+    // --- Nav panel
     const navPanel = document.createElement("aside");
     navPanel.id = "bw-nav-panel";
 
+    // Logo
+    const logo = document.createElement("div");
+    logo.classList.add("logo");
+    logo.textContent = "LOGO here";
+    navPanel.appendChild(logo);
+
     const navMenu = document.createElement("nav");
+    navMenu.classList.add("bw-list");
     const links = [
-      { title: "Home", icon: "", href: "/" },
-      { title: "About", icon: "", href: "/about.html" },
+      { title: "Home", icon: "", href: "index.html" },
+      { title: "About", icon: "", href: "about.html" },
     ];
     links.forEach((link) => {
       const elLink = document.createElement("a");

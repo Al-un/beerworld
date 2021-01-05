@@ -36,3 +36,6 @@
     - https://www.digitalocean.com/community/tutorials/web-components-composing-slots-named-slots
   - shadow dom + sass: https://medium.com/swlh/web-components-with-shadow-dom-and-sass-f780ad23dd90
   - render() in connectedCallback: https://stackoverflow.com/a/61039281/4906586
+  - https://alligator.io/web-components/attributes-properties/
+  - https://robdodson.me/interoperable-custom-elements/
+  - https://developers.google.com/web/fundamentals/web-components/best-practices

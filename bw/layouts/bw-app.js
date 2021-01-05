@@ -1,12 +1,12 @@
-import "../styles/layouts/_bw-app.scss";
-
-import { ATTR_BW_APP_ACCESS_TOKEN } from "../constants";
+import { ATTR_BW_APP_ACCESS_TOKEN, LS_ACCESS_TOKEN } from "../constants";
 import {
   addSlotFromCustomElement,
   attachCustomElementNode,
   USE_SHADOW_DOM,
   logoutUser,
   decodeAccessToken,
+  createFlexSpacer,
+  customQuerySelector,
 } from "../utils";
 
 class BwApp extends HTMLElement {
@@ -15,6 +15,11 @@ class BwApp extends HTMLElement {
   // --------------------------------------------------------------------------
   constructor() {
     super();
+
+    const accessToken = window.localStorage.getItem(LS_ACCESS_TOKEN);
+    if (accessToken !== null) {
+      this.setAttribute(ATTR_BW_APP_ACCESS_TOKEN, accessToken);
+    }
   }
 
   connectedCallback() {
@@ -58,25 +63,36 @@ class BwApp extends HTMLElement {
   }
 
   updateUserLoginArea() {
-    const userInfoArea = USE_SHADOW_DOM
-      ? this.shadowRoot.querySelector("#bw-user-info-area")
-      : this.querySelector("#bw-user-info-area");
-    userInfoArea.innerHTML = "";
+    const header = customQuerySelector(this, "bw-app-header");
+    if (!header) {
+      return;
+    }
+
+    const removeNode = (id) => {
+      const element = customQuerySelector(this, id);
+      if (element) {
+        header.removeChild(element);
+      }
+    };
+    removeNode("bw-login-btn");
+    removeNode("bw-logout-btn");
+    removeNode("bw-login-greeting");
 
     if (this.hasAttribute(ATTR_BW_APP_ACCESS_TOKEN)) {
       const userInfo = decodeAccessToken(
         this.getAttribute(ATTR_BW_APP_ACCESS_TOKEN)
       );
       const userName = document.createElement("div");
-      userName.textContent = `Hey ${userInfo.name}!`;
-      userInfoArea.appendChild(userName);
+      userName.id = "bw-login-greeting";
+      userName.textContent = `Hey <${userInfo.name}> !`;
+      header.appendChild(userName);
 
       const logoutBtn = document.createElement("bw-button");
       logoutBtn.addEventListener("click", () => this.logout());
       logoutBtn.id = "bw-logout-btn";
       logoutBtn.textContent = "Logout";
 
-      userInfoArea.appendChild(logoutBtn);
+      header.appendChild(logoutBtn);
     } else {
       const loginBtn = document.createElement("bw-button");
       loginBtn.addEventListener("click", () => {
@@ -85,7 +101,7 @@ class BwApp extends HTMLElement {
       loginBtn.id = "bw-login-btn";
       loginBtn.textContent = "Login";
 
-      userInfoArea.appendChild(loginBtn);
+      header.appendChild(loginBtn);
     }
   }
 
@@ -111,9 +127,8 @@ class BwApp extends HTMLElement {
     toggler.addEventListener("click", () => this.toggleMenu());
     header.appendChild(toggler);
 
-    const userInfoArea = document.createElement("div");
-    userInfoArea.id = "bw-user-info-area";
-    header.appendChild(userInfoArea);
+    const flexSpacer = createFlexSpacer();
+    header.appendChild(flexSpacer);
 
     elements = [...elements, header];
 

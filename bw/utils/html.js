@@ -66,6 +66,25 @@ export const addSlotFromCustomElement = (
   }
 };
 
+/**
+ *
+ * @param {HTMLElement} component
+ * @param {String} selector
+ * @param {Boolean} useShadow
+ */
+export const customQuerySelector = (
+  component,
+  selector,
+  useShadow = USE_SHADOW_DOM
+) => {
+  if (useShadow) {
+    const shadowRoot = component.shadowRoot;
+    return shadowRoot ? shadowRoot.querySelector(`#${selector}`) : undefined;
+  }
+
+  return component.querySelector(`#${selector}`);
+};
+
 // ---------- Create DOM element from HTML string
 /**
  * https://www.w3docs.com/snippets/javascript/how-to-create-a-new-dom-element-from-html-string.html
@@ -78,4 +97,12 @@ export const htmlFromString = (html) => {
   temp.innerHTML = html;
 
   return temp.content.firstChild;
+};
+
+// ----------- Create standard elements
+export const createFlexSpacer = () => {
+  const flexSpacer = document.createElement("div");
+  flexSpacer.classList.add("bw-flex-spacer");
+
+  return flexSpacer;
 };

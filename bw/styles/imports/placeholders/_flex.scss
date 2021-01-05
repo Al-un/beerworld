@@ -5,41 +5,49 @@
 }
 
 %flex-row {
-  @extend %flex;
+  display: flex;
   flex-direction: row;
 }
 
 %flex-col {
-  @extend %flex;
+  display: flex;
   flex-direction: column;
 }
 
 %flex-row-align-center {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
 %flex-col-align-center {
-  @extend %flex-col;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
 
 %flex-row-justify-center {
-  @extend %flex-row;
+  display: flex;
+  flex-direction: row;
   justify-content: center;
 }
 
 %flex-col-justify-center {
-  @extend %flex-col;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
 %flex-row-all-center {
-  @extend %flex-row-align-center;
-  @extend %flex-row-justify-center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }
 
 %flex-col-all-center {
-  @extend %flex-col-align-center;
-  @extend %flex-col-justify-center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 }

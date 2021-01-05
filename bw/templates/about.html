@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Beer World</title>
+
+    <script type="text/javascript">
+      // https://veerasundar.com/blog/2019/01/how-to-inject-environment-values-in-javascript-app-with-webpack/
+      window.BW_ENV = {
+        API_BASE_URL: "<%= htmlWebpackPlugin.options.bwEnv.apiBaseUrl %>",
+      };
+    </script>
+  </head>
+  <body>
+    <bw-app>
+      <h1>This is the About page</h1>
+    </bw-app>
+  </body>
+</html>

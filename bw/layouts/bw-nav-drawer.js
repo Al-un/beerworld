@@ -87,10 +87,27 @@ class BwNavMenu extends HTMLElement {
     elements = [...elements, backdrop];
 
     // --- Drawer
-    const navMenu = document.createElement("nav");
-    navMenu.id = "bw-nav-menu";
+    const navPanel = document.createElement("aside");
+    navPanel.id = "bw-nav-panel";
 
-    elements = [...elements, navMenu];
+    const navMenu = document.createElement("nav");
+    const links = [
+      { title: "Home", icon: "", href: "/" },
+      { title: "About", icon: "", href: "/about.html" },
+    ];
+    links.forEach((link) => {
+      const elLink = document.createElement("a");
+      elLink.href = link.href;
+
+      const elLinkText = document.createElement("span");
+      elLinkText.textContent = link.title;
+      elLink.appendChild(elLinkText);
+
+      navMenu.appendChild(elLink);
+    });
+    navPanel.appendChild(navMenu);
+
+    elements = [...elements, navPanel];
 
     // --- Attach to DOM
     attachCustomElementNode(this, elements, USE_SHADOW_DOM);

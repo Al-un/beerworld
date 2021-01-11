@@ -1,6 +1,6 @@
-import { attachCustomElementNode, USE_SHADOW_DOM } from "../utils";
+import { attachCustomElementNode, USE_SHADOW_DOM } from '../utils';
 
-const ATTR_OPENED = "opened";
+const ATTR_OPENED = 'opened';
 
 class BwNavMenu extends HTMLElement {
   // --------------------------------------------------------------------------
@@ -26,7 +26,7 @@ class BwNavMenu extends HTMLElement {
   //  Getters / Setters
   // --------------------------------------------------------------------------
   static get observedAttributes() {
-    return ["opened"];
+    return ['opened'];
   }
 
   get opened() {
@@ -35,7 +35,7 @@ class BwNavMenu extends HTMLElement {
 
   set opened(val) {
     if (val) {
-      this.setAttribute(ATTR_OPENED, "");
+      this.setAttribute(ATTR_OPENED, '');
     } else {
       this.removeAttribute(ATTR_OPENED);
     }
@@ -76,35 +76,38 @@ class BwNavMenu extends HTMLElement {
   // --------------------------------------------------------------------------
   $render() {
     let elements = [];
-    this.id = "bw-nav-drawer";
+    this.id = 'bw-nav-drawer';
+    this.classList.add('bw-nav-drawer');
 
     // --- Backdrop
-    const backdrop = document.createElement("div");
-    backdrop.id = "bw-nav-backdrop";
-    backdrop.addEventListener("click", () => this.removeAttribute(ATTR_OPENED));
+    const backdrop = document.createElement('div');
+    backdrop.id = 'bw-nav-backdrop';
+    backdrop.classList.add('bw-nav-backdrop');
+    backdrop.addEventListener('click', () => this.removeAttribute(ATTR_OPENED));
     elements = [...elements, backdrop];
 
     // --- Nav panel
-    const navPanel = document.createElement("aside");
-    navPanel.id = "bw-nav-panel";
+    const navPanel = document.createElement('aside');
+    navPanel.id = 'bw-nav-panel';
+    navPanel.classList.add('bw-nav-panel');
 
     // Logo
-    const logo = document.createElement("div");
-    logo.classList.add("logo");
-    logo.textContent = "LOGO here";
+    const logo = document.createElement('div');
+    logo.classList.add('logo');
+    logo.textContent = 'LOGO here';
     navPanel.appendChild(logo);
 
-    const navMenu = document.createElement("nav");
-    navMenu.classList.add("bw-list");
+    const navMenu = document.createElement('nav');
+    navMenu.classList.add('bw-list');
     const links = [
-      { title: "Home", icon: "", href: "index.html" },
-      { title: "About", icon: "", href: "about.html" },
+      { title: 'Home', icon: '', href: 'index.html' },
+      { title: 'About', icon: '', href: 'about.html' },
     ];
     links.forEach((link) => {
-      const elLink = document.createElement("a");
+      const elLink = document.createElement('a');
       elLink.href = link.href;
 
-      const elLinkText = document.createElement("span");
+      const elLinkText = document.createElement('span');
       elLinkText.textContent = link.title;
       elLink.appendChild(elLinkText);
 
@@ -124,4 +127,4 @@ class BwNavMenu extends HTMLElement {
   }
 }
 
-customElements.define("bw-nav-menu", BwNavMenu);
+customElements.define('bw-nav-menu', BwNavMenu);

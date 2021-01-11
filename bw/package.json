@@ -4,7 +4,9 @@
   "description": "Vanilla HTML, JS and SCSS implementation of Beerworld",
   "scripts": {
     "dev": "webpack serve --config webpack.dev.js --open",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js"
+    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "lint:style": "stylelint",
+    "lint:style:all": "stylelint \"**/*.{sass,scss}\""
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,9 @@
     "sass": "^1.32.0",
     "sass-loader": "^10.1.0",
     "style-loader": "^2.0.0",
+    "stylelint": "^13.8.0",
+    "stylelint-config-sass-guidelines": "^7.1.0",
+    "stylelint-order": "^4.1.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1",
     "webpack-dev-server": "^3.11.1"

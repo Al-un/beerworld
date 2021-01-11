@@ -1,22 +1,25 @@
 ## Dependencies
 
-| Package                           | Link                                                      | Purpose                               |
-| --------------------------------- | --------------------------------------------------------- | ------------------------------------- |
-| `@babel/core`                     | https://babeljs.io/docs/en/babel-core                     |                                       |
-| `@babel/preset-env`               | https://babeljs.io/docs/en/babel-preset-env               |                                       |
-| `@babel/plugin-transform-runtime` | https://babeljs.io/docs/en/babel-plugin-transform-runtime |                                       |
-| `babel-loader`                    | https://webpack.js.org/loaders/babel-loader/              |                                       |
-| `clean-webpack-plugin`            | https://www.npmjs.com/package/clean-webpack-plugin        | To clean the _dist/_ folder           |
-| `css-loader`                      | https://webpack.js.org/loaders/css-loader/                |                                       |
-| `html-loader`                     | https://webpack.js.org/loaders/html-loader/               |                                       |
-| `html-webpack-plugin`             | https://webpack.js.org/plugins/html-webpack-plugin/       | To load HTML files templates          |
-| `mini-css-extract-plugin`         | https://webpack.js.org/plugins/mini-css-extract-plugin/   | To have styles in dedicated CSS files |
-| `sass`                            | https://www.npmjs.com/package/sass                        | SASS JavaScript implementation        |
-| `sass-loader`                     | https://webpack.js.org/loaders/sass-loader/               |                                       |
-| `style-loader`                    | https://webpack.js.org/loaders/style-loader/              |                                       |
-| `webpack`                         | https://webpack.js.org/                                   |                                       |
-| `webpack-cli`                     | https://webpack.js.org/api/cli/                           |                                       |
-| `webpack-dev-server`              | https://webpack.js.org/configuration/dev-server/          |                                       |
+| Package                            | Link                                                         | Purpose                                  |
+| ---------------------------------- | ------------------------------------------------------------ | ---------------------------------------- |
+| `@babel/core`                      | https://babeljs.io/docs/en/babel-core                        |                                          |
+| `@babel/preset-env`                | https://babeljs.io/docs/en/babel-preset-env                  |                                          |
+| `@babel/plugin-transform-runtime`  | https://babeljs.io/docs/en/babel-plugin-transform-runtime    |                                          |
+| `babel-loader`                     | https://webpack.js.org/loaders/babel-loader/                 |                                          |
+| `clean-webpack-plugin`             | https://www.npmjs.com/package/clean-webpack-plugin           | To clean the _dist/_ folder              |
+| `css-loader`                       | https://webpack.js.org/loaders/css-loader/                   |                                          |
+| `html-loader`                      | https://webpack.js.org/loaders/html-loader/                  |                                          |
+| `html-webpack-plugin`              | https://webpack.js.org/plugins/html-webpack-plugin/          | To load HTML files templates             |
+| `mini-css-extract-plugin`          | https://webpack.js.org/plugins/mini-css-extract-plugin/      | To have styles in dedicated CSS files    |
+| `sass`                             | https://www.npmjs.com/package/sass                           | SASS JavaScript implementation           |
+| `sass-loader`                      | https://webpack.js.org/loaders/sass-loader/                  |                                          |
+| `style-loader`                     | https://webpack.js.org/loaders/style-loader/                 |                                          |
+| `stylelint`                        | https://stylelint.io/user-guide/get-started                  | Style linting                            |
+| `stylelint-config-sass-guidelines` | https://github.com/bjankord/stylelint-config-sass-guidelines | Linting rules for SASS                   |
+| `stylelint-order`                  | https://github.com/hudochenkov/stylelint-order               | Linting rules regarding properties order |
+| `webpack`                          | https://webpack.js.org/                                      |                                          |
+| `webpack-cli`                      | https://webpack.js.org/api/cli/                              |                                          |
+| `webpack-dev-server`               | https://webpack.js.org/configuration/dev-server/             |                                          |
 
 ## References
 

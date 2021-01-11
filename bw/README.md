@@ -39,3 +39,5 @@
   - https://alligator.io/web-components/attributes-properties/
   - https://robdodson.me/interoperable-custom-elements/
   - https://developers.google.com/web/fundamentals/web-components/best-practices
+  - styling shared stylesheet: https://www.smashingmagazine.com/2016/12/styling-web-components-using-a-shared-style-sheet/
+- css: alternative to reset https://github.com/necolas/normalize.css/

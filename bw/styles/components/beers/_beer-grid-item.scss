@@ -1,4 +1,4 @@
-@use "../../_bw" as *;
+@use '../../_bw' as *;
 
 // Aspect-ratio 1:1 hack: https://www.w3schools.com/howto/howto_css_aspect_ratio.asp
 .bw-beer-grid-item {
@@ -22,11 +22,11 @@
 
   .beer-name {
     background-color: rgba(255, 255, 255, 0.75);
-    top: 0;
+    line-height: 16px;
     padding: 8px;
     position: absolute;
-    line-height: 16px;
     text-align: center;
+    top: 0;
     width: 100%;
   }
 

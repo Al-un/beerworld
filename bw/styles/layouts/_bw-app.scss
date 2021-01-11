@@ -1,41 +1,39 @@
-@use "../_bw" as *;
+@use '../_bw' as *;
 
-#bw-app {
+.bw-app {
   background-color: var(--bw-bg-main);
   display: grid;
   grid-template-areas:
-    "bw-app-drawer bw-app-header"
-    "bw-app-drawer bw-app-content"
-    "bw-app-drawer bw-app-footer";
-  grid-template-rows: $bw-app-header-height 1fr $bw-app-footer-height;
+    'bw-app-drawer bw-app-header'
+    'bw-app-drawer bw-app-content'
+    'bw-app-drawer bw-app-footer';
   grid-template-columns: max-content 1fr;
+  grid-template-rows: $bw-app-header-height 1fr $bw-app-footer-height;
   min-height: 100%;
   width: 100%;
   z-index: $z-index-base;
 }
 
-#bw-app-header {
+.bw-app-header {
   @extend %flex-row-align-center;
-  grid-area: bw-app-header;
 
   background-color: var(--bw-bg-white);
   box-shadow: 0 2px 4px -1px $shadow-black-base;
+  grid-area: bw-app-header;
   padding: 16px;
   position: sticky;
   top: 0;
 }
 
-#bw-app-content {
+.bw-app-content {
   grid-area: bw-app-content;
-
   margin: 0 auto;
   max-width: 720px;
   padding: 16px;
   width: 100%;
 }
 
-#bw-app-footer {
-  grid-area: bw-app-footer;
-
+.bw-app-footer {
   background-color: var(--bw-bg-white);
+  grid-area: bw-app-footer;
 }

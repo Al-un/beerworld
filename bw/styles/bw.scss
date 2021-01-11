@@ -1,16 +1,16 @@
-@use "_bw" as *;
+@use '_bw' as *;
 
 // Common styling
-@use "global/common";
-@use "global/reset_base";
-@use "global/reset_custom";
-@use "animations";
+@use 'global/common';
+@use 'global/reset_base';
+@use 'global/reset_custom';
+@use 'animations';
 
 // Layout styling
-@use "layouts";
+@use 'layouts';
 
 // Components styling
-@use "components";
+@use 'components';
 
 // Init CSS variables
 

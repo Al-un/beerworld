@@ -1,12 +1,12 @@
-@use "../styles/_bw" as *;
+@use '../styles/_bw' as *;
 
-@use "../styles/global/common";
-@use "../styles/global/reset_base";
-@use "../styles/global/reset_custom";
-@use "../styles/animations";
+@use '../styles/global/common';
+@use '../styles/global/reset_base';
+@use '../styles/global/reset_custom';
+@use '../styles/animations';
 
-@use "../styles/layouts";
-@use "../styles/components/ui";
+@use '../styles/layouts';
+@use '../styles/components/ui';
 
 // Init CSS variables
 

@@ -1,21 +1,20 @@
-@use "../_bw";
+@use '../_bw';
 
-#bw-nav-drawer {
-  grid-area: bw-app-drawer;
-
+.bw-nav-drawer {
   box-shadow: 2px 0 4px -1px bw.$shadow-black-base;
+  grid-area: bw-app-drawer;
   height: 100%; // required for the mobile part to skip the grid position
   position: absolute;
   transition: width bw.$anim-speed-base;
   width: 0;
   z-index: bw.$z-index-menu;
 
-  &.opened {
-    width: bw.$bw-nav-menu-width;
-  }
-
   @include bw.respond-above(tablet) {
     position: inherit;
+  }
+
+  &.opened {
+    width: bw.$bw-nav-menu-width;
   }
 
   .logo {
@@ -23,17 +22,15 @@
   }
 }
 
-#bw-nav-backdrop {
+.bw-nav-backdrop {
   @extend %fullscreen-fixed;
 
   animation: fade bw.$anim-speed-base reverse;
   background: rgba(0, 0, 0, 0.6);
   display: none;
+  left: bw.$bw-nav-menu-width; // >>>> HACK to overcome backdrop z=index position
+  width: calc(100% - #{bw.$bw-nav-menu-width}); // >>>> HACK z=index position
   z-index: bw.$z-index-menu;
-  // >>>> HACK to overcome backdrop z=index position
-  left: bw.$bw-nav-menu-width;
-  width: calc(100% - #{bw.$bw-nav-menu-width});
-  // <<<<
 
   // Backdrop used only in mobile viewport
   @include bw.respond-below(tablet) {

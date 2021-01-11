@@ -1,4 +1,4 @@
-@use "../variables" as *;
+@use '../variables' as *;
 
 %flex {
   display: flex;
@@ -15,15 +15,15 @@
 }
 
 %flex-row-align-center {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
 }
 
 %flex-col-align-center {
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 %flex-row-justify-center {
@@ -39,15 +39,15 @@
 }
 
 %flex-row-all-center {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
 }
 
 %flex-col-all-center {
+  align-items: center;
   display: flex;
   flex-direction: row;
-  align-items: center;
   justify-content: center;
 }

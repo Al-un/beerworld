@@ -1,3 +1,4 @@
+import "../../styles/components/ui/_bw-button.scss";
 import { addSlotFromCustomElement, attachCustomElementNode } from "../../utils";
 
 class BwButton extends HTMLElement {

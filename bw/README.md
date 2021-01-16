@@ -11,6 +11,7 @@
 | `html-loader`                      | https://webpack.js.org/loaders/html-loader/                  |                                          |
 | `html-webpack-plugin`              | https://webpack.js.org/plugins/html-webpack-plugin/          | To load HTML files templates             |
 | `mini-css-extract-plugin`          | https://webpack.js.org/plugins/mini-css-extract-plugin/      | To have styles in dedicated CSS files    |
+| `prettier`                         | https://prettier.io/                                         | Code formatter                           |
 | `sass`                             | https://www.npmjs.com/package/sass                           | SASS JavaScript implementation           |
 | `sass-loader`                      | https://webpack.js.org/loaders/sass-loader/                  |                                          |
 | `style-loader`                     | https://webpack.js.org/loaders/style-loader/                 |                                          |

@@ -1,5 +1,6 @@
 # Nodejs
 node_modules
+dist
 
 # Misc
 pouet*

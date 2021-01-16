@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    // https://www.typescriptlang.org/tsconfig#allowSyntheticDefaultImports
+    "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    // https://www.typescriptlang.org/tsconfig#module
+    "module": "esnext",
+    // https://www.typescriptlang.org/tsconfig#moduleResolution
+    "moduleResolution": "node",
+    // https://www.typescriptlang.org/tsconfig#paths
+    "paths": {
+      "@bw/*": ["./*"]
+    },
+    // https://www.typescriptlang.org/tsconfig#target
+    "target": "es6"
+  }
+}

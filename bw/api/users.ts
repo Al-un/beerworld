@@ -1,19 +1,20 @@
-import { generateDelay, isMockApi } from "./utils";
+import { UserAPI, UserInfo } from '@bw/types';
+import { generateDelay, isMockApi } from './utils';
 
-const mockUser = {
-  id: "123456",
-  name: "Plop",
-};
+// const mockUser: UserInfo = {
+//   id: '123456',
+//   name: 'Plop',
+// };
 
 /**
  * Converted from mockUser on https://jwt.io/
  */
 const mockToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiUGxvcCIsImlhdCI6MTUxNjIzOTAyMn0.7UAcUx1XZG_dkJIvfZEqCslRhw_Y_9y_Orf8NL5C-p4";
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTYiLCJuYW1lIjoiUGxvcCIsImlhdCI6MTUxNjIzOTAyMn0.7UAcUx1XZG_dkJIvfZEqCslRhw_Y_9y_Orf8NL5C-p4';
 
-const mockUsersApi = {
+const mockUsersApi: UserAPI = {
   login: async ({ login, password }) => {
-    if (login === "plop@plop.com" && password === "plop") {
+    if (login === 'plop@plop.com' && password === 'plop') {
       return new Promise((resolve) => {
         setTimeout(() => resolve({ accessToken: mockToken }), generateDelay());
       });
@@ -29,13 +30,13 @@ const mockUsersApi = {
   },
 };
 
-const realUsersApi = {
+const realUsersApi: UserAPI = {
   login: async ({ login, password }) => {
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
   },
 
   logout: async (userId) => {
-    throw new Error("Not implemented");
+    throw new Error('Not implemented');
   },
 };
 

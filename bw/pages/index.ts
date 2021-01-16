@@ -1,17 +1,17 @@
-import { APP_CONTENT, api } from "./_common";
-import "./index.scss";
+import { APP_CONTENT, api } from './_common';
+import '@bw/styles/pages/index.scss';
 
-import { buildBeerDisplay } from "../components";
+import { buildBeerDisplay } from '@bw/components';
 
-let elBeerDisplay = undefined;
+let elBeerDisplay: HTMLElement | undefined = undefined;
 const beerDisplayInfo = {
-  title: "Beer world!!",
-  description: "All the beers are here",
-  empty: "No beers at the moment T_T",
+  title: 'Beer world!!',
+  description: 'All the beers are here',
+  empty: 'No beers at the moment T_T',
 };
 
 const onInit = () => {
-  const app = document.getElementById("app");
+  const app = document.getElementById('app');
   elBeerDisplay = buildBeerDisplay(beerDisplayInfo, []);
   app.appendChild(elBeerDisplay);
 

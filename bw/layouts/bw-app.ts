@@ -26,7 +26,7 @@ class BwApp extends HTMLElement {
     this.$render();
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
+  attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
     if (attrName === ATTR_BW_APP_ACCESS_TOKEN) {
       this.updateUserLoginArea();
     }
@@ -68,7 +68,7 @@ class BwApp extends HTMLElement {
       return;
     }
 
-    const removeNode = (id) => {
+    const removeNode = (id: string) => {
       const element = customQuerySelector(this, id);
       if (element) {
         header.removeChild(element);
@@ -115,7 +115,7 @@ class BwApp extends HTMLElement {
     this.id = 'bw-app';
     this.classList.add('bw-app');
 
-    let elements = [];
+    let elements: HTMLElement[] = [];
 
     // --- Menu
     const bwNavMenu = document.createElement('bw-nav-menu');

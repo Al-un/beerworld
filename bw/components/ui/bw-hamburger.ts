@@ -1,4 +1,4 @@
-import { attachCustomElementNode } from "../../utils";
+import { attachCustomElementNode } from '../../utils';
 
 class BwHamburger extends HTMLElement {
   // --------------------------------------------------------------------------
@@ -20,14 +20,14 @@ class BwHamburger extends HTMLElement {
   //  Render
   // --------------------------------------------------------------------------
   render() {
-    let elements = [];
+    let elements: HTMLElement[] = [];
 
     // elements = [...elements, document.createElement("div")]
     // elements = [...elements, document.createElement("div")]
     // elements = [...elements, document.createElement("div")]
 
-    const x = document.createElement("div");
-    x.textContent = "X";
+    const x = document.createElement('div');
+    x.textContent = 'X';
     elements = [...elements, x];
 
     // Attach to DOM
@@ -35,4 +35,4 @@ class BwHamburger extends HTMLElement {
   }
 }
 
-customElements.define("bw-hamburger", BwHamburger);
+customElements.define('bw-hamburger', BwHamburger);

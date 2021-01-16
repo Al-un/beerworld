@@ -14,7 +14,7 @@ class BwNavMenu extends HTMLElement {
     this.$render();
   }
 
-  attributeChangedCallback(attrName, oldVal, newVal) {
+  attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
     if (this.opened) {
       this.openMenu();
     } else {
@@ -52,7 +52,7 @@ class BwNavMenu extends HTMLElement {
     this.$setOpenClass(true);
   }
 
-  $setOpenClass(opened) {
+  $setOpenClass(opened: boolean) {
     const backdrop = USE_SHADOW_DOM
       ? this.shadowRoot
         ? this.shadowRoot.querySelector(`#bw-nav-backdrop`)
@@ -75,7 +75,7 @@ class BwNavMenu extends HTMLElement {
   //  Render
   // --------------------------------------------------------------------------
   $render() {
-    let elements = [];
+    let elements: HTMLElement[] = [];
     this.id = 'bw-nav-drawer';
     this.classList.add('bw-nav-drawer');
 

@@ -1,5 +1,5 @@
 {
-  "presets": ["@babel/preset-env"],
+  "presets": ["@babel/preset-typescript"],
   // https://stackoverflow.com/a/64083314/4906586
   "plugins": ["@babel/plugin-transform-runtime"]
 }

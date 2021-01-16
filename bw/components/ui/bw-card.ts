@@ -1,4 +1,4 @@
-import { addSlotFromCustomElement, attachCustomElementNode } from "../../utils";
+// import { addSlotFromCustomElement, attachCustomElementNode } from '../../utils';
 
 class BwCard extends HTMLElement {
   // --------------------------------------------------------------------------
@@ -20,12 +20,12 @@ class BwCard extends HTMLElement {
   //  Render
   // --------------------------------------------------------------------------
   render() {
-    this.classList.add("bw-card");
+    this.classList.add('bw-card');
 
-    if (this.hasAttribute("padded")) {
-      this.classList.add("padded");
+    if (this.hasAttribute('padded')) {
+      this.classList.add('padded');
     }
   }
 }
 
-customElements.define("bw-card", BwCard);
+customElements.define('bw-card', BwCard);

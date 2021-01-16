@@ -37,15 +37,15 @@ class RealBeersAPI implements BeerAPI {
     throw new Error('Not implemented');
   }
 
-  async fetchBeer(beerId: PrimaryKey): Promise<never> {
+  async fetchBeer(_: PrimaryKey): Promise<never> {
     throw new Error('Not implemented');
   }
 
-  async cheerBeer(beerId: PrimaryKey) {
+  async cheerBeer(_: PrimaryKey) {
     throw new Error('Not implemented');
   }
 
-  async drinkBeer(beerId: PrimaryKey, userId: PrimaryKey) {
+  async drinkBeer(_: PrimaryKey, __: PrimaryKey) {
     throw new Error('Not implemented');
   }
 }

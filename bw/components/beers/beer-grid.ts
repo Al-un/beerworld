@@ -1,7 +1,7 @@
 import { BeerShortInfo } from '@bw/types';
 import { buildBeerGridItem } from './beer-grid-item';
 
-export const buildBeerGrid = (beers: BeerShortInfo[] = []) => {
+export const buildBeerGrid = (beers: BeerShortInfo[] = []): HTMLElement => {
   const root = document.createElement('div');
   root.classList.add('bw-beer-grid');
 

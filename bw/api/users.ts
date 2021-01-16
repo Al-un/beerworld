@@ -1,4 +1,4 @@
-import { UserAPI, UserInfo } from '@bw/types';
+import { UserAPI } from '@bw/types';
 import { generateDelay, isMockApi } from './utils';
 
 // const mockUser: UserInfo = {
@@ -31,11 +31,11 @@ const mockUsersApi: UserAPI = {
 };
 
 const realUsersApi: UserAPI = {
-  login: async ({ login, password }) => {
+  login: async (_) => {
     throw new Error('Not implemented');
   },
 
-  logout: async (userId) => {
+  logout: async (_) => {
     throw new Error('Not implemented');
   },
 };

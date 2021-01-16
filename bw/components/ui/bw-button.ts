@@ -1,5 +1,5 @@
-import "../../styles/components/ui/_bw-button.scss";
-import { addSlotFromCustomElement, attachCustomElementNode } from "../../utils";
+import '../../styles/components/ui/_bw-button.scss';
+import { addSlotFromCustomElement, attachCustomElementNode } from '../../utils';
 
 class BwButton extends HTMLElement {
   // --------------------------------------------------------------------------
@@ -21,21 +21,21 @@ class BwButton extends HTMLElement {
   //  Render
   // --------------------------------------------------------------------------
   render() {
-    const el = document.createElement("button");
-    el.classList.add("bw-button");
+    const el = document.createElement('button');
+    el.classList.add('bw-button');
 
     // icon
-    if (this.hasAttribute("icon")) {
-      const elIcon = document.createElement("img");
-      elIcon.alt = "icon";
-      elIcon.classList.add("icon");
-      elIcon.src = this.getAttribute("icon");
+    if (this.hasAttribute('icon')) {
+      const elIcon = document.createElement('img');
+      elIcon.alt = 'icon';
+      elIcon.classList.add('icon');
+      elIcon.src = this.getAttribute('icon');
       el.appendChild(elIcon);
     }
 
     // Text via slot
-    const elText = document.createElement("span");
-    elText.classList.add("text");
+    const elText = document.createElement('span');
+    elText.classList.add('text');
     addSlotFromCustomElement(this, elText);
     el.appendChild(elText);
 
@@ -44,4 +44,4 @@ class BwButton extends HTMLElement {
   }
 }
 
-customElements.define("bw-button", BwButton);
+customElements.define('bw-button', BwButton);

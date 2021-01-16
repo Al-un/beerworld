@@ -1,4 +1,4 @@
-import { Count, PrimaryKey, UrlLink } from "./aliases";
+import { Count, PrimaryKey, UrlLink } from './aliases';
 
 export interface Beer extends BeerShortInfo {
   brewer?: BrewerInfo;

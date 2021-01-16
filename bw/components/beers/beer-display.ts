@@ -8,7 +8,7 @@ export const buildBeerDisplay = (
     empty,
   }: { title: string; description: string; empty: string },
   beers: BeerShortInfo[] = []
-) => {
+): HTMLElement => {
   const root = document.createElement('div');
   root.classList.add('bw-beer-display');
 

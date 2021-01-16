@@ -1,2 +1,2 @@
-import {} from "./_common";
-import "@bw/styles/pages/about.scss";
+import {} from './_common';
+import '@bw/styles/pages/about.scss';

@@ -14,7 +14,7 @@ class BwNavMenu extends HTMLElement {
     this.$render();
   }
 
-  attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
+  attributeChangedCallback() {
     if (this.opened) {
       this.openMenu();
     } else {

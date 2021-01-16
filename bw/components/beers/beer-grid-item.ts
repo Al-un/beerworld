@@ -14,12 +14,12 @@ const onCheer = (e: MouseEvent, beer: BeerShortInfo) => {
  *
  * @param {Event} e
  */
-const onDrink = (e: MouseEvent, beer: BeerShortInfo) => {
+const onDrink = (e: MouseEvent, _: BeerShortInfo) => {
   e.preventDefault();
   console.log('Drink!!!');
 };
 
-export const buildBeerGridItem = (beer: BeerShortInfo) => {
+export const buildBeerGridItem = (beer: BeerShortInfo): HTMLElement => {
   const root = document.createElement('a');
   root.classList.add('bw-beer-grid-item');
   root.href = routes.DETAIL.replace('%%BEER_ID%%', beer.id.toString());

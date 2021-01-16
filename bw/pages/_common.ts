@@ -3,13 +3,13 @@
 // ----------------------------------------------------------------------------
 
 // Common HTML elements
-export * from "../utils/html";
+export * from '../utils/html';
 
 // Re-export API
-export { default as api } from "../api";
+export { default as api } from '../api';
 
 // Layout logic
-import "../layouts";
+import '../layouts';
 
 // Register common components
-import "../components/ui";
+import '../components/ui';

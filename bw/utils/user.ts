@@ -1,7 +1,7 @@
 import { LS_ACCESS_TOKEN } from '@bw/constants/';
 import { UserInfo } from '@bw/types';
 
-export const logoutUser = () => {
+export const logoutUser = (): void => {
   window.localStorage.removeItem(LS_ACCESS_TOKEN);
 };
 

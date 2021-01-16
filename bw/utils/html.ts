@@ -20,7 +20,7 @@ export const attachCustomElementNode = (
   component: HTMLElement,
   element: HTMLElement | HTMLElement[],
   useShadow: boolean = USE_SHADOW_DOM
-) => {
+): void => {
   // Modify custom element children
   if (!useShadow) {
     if (Array.isArray(element)) {
@@ -32,7 +32,7 @@ export const attachCustomElementNode = (
   }
 
   // Use shadow DOM
-  let shadowRoot = component.attachShadow({ mode: 'open' });
+  const shadowRoot = component.attachShadow({ mode: 'open' });
   if (Array.isArray(element)) {
     element.forEach((e) => shadowRoot.appendChild(e));
   } else {
@@ -51,7 +51,7 @@ export const addSlotFromCustomElement = (
   component: HTMLElement,
   element: HTMLElement,
   useShadow: boolean = USE_SHADOW_DOM
-) => {
+): void => {
   if (useShadow) {
     element.appendChild(document.createElement('slot'));
   } else {
@@ -72,7 +72,7 @@ export const customQuerySelector = (
   component: HTMLElement,
   selector: string,
   useShadow: boolean = USE_SHADOW_DOM
-) => {
+): HTMLElement => {
   if (useShadow) {
     const shadowRoot = component.shadowRoot;
     return shadowRoot ? shadowRoot.querySelector(`#${selector}`) : undefined;
@@ -87,8 +87,8 @@ export const customQuerySelector = (
  * @param {String} html
  * @returns {HTMLElement}
  */
-export const htmlFromString = (html: string) => {
-  let temp = document.createElement('template');
+export const htmlFromString = (html: string): ChildNode => {
+  const temp = document.createElement('template');
   html = html.trim();
   temp.innerHTML = html;
 
@@ -96,7 +96,7 @@ export const htmlFromString = (html: string) => {
 };
 
 // ----------- Create standard elements
-export const createFlexSpacer = () => {
+export const createFlexSpacer = (): HTMLElement => {
   const flexSpacer = document.createElement('div');
   flexSpacer.classList.add('bw-flex-spacer');
 

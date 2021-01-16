@@ -1,5 +1,5 @@
 /**
- * Counts are expected to be positive and reaching potentially high numbers 
+ * Counts are expected to be positive and reaching potentially high numbers
  */
 export type Count = number;
 

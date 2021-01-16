@@ -1,4 +1,4 @@
-import { APP_CONTENT, api } from './_common';
+import { api } from './_common';
 import '@bw/styles/pages/index.scss';
 
 import { buildBeerDisplay } from '@bw/components';

@@ -1,7 +1,5 @@
 import { PrimaryKey } from './aliases';
 
-export interface User extends UserInfo {}
-
 export interface UserInfo {
   id: PrimaryKey;
   name: string;

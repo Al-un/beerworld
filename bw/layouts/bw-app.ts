@@ -26,7 +26,7 @@ class BwApp extends HTMLElement {
     this.$render();
   }
 
-  attributeChangedCallback(attrName: string, oldVal: any, newVal: any) {
+  attributeChangedCallback(attrName: string) {
     if (attrName === ATTR_BW_APP_ACCESS_TOKEN) {
       this.updateUserLoginArea();
     }

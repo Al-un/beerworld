@@ -1,3 +1,3 @@
-export * from "./html";
-export * from "./routes";
-export * from "./localStorage";
+export * from './html';
+export * from './routes';
+export * from './localStorage';

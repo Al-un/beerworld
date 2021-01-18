@@ -1,5 +1,5 @@
 import { api } from './_common';
-import '@bw/styles/pages/index.scss';
+import '@bw/styles/pages/home.scss';
 
 import { buildBeerDisplay } from '@bw/components';
 

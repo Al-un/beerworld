@@ -1,130 +1,140 @@
-import { attachCustomElementNode, USE_SHADOW_DOM } from '../utils';
+import { BaseCustomElement } from '@bw/components/base';
+import { USE_SHADOW_DOM } from '@bw/constants';
+import { attachCustomElementNode } from '../utils';
 
 const ATTR_OPENED = 'opened';
 
-class BwNavMenu extends HTMLElement {
-  // --------------------------------------------------------------------------
-  //  Lifecycle
-  // --------------------------------------------------------------------------
-  constructor() {
-    super();
-  }
+(function () {
+  class BwNavDrawer extends BaseCustomElement {
+    // --------------------------------------------------------------------------
+    //  Lifecycle
+    // --------------------------------------------------------------------------
+    constructor() {
+      super();
 
-  connectedCallback() {
-    this.$render();
-  }
+      this.styleFilePath = 'layouts/_bw-nav-drawer.scss';
+    }
 
-  attributeChangedCallback() {
-    if (this.opened) {
-      this.openMenu();
-    } else {
-      this.closeMenu();
+    async connectedCallback() {
+      await super.connectedCallback();
+
+      // --- Open state
+      if (this.hasAttribute(ATTR_OPENED)) {
+        this.openMenu();
+      }
+    }
+
+    attributeChangedCallback() {
+      if (this.opened) {
+        this.openMenu();
+      } else {
+        this.closeMenu();
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    //  Getters / Setters
+    // --------------------------------------------------------------------------
+    static get observedAttributes() {
+      return ['opened'];
+    }
+
+    get opened() {
+      return this.hasAttribute(ATTR_OPENED);
+    }
+
+    set opened(val) {
+      if (val) {
+        this.setAttribute(ATTR_OPENED, '');
+      } else {
+        this.removeAttribute(ATTR_OPENED);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    //  Methods
+    // --------------------------------------------------------------------------
+    closeMenu() {
+      this.$setOpenClass(false);
+      this.dispatchEvent(new CustomEvent('closed'));
+    }
+
+    openMenu() {
+      this.$setOpenClass(true);
+      this.dispatchEvent(new CustomEvent('zzzz'));
+    }
+
+    $setOpenClass(opened: boolean) {
+      const backdrop = this.useShadowDOM
+        ? this.shadowRoot
+          ? this.shadowRoot.querySelector(`#bw-nav-backdrop`)
+          : undefined
+        : this.querySelector(`#bw-nav-backdrop`);
+      if (!backdrop) {
+        return;
+      }
+
+      if (opened) {
+        this.classList.add(ATTR_OPENED);
+        backdrop.classList.add(ATTR_OPENED);
+      } else {
+        this.classList.remove(ATTR_OPENED);
+        backdrop.classList.remove(ATTR_OPENED);
+      }
+    }
+
+    // --------------------------------------------------------------------------
+    //  Render
+    // --------------------------------------------------------------------------
+    async renderRoot() {
+      this.id = 'bw-nav-drawer';
+      this.classList.add('bw-nav-drawer');
+    }
+
+    async renderChildren() {
+      let elements: HTMLElement[] = [];
+
+      // --- Backdrop
+      const backdrop = document.createElement('div');
+      backdrop.id = 'bw-nav-backdrop';
+      backdrop.classList.add('bw-nav-backdrop');
+      backdrop.addEventListener('click', () => (this.opened = false));
+
+      // --- Nav panel
+      const navPanel = document.createElement('aside');
+      navPanel.id = 'bw-nav-panel';
+      navPanel.classList.add('bw-nav-panel');
+
+      // Logo
+      const logo = document.createElement('div');
+      logo.classList.add('logo');
+      logo.textContent = 'LOGO here';
+      navPanel.appendChild(logo);
+
+      const navMenu = document.createElement('nav');
+      navMenu.classList.add('bw-list');
+      const links = [
+        { title: 'Home', icon: '', href: 'index.html' },
+        { title: 'About', icon: '', href: 'about.html' },
+      ];
+      links.forEach((link) => {
+        const elLink = document.createElement('a');
+        elLink.href = link.href;
+
+        const elLinkText = document.createElement('span');
+        elLinkText.textContent = link.title;
+        elLink.appendChild(elLinkText);
+
+        navMenu.appendChild(elLink);
+      });
+      navPanel.appendChild(navMenu);
+
+      elements = [navPanel, backdrop];
+
+      // --- Attach to DOM
+      return elements;
     }
   }
 
-  // --------------------------------------------------------------------------
-  //  Getters / Setters
-  // --------------------------------------------------------------------------
-  static get observedAttributes() {
-    return ['opened'];
-  }
-
-  get opened() {
-    return this.hasAttribute(ATTR_OPENED);
-  }
-
-  set opened(val) {
-    if (val) {
-      this.setAttribute(ATTR_OPENED, '');
-    } else {
-      this.removeAttribute(ATTR_OPENED);
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  //  Methods
-  // --------------------------------------------------------------------------
-  closeMenu() {
-    this.$setOpenClass(false);
-  }
-
-  openMenu() {
-    this.$setOpenClass(true);
-  }
-
-  $setOpenClass(opened: boolean) {
-    const backdrop = USE_SHADOW_DOM
-      ? this.shadowRoot
-        ? this.shadowRoot.querySelector(`#bw-nav-backdrop`)
-        : undefined
-      : this.querySelector(`#bw-nav-backdrop`);
-    if (!backdrop) {
-      return;
-    }
-
-    if (opened) {
-      this.classList.add(ATTR_OPENED);
-      backdrop.classList.add(ATTR_OPENED);
-    } else {
-      this.classList.remove(ATTR_OPENED);
-      backdrop.classList.remove(ATTR_OPENED);
-    }
-  }
-
-  // --------------------------------------------------------------------------
-  //  Render
-  // --------------------------------------------------------------------------
-  $render() {
-    let elements: HTMLElement[] = [];
-    this.id = 'bw-nav-drawer';
-    this.classList.add('bw-nav-drawer');
-
-    // --- Backdrop
-    const backdrop = document.createElement('div');
-    backdrop.id = 'bw-nav-backdrop';
-    backdrop.classList.add('bw-nav-backdrop');
-    backdrop.addEventListener('click', () => this.removeAttribute(ATTR_OPENED));
-    elements = [...elements, backdrop];
-
-    // --- Nav panel
-    const navPanel = document.createElement('aside');
-    navPanel.id = 'bw-nav-panel';
-    navPanel.classList.add('bw-nav-panel');
-
-    // Logo
-    const logo = document.createElement('div');
-    logo.classList.add('logo');
-    logo.textContent = 'LOGO here';
-    navPanel.appendChild(logo);
-
-    const navMenu = document.createElement('nav');
-    navMenu.classList.add('bw-list');
-    const links = [
-      { title: 'Home', icon: '', href: 'index.html' },
-      { title: 'About', icon: '', href: 'about.html' },
-    ];
-    links.forEach((link) => {
-      const elLink = document.createElement('a');
-      elLink.href = link.href;
-
-      const elLinkText = document.createElement('span');
-      elLinkText.textContent = link.title;
-      elLink.appendChild(elLinkText);
-
-      navMenu.appendChild(elLink);
-    });
-    navPanel.appendChild(navMenu);
-
-    elements = [...elements, navPanel];
-
-    // --- Attach to DOM
-    attachCustomElementNode(this, elements, USE_SHADOW_DOM);
-
-    // --- Open state
-    if (this.hasAttribute(ATTR_OPENED)) {
-      this.openMenu();
-    }
-  }
-}
-
-customElements.define('bw-nav-menu', BwNavMenu);
+  customElements.define('bw-nav-drawer', BwNavDrawer);
+})();

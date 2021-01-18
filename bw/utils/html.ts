@@ -1,3 +1,6 @@
+import { BaseCustomElement } from '@bw/components/base';
+import { USE_SHADOW_DOM } from '@bw/constants';
+
 // ---------- Common HTML elements
 export const APP_WRAPPER = document.querySelector('#bw-app-wrapper');
 export const APP_NAV_BACKDROP = document.querySelector('#bw-nav-backdrop');
@@ -7,32 +10,43 @@ export const APP_CONTENT = document.querySelector('#bw-app-content');
 export const APP_FOOTER = document.querySelector('#bw-app-footer');
 
 // ---------- Custom elements
-/**
- * Global flag to trigger custom elements rendering with shadow DOM
- */
-export const USE_SHADOW_DOM = false;
 
 /**
  * Either attach the built component to a shadow DOM or directly as a child
  * of a custom element
  */
-export const attachCustomElementNode = (
-  component: HTMLElement,
-  element: HTMLElement | HTMLElement[],
-  useShadow: boolean = USE_SHADOW_DOM
-): void => {
+export const attachCustomElementNode = async <C extends BaseCustomElement>(
+  component: C,
+  element: HTMLElement | HTMLElement[]
+): Promise<void> => {
   // Modify custom element children
-  if (!useShadow) {
-    if (Array.isArray(element)) {
-      element.forEach((e) => component.appendChild(e));
-    } else {
-      component.innerHTML = element.outerHTML;
-    }
+  if (!component.useShadowDOM) {
+    component.childNodes.forEach((c) => c.remove());
+
+    const children = Array.isArray(element) ? element : [element];
+    children.forEach((c) => {
+      component.appendChild(c);
+    });
     return;
   }
 
   // Use shadow DOM
   const shadowRoot = component.attachShadow({ mode: 'open' });
+  // Style
+  const getStyle = async (path: string): Promise<HTMLStyleElement> => {
+    const i = await import(`!!css-loader!sass-loader!../styles/${path}`);
+    const styleContent = i.default[0][1];
+
+    const style = document.createElement('style');
+    style.textContent = styleContent;
+
+    return style;
+  };
+  if (component.styleFilePath) {
+    const style = await getStyle(component.styleFilePath);
+    shadowRoot.appendChild(style);
+  }
+
   if (Array.isArray(element)) {
     element.forEach((e) => shadowRoot.appendChild(e));
   } else {
@@ -55,10 +69,24 @@ export const addSlotFromCustomElement = (
   if (useShadow) {
     element.appendChild(document.createElement('slot'));
   } else {
-    element.innerHTML = component.innerHTML;
     // Component initial innerHTML must be deleted as if shadow DOM is
     // not used, the component innerHTML is used to render the content
-    component.innerHTML = '';
+    // https://www.javascripttutorial.net/dom/manipulating/remove-all-child-nodes/
+    while (component.firstChild) {
+      const firstChild = component.firstChild;
+
+      // https://developer.mozilla.org/en-US/docs/Web/API/Node/nodeType
+      switch (firstChild.nodeType) {
+        case Node.ELEMENT_NODE:
+          element.appendChild(firstChild.cloneNode(true));
+          firstChild.remove();
+          break;
+        case Node.TEXT_NODE:
+          element.appendChild(firstChild.cloneNode(true));
+          firstChild.remove();
+          break;
+      }
+    }
   }
 };
 
@@ -93,12 +121,4 @@ export const htmlFromString = (html: string): ChildNode => {
   temp.innerHTML = html;
 
   return temp.content.firstChild;
-};
-
-// ----------- Create standard elements
-export const createFlexSpacer = (): HTMLElement => {
-  const flexSpacer = document.createElement('div');
-  flexSpacer.classList.add('bw-flex-spacer');
-
-  return flexSpacer;
 };

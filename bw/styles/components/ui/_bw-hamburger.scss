@@ -1,1 +1,20 @@
 @use '../../abstracts' as *;
+
+.bw-hamburger,
+:host {
+  background-color: lightskyblue;
+  padding: 8px;
+
+  div.closed {
+    background-color: maroon;
+  }
+}
+
+.bw-hamburger.closed,
+:host(.closed) {
+  background-color: limegreen;
+
+  div {
+    color: yellow;
+  }
+}

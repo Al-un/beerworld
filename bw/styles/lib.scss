@@ -1,11 +1,7 @@
-@use '../abstracts' as *;
-
-@use '../base';
-// @use '../layouts';
-// @use '../components/ui';
+@use 'abstracts' as *;
+@use 'base';
 
 // Init CSS variables
-
 :root {
   --bw-bg-main: #{$bg-main};
   --bw-bg-white: #{$bg-white};

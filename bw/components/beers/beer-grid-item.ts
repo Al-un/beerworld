@@ -40,9 +40,8 @@ export const buildBeerGridItem = (beer: BeerShortInfo): HTMLElement => {
   root.appendChild(name);
 
   // Beer actions: cheers and drink
-  const actions = document.createElement('div');
+  const actions = document.createElement('bw-button-group');
   actions.classList.add('beer-actions');
-  actions.classList.add('bw-button-group');
 
   const cheerBtn = document.createElement('bw-button');
   cheerBtn.innerHTML = `${beer.cheersCount}<br />Cheers`;

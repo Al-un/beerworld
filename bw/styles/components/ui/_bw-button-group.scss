@@ -1,5 +1,6 @@
 @use '../../abstracts' as *;
 
-.bw-button-group {
+.bw-button-group,
+:host {
   @extend %flex-row-align-center;
 }

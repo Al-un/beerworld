@@ -1,31 +1,32 @@
 // import { addSlotFromCustomElement, attachCustomElementNode } from '../../utils';
 
-class BwCard extends HTMLElement {
-  // --------------------------------------------------------------------------
-  //  Lifecycle
-  // --------------------------------------------------------------------------
-  constructor() {
-    super();
-  }
+import { BaseCustomElement } from '../base';
 
-  connectedCallback() {
-    this.render();
-  }
+(function () {
+  class BwCard extends BaseCustomElement {
+    // --------------------------------------------------------------------------
+    //  Lifecycle
+    // --------------------------------------------------------------------------
+    constructor() {
+      super();
 
-  // --------------------------------------------------------------------------
-  //  Getters / Setters
-  // --------------------------------------------------------------------------
+      this.styleFilePath = 'components/ui/_bw-card.scss';
+    }
 
-  // --------------------------------------------------------------------------
-  //  Render
-  // --------------------------------------------------------------------------
-  render() {
-    this.classList.add('bw-card');
+    // --------------------------------------------------------------------------
+    //  Render
+    // --------------------------------------------------------------------------
+    async renderRoot() {
+      this.classList.add('bw-card');
 
-    if (this.hasAttribute('padded')) {
-      this.classList.add('padded');
+      if (this.hasAttribute('padded')) {
+        this.classList.add('padded');
+      }
+    }
+    async renderChildren() {
+      return this.useShadowDOM ? [document.createElement('slot')] : [];
     }
   }
-}
 
-customElements.define('bw-card', BwCard);
+  customElements.define('bw-card', BwCard);
+})();

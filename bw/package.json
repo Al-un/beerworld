@@ -4,7 +4,8 @@
   "description": "Vanilla HTML, JS and SCSS implementation of Beerworld",
   "scripts": {
     "dev": "webpack serve --config webpack.dev.js --open",
-    "build": "NODE_ENV=production webpack --config webpack.prod.js",
+    "build:lib": "NODE_ENV=production webpack --config webpack.lib.js",
+    "build:site": "NODE_ENV=production webpack --config webpack.prod.js",
     "lint:code": "eslint",
     "lint:code:all": "eslint --ext .ts,.js --ignore-pattern 'webpack.*.js' .",
     "lint:style": "stylelint",

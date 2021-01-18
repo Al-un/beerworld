@@ -1,38 +1,41 @@
 import { attachCustomElementNode } from '../../utils';
+import { BaseCustomElement } from '../base';
 
-class BwHamburger extends HTMLElement {
-  // --------------------------------------------------------------------------
-  //  Lifecycle
-  // --------------------------------------------------------------------------
-  constructor() {
-    super();
+(function () {
+  class BwHamburger extends BaseCustomElement {
+    // --------------------------------------------------------------------------
+    //  Lifecycle
+    // --------------------------------------------------------------------------
+    constructor() {
+      super();
+
+      this.styleFilePath = 'components/ui/_bw-hamburger.scss';
+    }
+
+    // --------------------------------------------------------------------------
+    //  Render
+    // --------------------------------------------------------------------------
+    async renderRoot() {
+      this.addEventListener('click', () => {
+        this.classList.toggle('closed');
+        this.shadowRoot.querySelector('div').classList.toggle('closed');
+      });
+    }
+
+    async renderChildren() {
+      let children: HTMLElement[] = [];
+
+      // elements = [...elements, document.createElement("div")]
+      // elements = [...elements, document.createElement("div")]
+      // elements = [...elements, document.createElement("div")]
+
+      const x = document.createElement('div');
+      x.textContent = 'X';
+      children = [...children, x];
+
+      return children;
+    }
   }
 
-  connectedCallback() {
-    this.render();
-  }
-
-  // --------------------------------------------------------------------------
-  //  Getters / Setters
-  // --------------------------------------------------------------------------
-
-  // --------------------------------------------------------------------------
-  //  Render
-  // --------------------------------------------------------------------------
-  render() {
-    let elements: HTMLElement[] = [];
-
-    // elements = [...elements, document.createElement("div")]
-    // elements = [...elements, document.createElement("div")]
-    // elements = [...elements, document.createElement("div")]
-
-    const x = document.createElement('div');
-    x.textContent = 'X';
-    elements = [...elements, x];
-
-    // Attach to DOM
-    attachCustomElementNode(this, elements);
-  }
-}
-
-customElements.define('bw-hamburger', BwHamburger);
+  customElements.define('bw-hamburger', BwHamburger);
+})();

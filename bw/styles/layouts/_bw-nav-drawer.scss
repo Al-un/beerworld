@@ -1,24 +1,27 @@
 @use '../abstracts' as *;
 
-.bw-nav-drawer {
-  box-shadow: 2px 0 4px -1px $shadow-black-base;
-  grid-area: bw-app-drawer;
+.bw-nav-drawer,
+:host {
+  display: none;
   height: 100%; // required for the mobile part to skip the grid position
-  position: absolute;
+  left: 0;
+  position: fixed;
   transition: width $anim-speed-base;
-  width: 0;
+  top: 0;
+  width: 100%;
   z-index: $z-index-menu;
-
-  @include respond-above(tablet) {
-    position: inherit;
-  }
-
-  &.opened {
-    width: $bw-nav-menu-width;
-  }
 
   .logo {
     height: $bw-app-header-height;
+  }
+}
+
+.bw-nav-drawer.opened,
+:host(.opened) {
+  display: block;
+
+  .bw-nav-panel {
+    margin-left: 0;
   }
 }
 
@@ -27,10 +30,6 @@
 
   animation: fade $anim-speed-base reverse;
   background: rgba(0, 0, 0, 0.6);
-  display: none;
-  left: $bw-nav-menu-width; // >>>> HACK to overcome backdrop z=index position
-  width: calc(100% - #{$bw-nav-menu-width}); // >>>> HACK z=index position
-  z-index: $z-index-menu;
 
   // Backdrop used only in mobile viewport
   @include respond-below(tablet) {
@@ -39,4 +38,16 @@
       display: block;
     }
   }
+}
+
+.bw-nav-panel {
+  background-color: var(--bw-bg-white);
+  box-shadow: 2px 0 4px -1px $shadow-black-base;
+  height: 100%;
+  margin-left: -100%;
+  max-width: 90%;
+  position: absolute;
+  transition: margin-left $anim-speed-base;
+  width: $bw-nav-menu-width;
+  z-index: 2;
 }

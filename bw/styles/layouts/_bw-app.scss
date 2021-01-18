@@ -1,13 +1,13 @@
 @use '../abstracts' as *;
 
-.bw-app {
+.bw-app,
+:host {
   background-color: var(--bw-bg-main);
   display: grid;
   grid-template-areas:
-    'bw-app-drawer bw-app-header'
-    'bw-app-drawer bw-app-content'
-    'bw-app-drawer bw-app-footer';
-  grid-template-columns: max-content 1fr;
+    'bw-app-header'
+    'bw-app-content'
+    'bw-app-footer';
   grid-template-rows: $bw-app-header-height 1fr $bw-app-footer-height;
   min-height: 100%;
   width: 100%;
@@ -23,6 +23,7 @@
   padding: 16px;
   position: sticky;
   top: 0;
+  z-index: $z-index-header;
 }
 
 .bw-app-content {

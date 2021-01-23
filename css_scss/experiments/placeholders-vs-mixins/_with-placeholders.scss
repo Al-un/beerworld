@@ -1,0 +1,24 @@
+%with-bold-text {
+  font-weight: bold;
+}
+
+%with-uppercase-text {
+  text-transform: uppercase;
+}
+
+.my-text-with-placeholder {
+  @extend %with-bold-text;
+}
+
+.with-placeholders {
+  .my-label {
+    @extend %with-bold-text;
+    color: teal;
+  }
+
+  .my-description {
+    @extend %with-bold-text;
+    color: #666666;
+    font-style: italic;
+  }
+}

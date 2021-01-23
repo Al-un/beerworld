@@ -1,0 +1,24 @@
+@mixin with-bold-text {
+  font-weight: bold;
+}
+
+@mixin with-uppercase-text {
+  text-transform: uppercase;
+}
+
+.my-text-with-mixin {
+  @include with-bold-text;
+}
+
+.with-mixins {
+  .my-label {
+    @include with-bold-text;
+    color: teal;
+  }
+
+  .my-description {
+    @include with-bold-text;
+    color: #666666;
+    font-style: italic;
+  }
+}

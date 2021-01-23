@@ -1,0 +1,51 @@
+// ----------------------------------------------------------------------------
+// Copy Slumber theme: https://designshack.net/articles/trends/best-website-color-schemes/
+
+$color-bg: #051622;
+$color-fg: #1ba098;
+$color-fg-alt: #deb992;
+
+.bw-css-menu {
+  background-color: $color-bg;
+  box-shadow: 4px 4px 20px;
+  border-bottom: 1px solid $color-fg;
+  display: grid;
+  gap: 0.25rem;
+  grid-template-columns: repeat(auto-fill, minmax(10rem, max-content));
+  padding: 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+
+  a {
+    border: 1px solid $color-fg;
+    border-radius: 0.25rem;
+    color: $color-fg;
+    display: block;
+    padding: 0.5rem;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+
+    &:hover {
+      color: $color-fg-alt;
+      border-color: $color-fg-alt;
+    }
+
+    &:active {
+      background-color: $color-fg;
+    }
+  }
+}
+
+// ----------------------------------------------------------------------------
+body {
+  // From Omega Yeast: https://designshack.net/articles/trends/best-website-color-schemes/
+  background-color: #f7f7f7;
+}
+
+.bw-css-main {
+  margin: 1.5rem auto;
+  max-width: 960px;
+  width: 98%;
+}

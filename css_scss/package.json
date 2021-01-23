@@ -6,7 +6,8 @@
   "scripts": {
     "start": "webpack serve --open",
     "sass": "sass",
-    "sass:exp": "rimraf experiments_output && sass experiments:experiments_output --style=expanded --no-source-map"
+    "sass:exp": "rimraf experiments_output && sass experiments:experiments_output --style=expanded --no-source-map",
+    "sass:pages": "rimraf pages_output && sass pages:pages_output --style=expanded --no-source-map"
   },
   "repository": {
     "type": "git",

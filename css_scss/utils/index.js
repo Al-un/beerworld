@@ -4,7 +4,9 @@ export const addMenu = () => {
   menu.classList.add("bw-css-menu");
   menu.innerHTML = `
   <a href="/">Home</a>
-  <a href="/method_bem.html">Methodology: BEM</a>
+  <a href="/methodology/bem.html">Method: BEM</a>
+  <a href="/methodology/oocss.html">Method: OOCSS</a>
+  <a href="/methodology/smacss.html">Method: SMACSS</a>
 `;
 
   const body = document.querySelector("body");

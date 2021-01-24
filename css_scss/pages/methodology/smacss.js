@@ -1,5 +1,5 @@
-import "./method_bem.scss";
-import { loadBeers } from "../utils";
+import "./smacss.scss";
+import { loadBeers } from "../../utils";
 
 const printBeers = async () => {
   const beers = await loadBeers();

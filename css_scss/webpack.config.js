@@ -8,39 +8,56 @@ const fs = require("fs");
 const pages = ((pagesFolder = "pages") => {
   // _common.js is shared by all pages
   let entries = {
-    common: path.resolve(__dirname, `${pagesFolder}/_common.js`),
+    common: path.resolve(__dirname, pagesFolder, "_common.js"),
   };
   let htmlPages = [];
 
   // Load all files in the pages folder
-  const files = fs.readdirSync(path.join(__dirname, pagesFolder));
-  files.forEach((file) => {
-    const fileCheck = file.match(/^(?!_)(.*)\.js$/i);
+  const loadPages = (subfolder = "") => {
+    const currentFolder = path.join(__dirname, pagesFolder, subfolder);
+    const files = fs.readdirSync(currentFolder);
 
-    if (fileCheck) {
-      // Remove the .js extension
-      const pageName = fileCheck[1];
-      const outputName = pageName === "home" ? "index" : pageName;
+    files.forEach((file) => {
+      // Get inside sub-folders
+      if (fs.statSync(path.join(currentFolder, file)).isDirectory()) {
+        loadPages(`${subfolder ? subfolder + "/" : ""}${file}`);
+      }
 
-      // Add JS entry
-      entries = {
-        ...entries,
-        [outputName]: path.resolve(__dirname, pagesFolder, `${pageName}.js`),
-      };
+      // Check JavaScript files only which are not starting with an underscoreF
+      const fileCheck = file.match(/^(?!_)(.*)\.js$/i);
 
-      // Add HTML entry
-      const template = path.resolve(__dirname, pagesFolder, `${pageName}.html`);
+      if (fileCheck) {
+        // Remove the .js extension
+        const pageName = fileCheck[1];
+        // Switch home pages to index pages
+        const outputName = pageName === "home" ? "index" : pageName;
+        // Keep sub-folder structure
+        const outputFolder = subfolder ? `${subfolder}/` : "";
+        // Prefix chunk name with subfolder to avoid conflicts
+        const chunkName = subfolder ? `${subfolder}-${outputName}` : outputName;
 
-      htmlPages = [
-        ...htmlPages,
-        new HtmlWebpackPlugin({
-          template,
-          chunks: ["common", outputName],
-          filename: `${outputName}.html`,
-        }),
-      ];
-    }
-  });
+        // Add JS entry
+        entries = {
+          ...entries,
+          [chunkName]: {
+            import: path.resolve(currentFolder, `${pageName}.js`),
+            filename: `${outputFolder}${pageName}.js`,
+          },
+        };
+
+        // Add HTML entry
+        htmlPages = [
+          ...htmlPages,
+          new HtmlWebpackPlugin({
+            template: path.resolve(currentFolder, `${pageName}.html`),
+            chunks: ["common", chunkName],
+            filename: `${outputFolder}${outputName}.html`,
+          }),
+        ];
+      }
+    });
+  };
+  loadPages();
 
   return { entries, htmlPages };
 })();

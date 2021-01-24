@@ -4,7 +4,7 @@
   "description": "Testing out SCSS stuff",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --open",
+    "start": "webpack serve",
     "sass": "sass",
     "sass:exp": "rimraf experiments_output && sass experiments:experiments_output --style=expanded --no-source-map",
     "sass:pages": "rimraf pages_output && sass pages:pages_output --style=expanded --no-source-map"

@@ -4,6 +4,7 @@ import bodyParser from "body-parser";
 import { ExpressHandler, Endpoint, AllHandlers } from "../../handlers";
 import { DAO } from "../../dao";
 import { AbstApplication } from "../models";
+import passport from "../../middlewares/passport/config";
 
 export class ExpressApp extends AbstApplication<any> {
   _app: express.Application;
@@ -15,6 +16,9 @@ export class ExpressApp extends AbstApplication<any> {
 
     this._app = express();
     this._app.use(bodyParser.json());
+
+    this._app.use(passport.initialize())
+    this._app.get("/test", passport.authenticate('local'))
 
     this.loadEndpoints(this._handler);
   }

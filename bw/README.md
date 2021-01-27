@@ -17,6 +17,9 @@
 | `html-webpack-plugin`              | https://webpack.js.org/plugins/html-webpack-plugin/            | To load HTML files templates                                                   |
 | `mini-css-extract-plugin`          | https://webpack.js.org/plugins/mini-css-extract-plugin/        | To have styles in dedicated CSS files                                          |
 | `prettier`                         | https://prettier.io/                                           | Code formatter                                                                 |
+| `postcss`                          | https://github.com/postcss/postcss                             |                                                                                |
+| `postcss-loader`                   | https://webpack.js.org/loaders/postcss-loader                  |                                                                                |
+| `postcss-preset-env`               | https://github.com/csstools/postcss-preset-env                 |                                                                                |
 | `sass`                             | https://www.npmjs.com/package/sass                             | SASS JavaScript implementation                                                 |
 | `sass-loader`                      | https://webpack.js.org/loaders/sass-loader/                    |                                                                                |
 | `style-loader`                     | https://webpack.js.org/loaders/style-loader/                   |                                                                                |
@@ -28,6 +31,10 @@
 | `webpack`                          | https://webpack.js.org/                                        |                                                                                |
 | `webpack-cli`                      | https://webpack.js.org/api/cli/                                |                                                                                |
 | `webpack-dev-server`               | https://webpack.js.org/configuration/dev-server/               |                                                                                |
+
+### Storybook
+
+- `npx -p @storybook/cli sb init -t html`
 
 ## References
 

@@ -1,0 +1,5 @@
+# Browsers that we support
+# https://github.com/browserslist/browserslist
+
+[production]
+> 5%

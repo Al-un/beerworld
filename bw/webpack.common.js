@@ -101,9 +101,21 @@ module.exports = {
                 options: { publicPath: 'dist/styles' },
               },
           // https://webpack.js.org/loaders/css-loader/
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              // https://webpack.js.org/loaders/css-loader/#importloaders
+              importLoaders: 1,
+            },
+          },
+          // https://webpack.js.org/loaders/postcss-loader/
+          {
+            loader: 'postcss-loader',
+          },
           // https://webpack.js.org/loaders/sass-loader/
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+          },
         ],
       },
       {

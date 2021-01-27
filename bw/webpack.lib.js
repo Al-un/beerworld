@@ -9,9 +9,8 @@ module.exports = {
   mode: 'production',
 
   // >> https://webpack.js.org/configuration/entry-context/#entry
-  // >> Simple rule: one entry point per HTML page. SPA: one entry point, MPA: multiple entry points.
   entry: {
-    lib: path.resolve(__dirname, 'index.ts'),
+    lib: path.resolve(__dirname, 'lib.ts'),
   },
   output: {
     filename: '[name].js',
@@ -40,12 +39,23 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: 'dist/styles' },
           },
           // https://webpack.js.org/loaders/css-loader/
-          'css-loader',
+          {
+            loader: 'css-loader',
+            options: {
+              // https://webpack.js.org/loaders/css-loader/#importloaders
+              importLoaders: 1,
+            },
+          },
+          // https://webpack.js.org/loaders/postcss-loader/
+          {
+            loader: 'postcss-loader',
+          },
           // https://webpack.js.org/loaders/sass-loader/
-          'sass-loader',
+          {
+            loader: 'sass-loader',
+          },
         ],
       },
       {
@@ -68,7 +78,7 @@ module.exports = {
      */
     new MiniCssExtractPlugin({
       // https://webpack.js.org/plugins/mini-css-extract-plugin/#advanced-configuration-example
-      filename: '[name].[contenthash].css',
+      filename: '[name].css',
       chunkFilename: '[id].[contenthash].css',
     }),
   ],

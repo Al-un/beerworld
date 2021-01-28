@@ -1,5 +1,3 @@
-// import { addSlotFromCustomElement, attachCustomElementNode } from '../../utils';
-
 import { BaseCustomElement } from '../base';
 
 (function () {
@@ -16,7 +14,7 @@ import { BaseCustomElement } from '../base';
     // --------------------------------------------------------------------------
     //  Render
     // --------------------------------------------------------------------------
-    async renderRoot() {
+    async buildRoot() {
       this.classList.add('bw-card');
 
       if (this.hasAttribute('padded')) {
@@ -24,7 +22,7 @@ import { BaseCustomElement } from '../base';
       }
     }
     async renderChildren() {
-      return this.useShadowDOM ? [document.createElement('slot')] : [];
+      return this.addSlot() || [];
     }
   }
 

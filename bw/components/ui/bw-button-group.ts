@@ -15,11 +15,12 @@ import { BaseCustomElement } from '../base';
       // --------------------------------------------------------------------------
       //  Render
       // --------------------------------------------------------------------------
-      async renderRoot() {
+      async buildRoot() {
         this.classList.add('bw-button-group');
       }
-      async renderChildren() {
-        return this.useShadowDOM ? [document.createElement('slot')] : [];
+
+      async buildChildren() {
+        return this.addSlot() || [];
       }
     }
   );

@@ -1,6 +1,4 @@
 import { BaseCustomElement } from '@bw/components/base';
-import { USE_SHADOW_DOM } from '@bw/constants';
-import { attachCustomElementNode } from '../utils';
 
 const ATTR_OPENED = 'opened';
 
@@ -65,11 +63,7 @@ const ATTR_OPENED = 'opened';
     }
 
     $setOpenClass(opened: boolean) {
-      const backdrop = this.useShadowDOM
-        ? this.shadowRoot
-          ? this.shadowRoot.querySelector(`#bw-nav-backdrop`)
-          : undefined
-        : this.querySelector(`#bw-nav-backdrop`);
+      const backdrop = this.querySelect(`#bw-nav-backdrop`);
       if (!backdrop) {
         return;
       }
@@ -86,12 +80,12 @@ const ATTR_OPENED = 'opened';
     // --------------------------------------------------------------------------
     //  Render
     // --------------------------------------------------------------------------
-    async renderRoot() {
+    async buildRoot() {
       this.id = 'bw-nav-drawer';
       this.classList.add('bw-nav-drawer');
     }
 
-    async renderChildren() {
+    async buildChildren() {
       let elements: HTMLElement[] = [];
 
       // --- Backdrop

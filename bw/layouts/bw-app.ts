@@ -1,12 +1,6 @@
 import { BaseCustomElement } from '@bw/components/base';
 import { ATTR_BW_APP_ACCESS_TOKEN, LS_ACCESS_TOKEN } from '../constants';
-import {
-  addSlotFromCustomElement,
-  attachCustomElementNode,
-  logoutUser,
-  decodeAccessToken,
-  customQuerySelector,
-} from '../utils';
+import { logoutUser, decodeAccessToken } from '../utils';
 
 (function () {
   class BwApp extends BaseCustomElement {
@@ -52,9 +46,7 @@ import {
     }
 
     toggleMenu() {
-      const bwNav = this.useShadowDOM
-        ? this.shadowRoot.querySelector(`#bw-nav-drawer`)
-        : this.querySelector(`#bw-nav-drawer`);
+      const bwNav = this.querySelect(`#bw-nav-drawer`);
       if (!bwNav) {
         return;
       }
@@ -67,13 +59,13 @@ import {
     }
 
     updateUserLoginArea() {
-      const header = customQuerySelector(this, 'bw-app-header');
+      const header = this.querySelect('#bw-app-header');
       if (!header) {
         return;
       }
 
       const removeNode = (id: string) => {
-        const element = customQuerySelector(this, id);
+        const element = this.querySelect(id);
         if (element) {
           header.removeChild(element);
         }
@@ -115,20 +107,18 @@ import {
     // --------------------------------------------------------------------------
     //  Render
     // --------------------------------------------------------------------------
-    async renderRoot() {
+    async buildRoot() {
       this.id = 'bw-app';
       this.classList.add('bw-app');
     }
 
-    async renderChildren() {
+    async buildChildren() {
       let elements: HTMLElement[] = [];
 
       // --- Menu
       const bwNavDrawer = document.createElement('bw-nav-drawer');
       // bwNavDrawer.setAttribute('opened', '');
-      bwNavDrawer.addEventListener('zzzz', () =>
-        console.log("IT'S OPENED!!")
-      );
+      bwNavDrawer.addEventListener('zzzz', () => console.log("IT'S OPENED!!"));
       bwNavDrawer.addEventListener('closed', () =>
         console.log("IT'S CLOSED!!")
       );
@@ -154,7 +144,7 @@ import {
       const main = document.createElement('main');
       main.id = 'bw-app-content';
       main.classList.add('bw-app-content');
-      addSlotFromCustomElement(this, main);
+      this.addSlot(main);
       elements = [...elements, main];
 
       // --- Footer

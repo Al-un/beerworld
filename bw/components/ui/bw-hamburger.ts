@@ -1,4 +1,3 @@
-import { attachCustomElementNode } from '../../utils';
 import { BaseCustomElement } from '../base';
 
 (function () {
@@ -15,14 +14,14 @@ import { BaseCustomElement } from '../base';
     // --------------------------------------------------------------------------
     //  Render
     // --------------------------------------------------------------------------
-    async renderRoot() {
+    async buildRoot() {
       this.addEventListener('click', () => {
         this.classList.toggle('closed');
         this.shadowRoot.querySelector('div').classList.toggle('closed');
       });
     }
 
-    async renderChildren() {
+    async buildChildren() {
       let children: HTMLElement[] = [];
 
       // elements = [...elements, document.createElement("div")]

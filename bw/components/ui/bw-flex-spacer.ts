@@ -9,7 +9,7 @@ import { BaseCustomElement } from '../base';
         this.styleFilePath = 'components/ui/_bw-flex-spacer.scss';
       }
 
-      async renderRoot() {
+      async buildRoot() {
         this.classList.add('bw-flex-spacer');
       }
     }

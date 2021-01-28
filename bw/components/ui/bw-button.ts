@@ -1,4 +1,3 @@
-import { addSlotFromCustomElement, attachCustomElementNode } from '../../utils';
 import { BaseCustomElement } from '../base';
 
 (function () {
@@ -16,7 +15,7 @@ import { BaseCustomElement } from '../base';
     // --------------------------------------------------------------------------
     //  Render
     // --------------------------------------------------------------------------
-    async renderChildren() {
+    async buildChildren() {
       const el = document.createElement('button');
       el.classList.add('bw-button');
 
@@ -32,7 +31,7 @@ import { BaseCustomElement } from '../base';
       // Text via slot
       const elText = document.createElement('span');
       elText.classList.add('text');
-      addSlotFromCustomElement(this, elText, true);
+      this.addSlot(elText);
       el.appendChild(elText);
 
       // Attach to DOM

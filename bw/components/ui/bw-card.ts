@@ -1,30 +1,51 @@
 import { BaseCustomElement } from '../base';
 
-(function () {
-  class BwCard extends BaseCustomElement {
-    // --------------------------------------------------------------------------
-    //  Lifecycle
-    // --------------------------------------------------------------------------
-    constructor() {
-      super();
+export interface BwCardAttrs {
+  padded?: boolean;
+}
 
-      this.styleFilePath = 'components/ui/_bw-card.scss';
-    }
-
-    // --------------------------------------------------------------------------
-    //  Render
-    // --------------------------------------------------------------------------
-    async buildRoot() {
-      this.classList.add('bw-card');
-
-      if (this.hasAttribute('padded')) {
-        this.classList.add('padded');
-      }
-    }
-    async renderChildren() {
-      return this.addSlot() || [];
-    }
+export class BwCard extends BaseCustomElement {
+  // --------------------------------------------------------------------------
+  //  Lifecycle
+  // --------------------------------------------------------------------------
+  constructor() {
+    super();
   }
 
-  customElements.define('bw-card', BwCard);
-})();
+  get styleFilePath() {
+    return 'components/ui/_bw-card.scss';
+  }
+
+  get styleHeader(): string | undefined {
+    return this.buildStyleFromAttr('style-header');
+  }
+
+  get styleFooter(): string | undefined {
+    return this.buildStyleFromAttr('style-footer');
+  }
+
+  // --------------------------------------------------------------------------
+  //  Render
+  // --------------------------------------------------------------------------
+  buildRoot() {
+    if (this.hasAttribute('padded')) {
+      this.classList.add('padded');
+    }
+  }
+  buildChildren() {
+    const htmlHeader = this.hasSlot('header')
+      ? `<header class="card-header" ${this.styleHeader}>` +
+        `<slot name="header"></slot>` +
+        `</header>`
+      : '';
+    const htmlFooter = this.hasSlot('footer')
+      ? `<footer class="card-footer" ${this.styleFooter}>` +
+        `<slot name="footer"></slot>` +
+        `</footer>`
+      : '';
+
+    return this.buildFromString(
+      htmlHeader + `<main class="card-body"><slot></slot></main>` + htmlFooter
+    );
+  }
+}

@@ -1,10 +1,10 @@
 @use '../../abstracts' as *;
 
 .bw-button {
-  @extend %flex-row-align-center;
+  @extend %flex-row-all-center;
 
   background-color: transparent;
-  border: 1px solid var(--bw-primary);
+  border: 1px solid get-color('primary');
   border-radius: $border-radius-base;
   min-height: 24px;
   padding: 0 16px;
@@ -15,5 +15,20 @@
 
   &:hover {
     cursor: pointer;
+  }
+
+  &.solid{
+    background-color: get-color('primary');
+    border: 1px solid get-color('primary');
+    color: white;
+  }
+  &.outline{
+    border: 1px solid get-color('primary');
+    color: black;
+  }
+
+  &[disabled] {
+    color: darkgrey;
+    border-color: grey;
   }
 }

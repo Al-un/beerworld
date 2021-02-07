@@ -1,6 +1,7 @@
 @use '../../abstracts' as *;
 
-.bw-beer-display {
+.bw-beer-display,
+:host {
   .title {
     @extend %text-body;
   }

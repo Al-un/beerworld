@@ -1,0 +1,18 @@
+@use '../../abstracts' as *;
+
+// Aspect-ratio 1:1 hack: https://www.w3schools.com/howto/howto_css_aspect_ratio.asp
+.bw-beer-grid-item,
+:host {
+  img {
+    display: block;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+  }
+
+  bw-card,
+  .bw-card {
+    width: 100%;
+    height: 100%;
+  }
+}

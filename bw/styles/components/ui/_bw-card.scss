@@ -1,11 +1,34 @@
 @use '../../abstracts' as *;
 
-.bw-card {
+.bw-card,
+:host {
   background-color: var(--bw-bg-white);
   border-radius: $border-radius-base;
-  display: block;
+  // https://codepen.io/sdthornton/pen/wBZdXq
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  overflow: hidden;
 
-  &.padded {
+  // @extend %flex-col;
+  .card-body {
+    grid-area: card-body;
+    // flex: 1 0 auto;
+  }
+
+  .card-header {
+    grid-area: card-header;
+  }
+  .card-footer {
+    grid-area: card-footer;
+    // flex: 0 0 auto;
+  }
+  display: grid;
+  grid-template-areas: 'card-header' 'card-body' 'card-footer';
+  grid-template-rows: max-content 1fr max-content;
+}
+
+.bw-card.padded,
+:host(.padded) {
+  > :not(style) {
     padding: 8px;
   }
 }

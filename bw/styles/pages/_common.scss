@@ -1,8 +1,6 @@
 @use '../abstracts' as *;
 
 @use '../base';
-// @use '../layouts';
-// @use '../components/ui';
 
 // Init CSS variables
 
@@ -12,4 +10,7 @@
   --bw-font-color-body: #{$font-color-body};
   --bw-font-color-sub-body: #{$font-color-sub-body};
   --bw-primary: #{$primary};
+  --bw-primary-light: #{$primary-light};
+  --bw-primary-dark: #{$primary-dark};
+  --bw-divider: #{$divider};
 }

@@ -1,14 +1,35 @@
 import { BeerShortInfo } from '@bw/types';
-import { buildBeerGridItem } from './beer-grid-item';
+import { BaseCustomElement } from '../base';
+import { BwBeerGridItem } from './beer-grid-item';
 
-export const buildBeerGrid = (beers: BeerShortInfo[] = []): HTMLElement => {
-  const root = document.createElement('div');
-  root.classList.add('bw-beer-grid');
+export class BwBeerGrid extends BaseCustomElement {
+  _beers: BeerShortInfo[];
 
-  beers.forEach((beer) => {
-    const gridItem = buildBeerGridItem(beer);
-    root.appendChild(gridItem);
-  });
+  // --------------------------------------------------------------------------
+  //  Lifecycle
+  // --------------------------------------------------------------------------
+  constructor(beers: BeerShortInfo[] = []) {
+    super();
 
-  return root;
-};
+    this._beers = beers;
+  }
+
+  get styleFilePath() {
+    return 'components/beers/_bw-beer-grid.scss';
+  }
+
+  get beers(): BeerShortInfo[] {
+    return this._beers;
+  }
+
+  set beers(beers: BeerShortInfo[]) {
+    this._beers = beers;
+  }
+
+  // --------------------------------------------------------------------------
+  //  Render
+  // --------------------------------------------------------------------------
+  buildChildren() {
+    return this.beers ? this.beers.map((b) => new BwBeerGridItem(b)) : [];
+  }
+}

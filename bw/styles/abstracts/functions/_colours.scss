@@ -1,0 +1,17 @@
+@use '../variables/' as *;
+
+@function get-color($color) {
+  @if $color == 'primary' {
+    @return var(--bw-primary, $primary);
+  } @else if $color == 'primary-light' {
+    @return var(--bw-primary-light, $primary-light);
+  } @else if $color == 'primary-dark' {
+    @return var(--bw-primary-dark, $primary-dark);
+  } @else if $color == 'divider' {
+    @return var(--bw-divider, $divider);
+  } @else if $color == 'error' {
+    @return var(--bw-error, $error);
+  } @else {
+    @error "getColor: invalid color #{$color}";
+  }
+}

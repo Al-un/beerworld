@@ -1,43 +1,98 @@
 import { BaseCustomElement } from '../base';
 
-(function () {
-  class BwButton extends BaseCustomElement {
-    // --------------------------------------------------------------------------
-    //  Lifecycle
-    // --------------------------------------------------------------------------
-    constructor() {
-      super();
+export interface BwButtonAttrs {
+  disabled?: boolean;
+  icon?: string;
+  solid?: boolean;
+  outline?: boolean;
+}
 
-      this.styleFilePath = 'components/ui/_bw-button.scss';
-      this.useShadowDOM = true;
-    }
+export class BwButton extends BaseCustomElement {
+  _button?: HTMLButtonElement = undefined;
 
-    // --------------------------------------------------------------------------
-    //  Render
-    // --------------------------------------------------------------------------
-    async buildChildren() {
-      const el = document.createElement('button');
-      el.classList.add('bw-button');
+  // --------------------------------------------------------------------------
+  //  Lifecycle
+  // --------------------------------------------------------------------------
+  constructor() {
+    super();
+  }
 
-      // icon
-      if (this.hasAttribute('icon')) {
-        const elIcon = document.createElement('img');
-        elIcon.alt = 'icon';
-        elIcon.classList.add('icon');
-        elIcon.src = this.getAttribute('icon');
-        el.appendChild(elIcon);
-      }
+  get styleFilePath() {
+    return 'components/ui/_bw-button.scss';
+  }
 
-      // Text via slot
-      const elText = document.createElement('span');
-      elText.classList.add('text');
-      this.addSlot(elText);
-      el.appendChild(elText);
+  static get observedAttributes() {
+    return ['disabled'];
+  }
 
-      // Attach to DOM
-      return el;
+  get disabled(): boolean {
+    return this.hasAttribute('disabled');
+  }
+
+  set disabled(val: boolean) {
+    if (val) {
+      this.setAttribute('disabled', '');
+      if (this._button) this._button.setAttribute('disabled', '');
+    } else {
+      this.removeAttribute('disabled');
+      if (this._button) this._button.removeAttribute('disabled');
     }
   }
 
-  customElements.define('bw-button', BwButton);
-})();
+  get fill(): 'solid' | 'outline' {
+    if (this.hasAttribute('solid')) {
+      return 'solid';
+    } else if (this.hasAttribute('outline')) {
+      return 'outline';
+    }
+
+    // solid by default
+    return 'solid';
+  }
+
+  set fill(val: 'solid' | 'outline') {
+    if (val === 'solid') {
+      this.removeAttribute('outline');
+      this.setAttribute('solid', '');
+    } else if (val === 'outline') {
+      this.removeAttribute('solid');
+      this.setAttribute('outline', '');
+    }
+  }
+
+  // --------------------------------------------------------------------------
+  //  Render
+  // --------------------------------------------------------------------------
+  buildChildren() {
+    const el = document.createElement('button');
+    el.classList.add('bw-button');
+
+    // props
+    if (this.disabled) {
+      el.setAttribute('disabled', '');
+    }
+    if (this.fill) {
+      el.classList.add(this.fill);
+    }
+
+    // icon
+    if (this.hasAttribute('icon')) {
+      const elIcon = document.createElement('img');
+      elIcon.alt = 'icon';
+      elIcon.classList.add('icon');
+      elIcon.src = this.getAttribute('icon');
+      el.appendChild(elIcon);
+    }
+
+    // Text via slot
+    const elText = document.createElement('span');
+    elText.classList.add('text');
+    this.addSlot(elText);
+    el.appendChild(elText);
+
+    this._button = el;
+
+    // Attach to DOM
+    return el;
+  }
+}

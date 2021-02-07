@@ -1,2 +1,2 @@
-import './bw-app';
-import './bw-nav-drawer';
+export * from './bw-app';
+export * from './bw-nav-drawer';

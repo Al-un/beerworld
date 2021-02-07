@@ -36,4 +36,4 @@ const submitLogin = async (e: Event) => {
   }
 };
 
-loginForm.addEventListener('submit', submitLogin);
+// loginForm.addEventListener('submit', submitLogin);

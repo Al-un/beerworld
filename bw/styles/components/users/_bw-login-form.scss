@@ -1,0 +1,9 @@
+@use '../../abstracts' as *;
+
+.bw-login-form,
+:host {
+  bw-input,
+  .bw-input {
+    margin: 8px 0;
+  }
+}

@@ -1,0 +1,11 @@
+@use '../../abstracts' as *;
+
+$beer-grid-item-size: 250px;
+
+.bw-beer-grid,
+:host {
+  display: grid;
+  gap: 16px;
+  grid-auto-rows: $beer-grid-item-size;
+  grid-template-columns: repeat(auto-fill, minmax($beer-grid-item-size, 1fr));
+}

@@ -1,0 +1,35 @@
+:host {
+  display: block;
+  background-color: darkslategrey;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+  padding: 8px;
+  transition: background-color 0.25s;
+}
+
+:host(:hover) {
+  background-color: darkslateblue;
+}
+
+:host([margin]) {
+  margin: 16px;
+}
+
+.title {
+  color: lime;
+  margin: auto;
+}
+
+.description {
+  color: lightcyan;
+  font-size: 10px;
+  margin: 16px 0;
+}
+
+.input {
+  border: 1px solid #999999;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 4px;
+  width: 100%;
+}

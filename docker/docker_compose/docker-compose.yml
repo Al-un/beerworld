@@ -20,7 +20,7 @@ services:
   beer-api:
     container_name: bw-compose-api
     build:
-      context: ../docker-getting-started/server
+      context: ../getting-started/server
       dockerfile: server.Dockerfile
     expose:
       - "3000"
@@ -52,7 +52,7 @@ services:
   beer-web:
     container_name: bw-compose-web
     build:
-      context: ../docker-getting-started/client
+      context: ../getting-started/client
       dockerfile: client.Dockerfile
     ports:
       # Mapping container 80 port to localhost 8080

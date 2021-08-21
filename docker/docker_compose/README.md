@@ -2,7 +2,7 @@
 
 **Pre-requisites**
 
-- [Docker getting started](../docker-getting-started/README.md)
+- [Docker getting started](../getting-started/README.md)
 - [Docker network](../docker-network/README.md)
 
 - [Run the example](#run-the-example)

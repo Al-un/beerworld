@@ -13,7 +13,7 @@
 
 **Pre-requisites**
 
-- [Docker getting started](../docker-getting-started/README.md)
+- [Docker getting started](../getting-started/README.md)
 
 https://docs.docker.com/engine/reference/commandline/network_create/
 

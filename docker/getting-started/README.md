@@ -373,10 +373,10 @@ When building an image, Docker switches between two contexts:
 
 The _context_ question is the same as asking _What `pwd` will return on the builder and built contexts?_. First of all, how are those contexts defined?
 
-- _Builder context_: the last argument of the `sudo docker build` command is the path of the _builder context_. In the previous example, assuming the shell context is `${beerproject repository path}/docker-getting-started`, the _builder context_ is `./server`.
+- _Builder context_: the last argument of the `sudo docker build` command is the path of the _builder context_. In the previous example, assuming the shell context is `${beerproject repository path}/docker/getting-started`, the _builder context_ is `./server`.
 - _Built context_: the `WORKDIR` instruction in the Dockerfile defines the _built context_. In the previous example, the `WORKDIR` is `/usr/src/app`.
 
-The build contexts main purpose is clarity by avoiding `../../.. ...` paths. `COPY . .` means \_copy from "builder context" to "built context" which is lighter than `COPY ./docker-getting-started/server /usr/src/app`
+The build contexts main purpose is clarity by avoiding `../../.. ...` paths. `COPY . .` means \_copy from "builder context" to "built context" which is lighter than `COPY ./docker/getting-started/server /usr/src/app`
 
 **Notes**:
 

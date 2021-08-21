@@ -20,7 +20,7 @@ node index.js
 
 ## Still simple API with Koa
 
-Nothing fancy here compared to the [Docker-Getting-Started server](../../docker-getting-started/server/README.md). I am still using Koa with Koa router as there are two endpoints:
+Nothing fancy here compared to the [Docker-Getting-Started server](../../getting-started/server/README.md). I am still using Koa with Koa router as there are two endpoints:
 
 - `GET: /` delivers the beer list but each request is logged
 - `GET: /logs` returns the logs
@@ -47,7 +47,7 @@ When calling the root endpoint, this server is supposed to return a list of beer
 
 ### Call another API
 
-To return a list of beers, I want to get the list provided by the [Docker-Getting-Started server](../../docker-getting-started/server/README.md). An HTTP call being necessary, I tried to use the standard `http` tool but callback management ended up being complicated, I switched to Axios.
+To return a list of beers, I want to get the list provided by the [Docker-Getting-Started server](../../getting-started/server/README.md). An HTTP call being necessary, I tried to use the standard `http` tool but callback management ended up being complicated, I switched to Axios.
 
 **References**
 

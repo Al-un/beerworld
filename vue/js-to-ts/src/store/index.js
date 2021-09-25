@@ -10,6 +10,6 @@ export default new Vuex.Store({
   mutations: {},
   actions: {},
   modules: {
-    beers: { ...beersModules, namespaced: true },
+    beers: beersModules,
   },
 });

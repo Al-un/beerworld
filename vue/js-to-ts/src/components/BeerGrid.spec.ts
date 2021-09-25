@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import BeerGrid from "./BeerGrid";
+import BeerGrid from "./BeerGrid.vue";
 
 let wrapper;
 

@@ -5,17 +5,7 @@
   </div>
 </template>
 
-<script>
-import BeerGridItem from "./BeerGridItem.vue";
-
-export default {
-  components: { BeerGridItem },
-  props: {
-    beers: { type: Array, required: true },
-    loading: { type: Boolean, default: false },
-  },
-};
-</script>
+<script lang="ts" src="./BeerGrid.ts"></script>
 
 <style lang="scss">
 .beer-grid {

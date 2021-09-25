@@ -1,6 +1,6 @@
 import { mount } from "@vue/test-utils";
 
-import BeerGridItem from "./BeerGridItem";
+import BeerGridItem from "./BeerGridItem.vue"; // .vue extension required here
 
 let wrapper;
 

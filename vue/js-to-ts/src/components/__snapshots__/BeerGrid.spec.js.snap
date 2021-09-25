@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/BeerGrid renders and matches snapshot When beers list is empty 1`] = `
+<div class="beer-grid">
+  <p style="display: none;">Loading...</p>
+</div>
+`;
+
+exports[`components/BeerGrid renders and matches snapshot When loading 1`] = `
+<div class="beer-grid">
+  <p>Loading...</p>
+  <div class="beer-grid-item"><img src="mainPic1" class="beer-img">
+    <div class="beer-name">beer1</div>
+  </div>
+  <div class="beer-grid-item"><img src="mainPic2" class="beer-img">
+    <div class="beer-name">beer2</div>
+  </div>
+</div>
+`;
+
+exports[`components/BeerGrid renders and matches snapshot When not loading 1`] = `
+<div class="beer-grid">
+  <p style="display: none;">Loading...</p>
+  <div class="beer-grid-item"><img src="mainPic1" class="beer-img">
+    <div class="beer-name">beer1</div>
+  </div>
+  <div class="beer-grid-item"><img src="mainPic2" class="beer-img">
+    <div class="beer-name">beer2</div>
+  </div>
+</div>
+`;

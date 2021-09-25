@@ -1,0 +1,7 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`components/BeerGridItem renders and match snapshot 1`] = `
+<div class="beer-grid-item"><img src="mainPic1" class="beer-img">
+  <div class="beer-name">beer1</div>
+</div>
+`;

@@ -1,5 +1,7 @@
 # Nuxtjs full setup <!-- omit in toc -->
 
+> Related Medium article: https://medium.com/js-dojo/nuxt-js-setup-storybook-powered-f023b4ef351d
+
 Mainly self notes for setting up a Nuxtjs application with Vuetify, vue-i18n and Storybook.
 
 - [Notes](#notes)

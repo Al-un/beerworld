@@ -6,20 +6,21 @@ A mix of experiments, guides, self-notes primarily focusing on front-end develop
 
 - Front-end
   - Vue.js
-    - [Nuxt.js full setup](vue_nuxtjs-full-setup/): Nuxt.js setup notes with Vuetify, Nuxt-i18n and Storybook-powered
+    - [Nuxt.js full setup](vue/nuxtjs-full-setup): Nuxt.js setup notes with Vuetify, Nuxt-i18n and Storybook-powered
+    - [Hybrid JS/TS codebase](vue/js-to-ts)
 - Static site generator
   - Hugo
     - [Getting started](hugo_getting_started/)
 - DevOps
   - AWS
-    - [CLI](aws_cli/)
-    - [CloudFormation: hosting static website](aws_cloudformation-static-website/)
+    - [CLI](aws/cli)
+    - [CloudFormation: hosting static website](aws/cloudformation-static-website)
   - Docker
-    - [Getting started](docker_getting-started/)
-    - [Network & storage](docker_network-storage/)
-    - [Docker compose](docker_compose/)
+    - [Getting started](docker/getting-started)
+    - [Network & storage](docker/network_storage)
+    - [Docker compose](docker/docker_compose)
     - Reverse Proxy
   - Kubernetes
 - Databases
   - PostgreSQL
-    - [Getting started](pgsql_getting-started/)
+    - [Getting started](postgres/getting-started/)
